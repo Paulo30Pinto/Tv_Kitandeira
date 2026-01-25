@@ -83,6 +83,7 @@ const App: React.FC = () => {
           <div className="md:hidden absolute top-16 left-0 right-0 bg-gray-900 z-40 border-b border-gray-800 shadow-xl p-4 space-y-2 overflow-y-auto max-h-[80vh]">
             <button onClick={() => handleMobileSelect('All')} className={getMobileMenuClass('All')}>Todos</button>
             <button onClick={() => handleMobileSelect(Category.NEWS)} className={getMobileMenuClass(Category.NEWS)}>Notícias</button>
+            <button onClick={() => handleMobileSelect(Category.KIDS)} className={getMobileMenuClass(Category.KIDS)}>Infantil</button>
             <button onClick={() => handleMobileSelect(Category.SPORTS)} className={getMobileMenuClass(Category.SPORTS)}>Desporto</button>
             <button onClick={() => handleMobileSelect(Category.EDUCATION)} className={getMobileMenuClass(Category.EDUCATION)}>Educação & Gov</button>
             <button onClick={() => handleMobileSelect(Category.INTERNATIONAL)} className={getMobileMenuClass(Category.INTERNATIONAL)}>Internacional</button>

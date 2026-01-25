@@ -1,5 +1,4 @@
-import React from 'react';
-import { Tv, Globe2, Film, Info, Trophy, Music, GraduationCap, Globe } from 'lucide-react';
+import { Tv, Globe2, Film, Info, Trophy, Music, GraduationCap, Globe, Smile } from 'lucide-react';
 import { Category } from '../types';
 
 interface SidebarProps {
@@ -11,6 +10,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeCategory, onSelectCatego
   const menuItems = [
     { id: 'All', label: 'Todos os Canais', icon: Tv },
     { id: Category.NEWS, label: 'Notícias', icon: Globe2 },
+    { id: Category.KIDS, label: 'Infantil', icon: Smile },
     { id: Category.SPORTS, label: 'Desporto', icon: Trophy },
     { id: Category.EDUCATION, label: 'Educação & Gov', icon: GraduationCap },
     { id: Category.INTERNATIONAL, label: 'Internacional', icon: Globe },

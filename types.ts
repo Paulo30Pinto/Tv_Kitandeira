@@ -35,7 +35,8 @@ export enum Category {
   SPORTS = 'Desporto',
   MUSIC = 'Música',
   EDUCATION = 'Educação & Gov',
-  INTERNATIONAL = 'Internacional'
+  INTERNATIONAL = 'Internacional',
+  KIDS = 'Infantil'
 }
 
 export interface Channel {
@@ -48,5 +49,5 @@ export interface Channel {
   country: Country;
   category: Category;
   youtubeId?: string;
-  youtubeHandle?: string; // Novo: Handle do canal (@...)
+  youtubeHandle?: string; 
 }

@@ -3,16 +3,6 @@ import { Channel, StreamType, Country, Category } from './types';
 export const CHANNELS: Channel[] = [
   // --- ANGOLA ---
   {
-    id: 'tpa-1',
-    name: 'TPA 1',
-    description: 'Emissora pública de Angola. Referência nacional em notícias, cultura e entretenimento em sinal digital direto.',
-    logoColor: 'bg-red-800',
-    streamUrl: 'https://api.new.livestream.com/accounts/1181452/events/5141181/live.m3u8', 
-    type: StreamType.HLS,
-    country: Country.ANGOLA,
-    category: Category.PUBLIC
-  },
-  {
     id: 'tv-zimbo',
     name: 'TV Zimbo',
     description: 'A primeira emissora privada de Angola. Programação diversificada com foco em jornalismo e debates em alta definição.',
@@ -22,45 +12,217 @@ export const CHANNELS: Channel[] = [
     country: Country.ANGOLA,
     category: Category.GENERAL
   },
+
+  // --- INFANTIL & GEEK ---
   {
-    id: 'tv-girassol',
-    name: 'TV Girassol',
-    description: 'O novo olhar de Angola. Programação moderna com foco em entretenimento, cultura e informação.',
-    logoColor: 'bg-yellow-600',
-    streamUrl: 'https://sgn-cdn-video.vods2africa.com/Tv-Girassol/index.fmp4.m3u8',
+    id: 'retro-cartoon',
+    name: 'Retro Cartoon',
+    description: 'O melhor da animação clássica 24 horas por dia. Reviva os desenhos que marcaram gerações em sinal digital.',
+    logoColor: 'bg-yellow-500',
+    streamUrl: 'https://stmv1.video.brstream.com.br/retrotv/retrotv/playlist.m3u8',
     type: StreamType.HLS,
-    country: Country.ANGOLA,
+    country: Country.BRASIL,
+    category: Category.KIDS
+  },
+  {
+    id: 'retro-tv',
+    name: 'Retro TV',
+    description: 'Uma viagem no tempo com os maiores clássicos da TV brasileira e mundial. Filmes, séries e programas que marcaram época.',
+    logoColor: 'bg-amber-600',
+    streamUrl: 'https://stmv1.video.brstream.com.br/retrotv/retrotv/playlist.m3u8',
+    type: StreamType.HLS,
+    country: Country.BRASIL,
     category: Category.GENERAL
+  },
+  {
+    id: 'anime-tv',
+    name: 'Anime TV',
+    description: 'O portal para o mundo das animações orientais. Séries e clássicos da cultura japonesa 24 horas por dia.',
+    logoColor: 'bg-indigo-600',
+    streamUrl: 'https://stmv1.srvif.com/anime/anime/playlist.m3u8',
+    type: StreamType.HLS,
+    country: Country.BRASIL,
+    category: Category.KIDS
+  },
+  {
+    id: 'ichiban-tv',
+    name: 'Ichiban TV',
+    description: 'O melhor da cultura pop japonesa, animes clássicos e modernos em sinal digital 24 horas.',
+    logoColor: 'bg-red-600',
+    streamUrl: 'https://stream.ichibantv.com:3764/hybrid/play.m3u8',
+    type: StreamType.HLS,
+    country: Country.GLOBAL,
+    category: Category.KIDS
+  },
+  {
+    id: '3abn-kids',
+    name: '3ABN Kids',
+    description: 'Programação infantil educativa com foco em valores cristãos, música e histórias bíblicas (Inglês).',
+    logoColor: 'bg-cyan-500',
+    streamUrl: 'https://3abn.bozztv.com/3abn2/Kids_live/smil:Kids_live.smil/playlist.m3u8',
+    type: StreamType.HLS,
+    country: Country.USA,
+    category: Category.KIDS
+  },
+  {
+    id: 'gospel-cartoon',
+    name: 'Gospel Cartoon',
+    description: 'Animações e desenhos com valores cristãos e mensagens positivas para o público infantil em sinal digital.',
+    logoColor: 'bg-sky-600',
+    streamUrl: 'https://stmv1.srvif.com/gospelcartoon/gospelcartoon/playlist.m3u8',
+    type: StreamType.HLS,
+    country: Country.BRASIL,
+    category: Category.KIDS
+  },
+  {
+    id: 'lucas-tv',
+    name: 'Lucas TV',
+    description: 'Diversão garantida para o público infantil e juvenil. Aventuras, cores e muito entretenimento para a criançada.',
+    logoColor: 'bg-sky-400',
+    streamUrl: 'https://stmv1.srvif.com/lucastv/lucastv/playlist.m3u8',
+    type: StreamType.HLS,
+    country: Country.BRASIL,
+    category: Category.KIDS
+  },
+  {
+    id: 'loading-tv',
+    name: 'Loading TV',
+    description: 'Cultura pop, games, eSports e animes. O canal definitivo para a geração conectada e fã de entretenimento geek.',
+    logoColor: 'bg-fuchsia-600',
+    streamUrl: 'https://stmv1.srvif.com/loadingtv/loadingtv/playlist.m3u8',
+    type: StreamType.HLS,
+    country: Country.BRASIL,
+    category: Category.KIDS
   },
 
   // --- BRASIL ---
   {
-    id: 'sbt-br',
-    name: 'SBT',
-    description: 'A TV que tem a cara do Brasil. Programas de auditório, novelas e jornalismo popular ao vivo.',
+    id: 'cnn-brasil',
+    name: 'CNN Brasil',
+    description: 'A maior rede de notícias do mundo em sua versão brasileira. Cobertura completa 24 horas dos principais fatos globais.',
+    logoColor: 'bg-red-800',
+    streamUrl: 'https://www.youtube.com/embed/live_stream?channel=UCv9f3uUuayI-R_Ww88E7YxA',
+    type: StreamType.YOUTUBE,
+    country: Country.BRASIL,
+    category: Category.NEWS
+  },
+  {
+    id: 'central-tv',
+    name: 'Central TV',
+    description: 'Programação variada com foco em jornalismo, entretenimento e cultura regional em alta definição.',
+    logoColor: 'bg-indigo-500',
+    streamUrl: 'https://tv01.zas.media:1936/centraltvweb/centraltvweb/playlist.m3u8',
+    type: StreamType.HLS,
+    country: Country.BRASIL,
+    category: Category.GENERAL
+  },
+  {
+    id: 'tv-cidade-verde',
+    name: 'TV Cidade Verde',
+    description: 'Afiliada SBT no Piauí. O jornalismo de credibilidade e a programação que o povo piauiense confia.',
+    logoColor: 'bg-emerald-600',
+    streamUrl: 'https://stmv1.transmissaodigital.com/cidadeverdenovo/cidadeverdenovo/playlist.m3u8',
+    type: StreamType.HLS,
+    country: Country.BRASIL,
+    category: Category.GENERAL
+  },
+  {
+    id: 'tv-cidade-brasil',
+    name: 'TV Cidade Brasil',
+    description: 'Um canal dedicado à integração nacional, trazendo informação, cultura e o melhor do entretenimento regional para todo o país.',
+    logoColor: 'bg-cyan-700',
+    streamUrl: 'https://stmv2.samcast.com.br/tvcidadebrasil/tvcidadebrasil/playlist.m3u8',
+    type: StreamType.HLS,
+    country: Country.BRASIL,
+    category: Category.GENERAL
+  },
+  {
+    id: 'multicanais-tv',
+    name: 'Multicanais TV',
+    description: 'Conteúdo variado com filmes, séries e programas de variedades em alta definição para o público brasileiro.',
+    logoColor: 'bg-blue-950',
+    streamUrl: 'https://stmv2.painelvideocast.com.br/multicanais/multicanais/playlist.m3u8',
+    type: StreamType.HLS,
+    country: Country.BRASIL,
+    category: Category.GENERAL
+  },
+  {
+    id: 'clouding-tv',
+    name: 'Clouding TV',
+    description: 'Uma nova experiência em televisão digital com foco em entretenimento, variedades e programação cultural dinâmica.',
+    logoColor: 'bg-blue-500',
+    streamUrl: 'https://stmv7.voxtvhd.com.br/clouding/clouding/playlist.m3u8',
+    type: StreamType.HLS,
+    country: Country.BRASIL,
+    category: Category.GENERAL
+  },
+  {
+    id: 'rogerio-tv',
+    name: 'Rogério TV',
+    description: 'Canal de variedades com programação diversificada, incluindo música, cultura e informação regional.',
+    logoColor: 'bg-blue-800',
+    streamUrl: 'https://video01.kshost.com.br:4443/rogerio7271/rogerio7271/playlist.m3u8',
+    type: StreamType.HLS,
+    country: Country.BRASIL,
+    category: Category.GENERAL
+  },
+  {
+    id: 'sony-one-emocoes',
+    name: 'Sony One Emoções',
+    description: 'O canal dedicado aos grandes sucessos da Sony Pictures. Dramas, romances e histórias emocionantes que cativam o público brasileiro.',
+    logoColor: 'bg-slate-900',
+    streamUrl: 'https://spt-sonyoneemocoes-1-br.samsung.wurl.tv/playlist.m3u8',
+    type: StreamType.HLS,
+    country: Country.BRASIL,
+    category: Category.GENERAL
+  },
+  {
+    id: 'tvr',
+    name: 'TVR',
+    description: 'Programação variada com foco em informação, cultura regional e entretenimento de qualidade para toda a família.',
     logoColor: 'bg-blue-600',
-    streamUrl: 'https://www.youtube.com/embed/live_stream?channel=UC5pB_L_1pS676XidX9-U79A',
-    type: StreamType.YOUTUBE,
+    streamUrl: 'https://tvchannel.tvr.ovh/video28392/video28392/playlist.m3u8',
+    type: StreamType.HLS,
     country: Country.BRASIL,
     category: Category.GENERAL
   },
   {
-    id: 'band-br',
-    name: 'Band',
-    description: 'Rede Bandeirantes: Tradição em esporte, jornalismo ágil e o melhor do entretenimento nacional.',
-    logoColor: 'bg-emerald-700',
-    streamUrl: 'https://www.youtube.com/embed/live_stream?channel=UC77SSTf9m2pREHn06n6lQ5Q',
-    type: StreamType.YOUTUBE,
+    id: 'canal-29',
+    name: 'Canal 29',
+    description: 'Conteúdo regional diversificado, trazendo informação, cultura e entretenimento local em alta qualidade.',
+    logoColor: 'bg-purple-700',
+    streamUrl: 'https://stmv1.srvif.com/canal29/canal29/playlist.m3u8',
+    type: StreamType.HLS,
     country: Country.BRASIL,
     category: Category.GENERAL
   },
   {
-    id: 'globo-rural',
-    name: 'Globo Rural',
-    description: 'Notícias do campo, agronegócio e a vida rural brasileira em transmissão contínua.',
-    logoColor: 'bg-green-800',
-    streamUrl: 'https://www.youtube.com/embed/1IsLUmlTa5g',
-    type: StreamType.YOUTUBE,
+    id: 'tv-serie',
+    name: 'TV Série',
+    description: 'As melhores séries, dramas e maratonas de entretenimento em um canal dedicado 24h para os apaixonados por seriados.',
+    logoColor: 'bg-rose-700',
+    streamUrl: 'https://stmv1.srvif.com/tvserie/tvserie/playlist.m3u8',
+    type: StreamType.HLS,
+    country: Country.BRASIL,
+    category: Category.GENERAL
+  },
+  {
+    id: 'tv-aracati',
+    name: 'TV Aracati',
+    description: 'A voz do litoral leste cearense. Notícias locais, cultura e entretenimento direto de Aracati para o mundo.',
+    logoColor: 'bg-blue-700',
+    streamUrl: 'https://video04.logicahost.com.br/tvaracati/tvaracati/playlist.m3u8',
+    type: StreamType.HLS,
+    country: Country.BRASIL,
+    category: Category.GENERAL
+  },
+  {
+    id: 'xtreme-tv',
+    name: 'Xtreme TV',
+    description: 'Ação, esportes radicais e entretenimento dinâmico. O canal para quem busca adrenalina e cultura urbana.',
+    logoColor: 'bg-orange-600',
+    streamUrl: 'https://stmv.webtvninjas.com.br/xtremetv54/xtremetv54/playlist.m3u8',
+    type: StreamType.HLS,
     country: Country.BRASIL,
     category: Category.GENERAL
   },
@@ -71,16 +233,6 @@ export const CHANNELS: Channel[] = [
     logoColor: 'bg-slate-800',
     streamUrl: 'https://run-rnw-rn.otteravision.com/rnw/rn/rnw_rn_720p_high.m3u8',
     type: StreamType.HLS,
-    country: Country.BRASIL,
-    category: Category.NEWS
-  },
-  {
-    id: 'cnn-brasil',
-    name: 'CNN Brasil',
-    description: 'A maior rede de notícias do mundo, com cobertura exclusiva dos fatos que movem o Brasil.',
-    logoColor: 'bg-red-900',
-    streamUrl: 'https://www.youtube.com/embed/live_stream?channel=UCv8_id_fT_vU-v5S8Xp3U1Q',
-    type: StreamType.YOUTUBE,
     country: Country.BRASIL,
     category: Category.NEWS
   },
@@ -99,9 +251,19 @@ export const CHANNELS: Channel[] = [
   {
     id: 'telemundo-accion',
     name: 'Telemundo Acción',
-    description: 'Adrenalina pura com as melhores séries de ação, suspense e dramas policiais latinos.',
+    description: 'Adrenalina pura com as melhores séries de action, suspense e dramas policiais latinos.',
     logoColor: 'bg-red-950',
     streamUrl: 'https://d3rciv7av2te5a.cloudfront.net/v1/master/3fec3e5cac39a52b2132f9c66c83dae043dc17d4/prod-plex/master.m3u8?ads.xumo_channelId=88889470',
+    type: StreamType.HLS,
+    country: Country.GLOBAL,
+    category: Category.GENERAL
+  },
+  {
+    id: 'azteca-mundo',
+    name: 'Azteca Mundo',
+    description: 'Um dos maiores canais de entretenimento da América Latina, trazendo novelas, séries e variedades de grande sucesso global.',
+    logoColor: 'bg-emerald-700',
+    streamUrl: 'https://azt-mun.otteravision.com/azt/mun/mun.m3u8',
     type: StreamType.HLS,
     country: Country.GLOBAL,
     category: Category.GENERAL
@@ -119,17 +281,89 @@ export const CHANNELS: Channel[] = [
     category: Category.PUBLIC
   },
   {
-    id: 'euronews-luso',
-    name: 'Euronews PT',
-    description: 'Notícias internacionais sob uma perspectiva europeia, agora em português.',
-    logoColor: 'bg-blue-500',
-    streamUrl: 'https://www.youtube.com/embed/live_stream?channel=UC4pA89_W_v_yTidv8_7_53w',
-    type: StreamType.YOUTUBE,
-    country: Country.GLOBAL,
-    category: Category.NEWS
+    id: 'tvi-ficcao',
+    name: 'TVI Ficção',
+    description: 'Canal português dedicado à melhor ficção nacional. Reviva as grandes histórias, novelas e séries de sucesso da TVI 24 horas por dia.',
+    logoColor: 'bg-pink-600',
+    streamUrl: 'https://video-auth2.iol.pt/live_tvi_ficcao/live_tvi_ficcao/edge_servers/tvificcao-720p/playlist.m3u8',
+    type: StreamType.HLS,
+    country: Country.PORTUGAL,
+    category: Category.GENERAL
   },
 
-  // --- ESPECIALIZADOS ---
+  // --- MÚSICA ---
+  {
+    id: 'trace-urban',
+    name: 'Trace Urban',
+    description: 'O canal número um de música urbana. Acompanhe os maiores sucessos do Hip-Hop, R&B e ritmos globais 24 horas por dia.',
+    logoColor: 'bg-indigo-950',
+    streamUrl: 'https://amg01076-lightningintern-traceurban-xiaomi-m78n3.amagi.tv/playlist/amg01076-lightningintern-traceurban-xiaomi/playlist.m3u8',
+    type: StreamType.HLS,
+    country: Country.GLOBAL,
+    category: Category.MUSIC
+  },
+
+  // --- ESPECIALIZADOS & GLOBAL ---
+  {
+    id: 'gia-tv',
+    name: 'GIA TV',
+    description: 'Transmissão global com foco em espiritualidade, cultura e programas de variedades para toda a família.',
+    logoColor: 'bg-violet-800',
+    streamUrl: 'https://live20.bozztv.com/giatvplayout7/giatv-208272/playlist.m3u8',
+    type: StreamType.HLS,
+    country: Country.GLOBAL,
+    category: Category.GENERAL
+  },
+  {
+    id: 'rssports',
+    name: 'RSSports',
+    description: 'O canal dedicado à emoção do esporte. Acompanhe as principais competições, debates e coberturas completas das modalidades mais amadas.',
+    logoColor: 'bg-red-900',
+    streamUrl: 'https://video03.logicahost.com.br/rssports5/rssports5/playlist.m3u8',
+    type: StreamType.HLS,
+    country: Country.BRASIL,
+    category: Category.SPORTS
+  },
+  {
+    id: 'nsports',
+    name: 'NSports',
+    description: 'O canal de esportes para quem vive a emoção das competições. Transmissões variadas, eventos ao vivo e o melhor do desporto nacional e internacional.',
+    logoColor: 'bg-red-700',
+    streamUrl: 'https://ogc-nsprt-tcl-roku-syndication.otteravision.com/ogc/nsprt/nsprt_720p.m3u8',
+    type: StreamType.HLS,
+    country: Country.BRASIL,
+    category: Category.SPORTS
+  },
+  {
+    id: 'fifa-plus',
+    name: 'FIFA+',
+    description: 'O canal oficial da FIFA com o melhor do futebol mundial. Jogos históricos, documentários e transmissões ao vivo com narração em português.',
+    logoColor: 'bg-blue-800',
+    streamUrl: 'https://c2657533.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UGxleC1icl9GSUZBUGx1c1BvcnR1Z3Vlc2VfSExT/playlist.m3u8',
+    type: StreamType.HLS,
+    country: Country.GLOBAL,
+    category: Category.SPORTS
+  },
+  {
+    id: 'barca-tv',
+    name: 'Barça TV',
+    description: 'O canal oficial do FC Barcelona. Acompanhe os bastidores, jogos históricos, interviews e conteúdos exclusivos do time catalão.',
+    logoColor: 'bg-blue-900',
+    streamUrl: 'https://amg17560-fcb-amg17560c1-rakuten-uk-4891.playouts.now.amagi.tv/playlist/amg17560-fcbarcelona-topbarcaenglish-rakutenuk/playlist.m3u8',
+    type: StreamType.HLS,
+    country: Country.SPAIN,
+    category: Category.SPORTS
+  },
+  {
+    id: 'real-madrid-tv',
+    name: 'Real Madrid TV',
+    description: 'O canal oficial do Real Madrid CF. Notícias, treinos, jogos históricos e cobertura exclusiva do maior clube do mundo.',
+    logoColor: 'bg-blue-600',
+    streamUrl: 'https://rmtv.akamaized.net/hls/live/2043153/rmtv-es-web/master.m3u8',
+    type: StreamType.HLS,
+    country: Country.SPAIN,
+    category: Category.SPORTS
+  },
   {
     id: 'redbull-tv',
     name: 'Red Bull TV',
@@ -139,15 +373,5 @@ export const CHANNELS: Channel[] = [
     type: StreamType.HLS,
     country: Country.GLOBAL,
     category: Category.SPORTS
-  },
-  {
-    id: 'nasa-live',
-    name: 'NASA TV',
-    description: 'Direto do espaço. Lançamentos, missões e a vida dos astronautas na Estação Espacial Internacional.',
-    logoColor: 'bg-sky-950',
-    streamUrl: 'https://www.youtube.com/embed/live_stream?channel=UCLA_DiR1FfKNvjuUpBHmylQ',
-    type: StreamType.YOUTUBE,
-    country: Country.USA,
-    category: Category.INTERNATIONAL
   }
 ];
