@@ -193,7 +193,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ channel }) => {
           src={channel.streamUrl} 
           title={channel.name} 
           className="w-full h-full border-0" 
-          allow="autoplay; encrypted-media; picture-in-picture"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen 
         />
       )}

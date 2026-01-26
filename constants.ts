@@ -305,6 +305,16 @@ export const CHANNELS: Channel[] = [
 
   // --- ESPECIALIZADOS & GLOBAL ---
   {
+    id: 'premier-uk',
+    name: 'Premier UK',
+    description: 'O melhor do desporto e entretenimento internacional direto do Reino Unido em alta definição.',
+    logoColor: 'bg-blue-900',
+    streamUrl: 'https://profamouslife.com/premium.php?player=desktop&live=premieruk',
+    type: StreamType.IFRAME,
+    country: Country.UK,
+    category: Category.SPORTS
+  },
+  {
     id: 'gia-tv',
     name: 'GIA TV',
     description: 'Transmissão global com foco em espiritualidade, cultura e programas de variedades para toda a família.',

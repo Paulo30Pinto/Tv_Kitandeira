@@ -1,3 +1,6 @@
+
+// Import React to fix the 'Cannot find namespace React' error on line 9
+import React from 'react';
 import { Tv, Globe2, Film, Info, Trophy, Music, GraduationCap, Globe, Smile } from 'lucide-react';
 import { Category } from '../types';
 
@@ -26,7 +29,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeCategory, onSelectCatego
           <Tv size={18} className="text-white" />
         </div>
         <h1 className="text-2xl font-bold tracking-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-          LusoTV
+          Tv Kianda
         </h1>
       </div>
 
