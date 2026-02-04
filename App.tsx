@@ -98,7 +98,7 @@ const App: React.FC = () => {
                 <div className="w-8 h-8 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
                   <Tv size={16} className="text-white" />
                 </div>
-                <span className="text-xl font-bold tracking-tight text-white">LusoTV</span>
+                <span className="text-xl font-bold tracking-tight text-white">Tv Kitandeira</span>
               </div>
               
               {/* Category Pill (Visual Indicator) */}
@@ -165,7 +165,7 @@ const App: React.FC = () => {
 
         {/* Content Grid */}
         <div className="flex-1 overflow-y-auto custom-scrollbar">
-          <div className="max-w-7xl mx-auto p-4 md:p-8 pb-24 md:pb-8">
+          <div className="max-w-7xl mx-auto p-3 md:p-8 pb-24 md:pb-8">
             
             {/* Desktop Header (Hidden on Mobile) */}
             <div className="hidden md:block mb-8">
@@ -189,12 +189,13 @@ const App: React.FC = () => {
             </div>
 
             {/* Results Count */}
-            <div className="mb-4 text-xs text-gray-500 font-medium uppercase tracking-widest md:hidden">
-              {filteredChannels.length} Canais Encontrados
+            <div className="mb-3 text-[10px] text-gray-500 font-bold uppercase tracking-widest md:hidden px-1">
+              {filteredChannels.length} Canais ao vivo
             </div>
 
             {filteredChannels.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+              // GRID CHANGE: grid-cols-2 for mobile, standard aspect ratio support
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-5">
                 {filteredChannels.map(channel => (
                   <ChannelCard 
                     key={channel.id} 
