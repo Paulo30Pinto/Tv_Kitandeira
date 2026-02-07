@@ -1,0 +1,19 @@
+{
+  "appId": "com.tvkitandeira.smartpwa",
+  "appName": "Tv Kitandeira",
+  "webDir": ".",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https",
+    "allowNavigation": ["*"]
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "backgroundColor": "#0f0f0f",
+      "androidScaleType": "CENTER_CROP",
+      "showSpinner": true,
+      "spinnerColor": "#00bcd4"
+    }
+  }
+}

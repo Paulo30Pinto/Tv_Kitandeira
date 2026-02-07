@@ -1,39 +1,41 @@
-
-// Import React to fix the 'Cannot find namespace React' error on line 9
 import React from 'react';
-import { Tv, Globe2, Film, Info, Trophy, Music, GraduationCap, Globe, Smile } from 'lucide-react';
+import { Tv, Globe2, Film, Info, Trophy, Music, GraduationCap, Globe, Smile, Download } from 'lucide-react';
 import { Category } from '../types';
 
 interface SidebarProps {
   activeCategory: Category | 'All';
   onSelectCategory: (cat: Category | 'All') => void;
+  onInstall?: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ activeCategory, onSelectCategory }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ activeCategory, onSelectCategory, onInstall }) => {
   const menuItems = [
-    { id: 'All', label: 'Todos os Canais', icon: Tv },
+    { id: 'All', label: 'Início', icon: Tv },
     { id: Category.NEWS, label: 'Notícias', icon: Globe2 },
     { id: Category.KIDS, label: 'Infantil', icon: Smile },
     { id: Category.SPORTS, label: 'Desporto', icon: Trophy },
-    { id: Category.EDUCATION, label: 'Educação & Gov', icon: GraduationCap },
-    { id: Category.INTERNATIONAL, label: 'Internacional', icon: Globe },
+    { id: Category.EDUCATION, label: 'Educação', icon: GraduationCap },
+    { id: Category.INTERNATIONAL, label: 'Mundo', icon: Globe },
     { id: Category.MUSIC, label: 'Música', icon: Music },
     { id: Category.GENERAL, label: 'Variedades', icon: Film },
     { id: Category.PUBLIC, label: 'Públicos', icon: Info },
   ];
 
   return (
-    <div className="hidden md:flex flex-col w-64 bg-gray-900 border-r border-gray-800 h-full p-6">
-      <div className="mb-10 flex items-center gap-3 px-2">
-        <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
-          <Tv size={18} className="text-white" />
+    <div className="hidden md:flex flex-col w-72 bg-[#0a0a0a] border-r border-white/5 h-full p-8">
+      <div className="mb-12 flex items-center gap-3 px-2">
+        <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-2xl shadow-cyan-500/20 rotate-3">
+          <Tv size={22} className="text-white" strokeWidth={2.5} />
         </div>
-        <h1 className="text-2xl font-bold tracking-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">
-          Tv Kianda
-        </h1>
+        <div>
+          <h1 className="text-2xl font-black tracking-tighter text-white italic leading-none">
+            KITANDEIRA
+          </h1>
+          <span className="text-[9px] font-black text-cyan-500 tracking-[0.3em] uppercase">Smart PWA</span>
+        </div>
       </div>
 
-      <nav className="space-y-2 overflow-y-auto max-h-[calc(100vh-200px)] pr-2 custom-scrollbar">
+      <nav className="space-y-1.5 overflow-y-auto max-h-[calc(100vh-320px)] pr-2 custom-scrollbar">
         {menuItems.map((item) => {
           const isActive = activeCategory === item.id;
           const Icon = item.icon;
@@ -41,24 +43,43 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeCategory, onSelectCatego
             <button
               key={item.id}
               onClick={() => onSelectCategory(item.id as Category | 'All')}
-              className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 group text-sm font-medium
+              className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all duration-300 group text-sm font-bold
                 ${isActive 
-                  ? 'bg-blue-600/10 text-blue-400 ring-1 ring-blue-500/50' 
-                  : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+                  ? 'bg-cyan-500 text-black shadow-lg shadow-cyan-500/10 scale-[1.02]' 
+                  : 'text-gray-500 hover:bg-white/5 hover:text-white'
                 }`}
             >
-              <Icon size={20} className={isActive ? 'text-blue-400' : 'text-gray-500 group-hover:text-white'} />
+              <Icon size={20} className={isActive ? 'text-black' : 'text-gray-600 group-hover:text-cyan-400'} />
               {item.label}
             </button>
           );
         })}
       </nav>
 
-      <div className="mt-auto">
-        <div className="bg-gray-800/50 rounded-xl p-4 border border-gray-700/50">
-          <p className="text-xs text-gray-500 leading-relaxed text-center">
-            Pressione <strong>ESC</strong> para sair do player de vídeo. Use o teclado ou toque para navegar.
+      <div className="mt-auto pt-8">
+        {onInstall && (
+          <button 
+            onClick={onInstall}
+            className="w-full flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 text-white font-black py-4 rounded-2xl mb-6 transition-all border border-white/5 active:scale-95"
+          >
+            <Download size={18} className="text-cyan-400" />
+            INSTALAR APP
+          </button>
+        )}
+        
+        <div className="bg-[#111] rounded-3xl p-5 border border-white/5 text-center relative overflow-hidden group">
+          <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:rotate-12 transition-transform">
+             <Tv size={40} />
+          </div>
+          <p className="text-[10px] text-gray-500 leading-relaxed font-bold uppercase tracking-widest relative z-10">
+            Interface otimizada<br/>
+            <span className="text-cyan-400 font-black">v2.1 Stable</span>
           </p>
+          <div className="mt-2 flex justify-center gap-1">
+            <div className="w-1 h-1 bg-green-500 rounded-full" />
+            <div className="w-1 h-1 bg-green-500 rounded-full animate-pulse" />
+            <div className="w-1 h-1 bg-green-500 rounded-full" />
+          </div>
         </div>
       </div>
     </div>
