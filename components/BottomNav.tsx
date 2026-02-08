@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Search, Grid, Heart } from 'lucide-react';
+import { Home, Search, Grid, Heart, User } from 'lucide-react';
 
 interface BottomNavProps {
   activeTab: string;
@@ -15,7 +15,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange, on
         className={`flex flex-col items-center gap-1 p-2 ${activeTab === 'home' ? 'text-cyan-400' : 'text-gray-500'}`}
       >
         <Home size={20} strokeWidth={activeTab === 'home' ? 2.5 : 2} />
-        <span className="text-[10px] font-medium">Início</span>
+        <span className="text-[10px] font-medium">Canais</span>
       </button>
 
       <button 
@@ -25,8 +25,8 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange, on
         }}
         className={`flex flex-col items-center gap-1 p-2 ${activeTab === 'search' ? 'text-cyan-400' : 'text-gray-500'}`}
       >
-        <Search size={20} strokeWidth={activeTab === 'search' ? 2.5 : 2} />
-        <span className="text-[10px] font-medium">Buscar</span>
+        <User size={20} strokeWidth={activeTab === 'search' ? 2.5 : 2} />
+        <span className="text-[10px] font-medium">Perfil</span>
       </button>
 
       <button 
@@ -34,7 +34,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange, on
         className={`flex flex-col items-center gap-1 p-2 ${activeTab === 'menu' ? 'text-cyan-400' : 'text-gray-500'}`}
       >
         <Grid size={20} strokeWidth={activeTab === 'menu' ? 2.5 : 2} />
-        <span className="text-[10px] font-medium">Canais</span>
+        <span className="text-[10px] font-medium">Categorias</span>
       </button>
 
       <button 
