@@ -44,10 +44,15 @@ export interface Channel {
   name: string;
   description: string;
   logoColor: string; 
+  logoImage?: string;
   streamUrl: string;
   type: StreamType;
   country: Country;
   category: Category;
+  language?: string;
+  audio?: string;
+  fallbackUrls?: string[];
+  embedPolicy?: string;
   youtubeId?: string;
   youtubeHandle?: string; 
 }

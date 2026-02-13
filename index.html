@@ -3,20 +3,17 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover" />
-    <meta name="theme-color" content="#0f0f0f" />
+    <meta name="theme-color" content="#050505" />
     
-    <!-- PWA Primary Tags -->
     <title>Tv Kitandeira - Smart PWA</title>
-    <meta name="description" content="Assista TV aberta e pública em qualquer lugar com interface de Smart TV." />
+    <meta name="description" content="A próxima geração de TV pública digital." />
     <link rel="manifest" href="manifest.json" />
-    
-    <!-- Apple Mobile Specific -->
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="Tv Kitandeira" />
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/716/716429.png" />
     
-    <!-- Dependencies -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Syne:wght@400..800&display=swap" rel="stylesheet">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     
@@ -24,28 +21,55 @@
       :root {
         --safe-top: env(safe-area-inset-top);
         --safe-bottom: env(safe-area-inset-bottom);
+        --accent: #22d3ee;
       }
-      ::-webkit-scrollbar { width: 6px; height: 6px; }
-      ::-webkit-scrollbar-track { background: #0f0f0f; }
-      ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
-      
+
+      * {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      h1, h2, .font-syne { font-family: 'Syne', sans-serif; }
+
       body {
-        background-color: #0f0f0f;
+        background-color: #050505;
+        background-image: 
+          radial-gradient(at 0% 0%, rgba(34, 211, 238, 0.05) 0px, transparent 50%),
+          radial-gradient(at 100% 100%, rgba(59, 130, 246, 0.05) 0px, transparent 50%);
         color: white;
         overflow: hidden;
         -webkit-tap-highlight-color: transparent;
         user-select: none;
       }
 
-      /* Native feeling for PWA */
-      .pt-safe { padding-top: var(--safe-top); }
-      .pb-safe { padding-bottom: var(--safe-bottom); }
-      
-      @media all and (display-mode: standalone) {
-        body {
-          /* Add extra padding for standalone mode if needed */
-        }
+      .glass {
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
       }
+
+      .glass-card {
+        background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.01) 100%);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255,255,255,0.08);
+      }
+
+      .glow-accent {
+        box-shadow: 0 0 20px rgba(34, 211, 238, 0.2);
+      }
+
+      ::-webkit-scrollbar { width: 4px; }
+      ::-webkit-scrollbar-track { background: transparent; }
+      ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
+      .perspective-1000 { perspective: 1000px; }
+      
+      @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+      }
+      .animate-float { animation: float 3s ease-in-out infinite; }
     </style>
     
     <script type="importmap">
@@ -62,21 +86,11 @@
   <body>
     <div id="root"></div>
     <script>
-      // Service Worker Registration
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
-            .then(reg => console.log('PWA Service Worker Ativo'))
-            .catch(err => console.error('Erro ao registrar SW:', err));
+          navigator.serviceWorker.register('/sw.js').catch(err => console.error(err));
         });
       }
-
-      // Prevent accidental pull-to-refresh on some mobile browsers
-      document.body.addEventListener('touchmove', function(e) {
-        if (e.target.closest('.overflow-y-auto')) return;
-        if (e.touches.length > 1) return;
-        // Optional: e.preventDefault();
-      }, {passive: false});
     </script>
   </body>
 </html>

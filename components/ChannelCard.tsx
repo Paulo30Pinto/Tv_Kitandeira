@@ -1,6 +1,6 @@
 import React from 'react';
 import { Channel } from '../types';
-import { Play } from 'lucide-react';
+import { Play, Info, Heart } from 'lucide-react';
 
 interface ChannelCardProps {
   channel: Channel;
@@ -9,56 +9,59 @@ interface ChannelCardProps {
 
 export const ChannelCard: React.FC<ChannelCardProps> = ({ channel, onClick }) => {
   return (
-    <button
-      onClick={() => onClick(channel)}
-      className="group relative flex flex-col w-full bg-[#161616] rounded-xl shadow-md overflow-hidden hover:shadow-[0_0_20px_rgba(34,211,238,0.2)] transition-all duration-300 text-left focus:outline-none focus:ring-2 focus:ring-cyan-500"
-      aria-label={`Assistir ${channel.name}`}
-    >
-      {/* Thumbnail Area - Aspect Ratio 16:9 */}
-      <div className={`aspect-video w-full ${channel.logoColor} relative overflow-hidden flex items-center justify-center`}>
-        {/* Decorative gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#161616] via-transparent to-transparent opacity-80" />
-        
-        {/* Pattern for texture */}
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10 mix-blend-overlay" />
-
-        {/* Logo / Initials Centered & Prominent */}
-        <div className="relative z-10 transform transition-transform duration-500 group-hover:scale-110">
-          <h2 className="text-3xl md:text-4xl font-black text-white/90 tracking-tighter drop-shadow-lg select-none">
-            {channel.name.substring(0, 2).toUpperCase()}
-          </h2>
-        </div>
-
-        {/* LIVE Badge: Top Right */}
-        <div className="absolute top-2 right-2 flex items-center gap-1 bg-red-600/90 backdrop-blur-sm text-white text-[8px] font-bold px-1.5 py-0.5 rounded-sm shadow-sm z-20">
-          <div className="w-1 h-1 bg-white rounded-full animate-pulse" />
-          AO VIVO
-        </div>
-
-        {/* Play Overlay (Visible on Hover/Focus) */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40 z-20">
-           <div className="w-10 h-10 bg-cyan-500 rounded-full flex items-center justify-center shadow-lg transform scale-0 group-hover:scale-100 transition-transform duration-300">
-             <Play fill="white" className="text-white ml-1" size={16} />
-           </div>
-        </div>
-      </div>
-
-      {/* Content Area */}
-      <div className="p-3 flex-1 flex flex-col justify-between w-full bg-[#1a1a1a]">
-        <div>
-          {/* Title */}
-          <h3 className="text-sm font-bold text-gray-100 leading-tight group-hover:text-cyan-400 transition-colors line-clamp-1 mb-1">
-            {channel.name}
-          </h3>
+    <div className="perspective-1000 group">
+      <button
+        onClick={() => onClick(channel)}
+        className="w-full relative flex flex-col bg-white/5 rounded-[2rem] overflow-hidden transition-all duration-500 transform group-active:scale-95 group-hover:-translate-y-2 border border-white/10 shadow-2xl"
+      >
+        {/* Thumbnail Area */}
+        <div className={`aspect-[4/5] w-full ${channel.logoColor} relative overflow-hidden`}>
+          {/* Layered Overlays */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent z-10" />
+          <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-500" />
           
-          {/* Subtitle / Metadata */}
-          <div className="flex items-center gap-2 text-[10px] text-gray-500 font-medium uppercase tracking-wide">
-            <span className="truncate max-w-[80px]">{channel.category}</span>
-            <span className="w-0.5 h-2 bg-gray-700 rounded-full"></span>
-            <span>{channel.country}</span>
+          {/* Static Texture */}
+          <div className="absolute inset-0 opacity-20 mix-blend-overlay pointer-events-none" 
+               style={{backgroundImage: 'url("https://www.transparenttextures.com/patterns/stardust.png")'}} />
+
+          {/* Logo Abbreviation */}
+          <div className="absolute inset-0 flex items-center justify-center z-10 transition-transform duration-700 group-hover:scale-125">
+            <span className="text-5xl font-black text-white/20 tracking-tighter select-none font-syne">
+              {channel.name.substring(0, 2).toUpperCase()}
+            </span>
+          </div>
+
+          {/* Badge & Meta */}
+          <div className="absolute top-4 left-4 z-20 flex flex-col gap-2">
+            <div className="flex items-center gap-1.5 bg-red-500/90 backdrop-blur-md text-white text-[9px] font-black px-2.5 py-1 rounded-full shadow-lg">
+              <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
+              LIVE
+            </div>
+          </div>
+
+          {/* Bottom Info Overlay */}
+          <div className="absolute bottom-0 left-0 right-0 p-5 z-20">
+            <h3 className="text-lg font-extrabold text-white leading-tight mb-1 font-syne group-hover:text-cyan-400 transition-colors">
+              {channel.name}
+            </h3>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] text-cyan-500/80 font-black uppercase tracking-widest">{channel.category}</span>
+              <span className="w-1 h-1 bg-white/20 rounded-full" />
+              <span className="text-[10px] text-white/40 font-bold">{channel.country}</span>
+            </div>
+          </div>
+
+          {/* Hover Actions Bar */}
+          <div className="absolute inset-x-0 top-0 h-full flex items-center justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-cyan-950/20 backdrop-blur-sm z-30">
+             <div className="w-14 h-14 bg-white text-black rounded-full flex items-center justify-center shadow-2xl transform scale-50 group-hover:scale-100 transition-transform duration-500 delay-75">
+               <Play fill="currentColor" size={24} className="ml-1" />
+             </div>
           </div>
         </div>
-      </div>
-    </button>
+
+        {/* Quick Footer */}
+        <div className="h-2 bg-gradient-to-r from-cyan-500/50 to-blue-600/50 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      </button>
+    </div>
   );
 };
