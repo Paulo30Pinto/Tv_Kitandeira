@@ -1,16 +1,17 @@
+
 {
-  "short_name": "Kitandeira",
-  "name": "Tv Kitandeira - Smart PWA",
+  "short_name": "TEIP",
+  "name": "TEIP - Smart PWA",
   "description": "Agregador de canais de TV públicos com interface de Smart TV.",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/716/716429.png",
+      "src": "logo_white_bg.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/716/716429.png",
+      "src": "logo_no_bg.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
@@ -19,8 +20,8 @@
   "start_url": "./index.html",
   "display": "standalone",
   "display_override": ["window-controls-overlay", "minimal-ui"],
-  "theme_color": "#0f0f0f",
-  "background_color": "#0f0f0f",
+  "theme_color": "#050505",
+  "background_color": "#050505",
   "orientation": "portrait-primary",
   "categories": ["entertainment", "multimedia"]
 }

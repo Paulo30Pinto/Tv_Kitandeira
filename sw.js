@@ -1,9 +1,12 @@
-const CACHE_NAME = 'tv-kitandeira-v3';
+
+const CACHE_NAME = 'teip-stream-v1';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/index.tsx',
   '/manifest.json',
+  '/logo_no_bg.png',
+  '/logo_white_bg.png',
   'https://cdn.tailwindcss.com',
   'https://cdn.jsdelivr.net/npm/hls.js@latest',
   'https://esm.sh/react@^19.2.3',

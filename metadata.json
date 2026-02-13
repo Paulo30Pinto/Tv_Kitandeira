@@ -1,5 +1,5 @@
 {
-  "name": "Tv Kitandeira Smart PWA",
+  "name": "TEIP Smart PWA",
   "description": "A Smart-TV style PWA aggregating public TV channels with Capacitor CLI integration.",
   "requestFramePermissions": [
     "camera",

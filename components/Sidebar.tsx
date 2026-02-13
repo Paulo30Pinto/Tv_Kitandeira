@@ -23,15 +23,15 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeCategory, onSelectCatego
 
   return (
     <div className="hidden md:flex flex-col w-72 bg-[#0a0a0a] border-r border-white/5 h-full p-8">
-      <div className="mb-12 flex items-center gap-3 px-2">
-        <div className="w-10 h-10 bg-gradient-to-br from-cyan-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-2xl shadow-cyan-500/20 rotate-3">
-          <Tv size={22} className="text-white" strokeWidth={2.5} />
+      <div className="mb-12 flex items-center gap-4 px-2">
+        <div className="w-12 h-12 glass rounded-2xl flex items-center justify-center shadow-2xl overflow-hidden border border-white/10 rotate-3">
+          <img src="logo_no_bg.png" alt="TEIP Logo" className="w-9 h-9 object-contain" />
         </div>
         <div>
-          <h1 className="text-2xl font-black tracking-tighter text-white italic leading-none">
-            KITANDEIRA
+          <h1 className="text-3xl font-black tracking-tighter text-white italic leading-none">
+            TEIP
           </h1>
-          <span className="text-[9px] font-black text-cyan-500 tracking-[0.3em] uppercase">Smart PWA</span>
+          <span className="text-[9px] font-black text-cyan-500 tracking-[0.3em] uppercase">Digital Stream</span>
         </div>
       </div>
 
@@ -69,11 +69,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeCategory, onSelectCatego
         
         <div className="bg-[#111] rounded-3xl p-5 border border-white/5 text-center relative overflow-hidden group">
           <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:rotate-12 transition-transform">
-             <Tv size={40} />
+             <img src="logo_no_bg.png" alt="" className="w-12 h-12 grayscale" />
           </div>
           <p className="text-[10px] text-gray-500 leading-relaxed font-bold uppercase tracking-widest relative z-10">
             Interface otimizada<br/>
-            <span className="text-cyan-400 font-black">v2.1 Stable</span>
+            <span className="text-cyan-400 font-black">v3.0 Nebula</span>
           </p>
           <div className="mt-2 flex justify-center gap-1">
             <div className="w-1 h-1 bg-green-500 rounded-full" />
