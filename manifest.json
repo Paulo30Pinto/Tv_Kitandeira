@@ -5,19 +5,19 @@
   "description": "Agregador de canais de TV públicos com interface de Smart TV.",
   "icons": [
     {
-      "src": "logo_white_bg.png",
+      "src": "/icons/TEIP.JPG",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "logo_no_bg.png",
+      "src": "/icons/TEIP.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     }
   ],
-  "start_url": "./index.html",
+  "start_url": "/",
   "display": "standalone",
   "display_override": ["window-controls-overlay", "minimal-ui"],
   "theme_color": "#050505",
