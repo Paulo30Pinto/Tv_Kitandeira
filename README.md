@@ -1,5 +1,5 @@
 <div align="center">
-<img width="1200" height="475" alt="GHBanner" src="TEIP.JPG" />
+<img width="1200" height="475" alt="GHBanner" src="https://teiptv.netlify.app/icons/TEIP.JPG" />
 </div>
 
 # Run and deploy your AI Studio app
