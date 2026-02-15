@@ -4,8 +4,8 @@ const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/TEIP.png',
-  '/TEIP.JPG'
+  '/public/TEIP.png',
+  '/public/TEIP.JPG',
 ];
 
 self.addEventListener('install', (event) => {
