@@ -3,15 +3,9 @@ const CACHE_NAME = 'teip-stream-v1';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
-  '/index.tsx',
   '/manifest.json',
   '/TEIP.png',
-  '/TEIP.JPG',
-  'https://cdn.tailwindcss.com',
-  'https://cdn.jsdelivr.net/npm/hls.js@latest',
-  'https://esm.sh/react@^19.2.3',
-  'https://esm.sh/react-dom@^19.2.3/',
-  'https://esm.sh/lucide-react@^0.562.0'
+  '/TEIP.JPG'
 ];
 
 self.addEventListener('install', (event) => {

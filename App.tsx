@@ -5,6 +5,7 @@ import { ChannelCard } from './components/ChannelCard';
 import { VideoPlayer } from './components/VideoPlayer';
 import { Sidebar } from './components/Sidebar';
 import { BottomNav } from './components/BottomNav';
+import { HeroCarousel } from './components/HeroCarousel';
 import { ArrowLeft, Search, X, Tv, WifiOff, Download, Sparkles, TrendingUp, Play, Bell } from 'lucide-react';
 
 const App: React.FC = () => {
@@ -16,7 +17,7 @@ const App: React.FC = () => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   
-  const featuredChannel = CHANNELS[0];
+  const featuredChannels = CHANNELS.slice(0, 5);
 
   useEffect(() => {
     window.addEventListener('beforeinstallprompt', (e) => {
@@ -107,7 +108,7 @@ const App: React.FC = () => {
           <div className="flex items-center justify-between py-5 mb-2">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 glass rounded-2xl flex items-center justify-center shadow-xl glow-border overflow-hidden">
-                <img src="/icons/TEIP.png" alt="TEIP Logo" className="w-8 h-8 object-contain" />
+                <img src="/TEIP.png" alt="TEIP Logo" className="w-8 h-8 object-contain" />
               </div>
               <h1 className="text-3xl font-black font-syne tracking-tighter italic">TEIP</h1>
             </div>
@@ -140,33 +141,12 @@ const App: React.FC = () => {
         {/* Content Area */}
         <div className="flex-1 overflow-y-auto custom-scrollbar px-6 md:px-12 pb-36">
           
-          {/* Hero Section (Desktop/Mobile) */}
+          {/* Hero Section (Carousel) */}
           {!searchTerm && activeCategory === 'All' && activeTab === 'home' && (
-             <div className="mb-12 mt-4">
-                <button 
-                  onClick={() => setActiveChannel(featuredChannel)}
-                  className="w-full aspect-[16/9] md:aspect-[21/9] rounded-[3rem] bg-gradient-to-br from-cyan-600/30 to-purple-900/40 border border-white/10 relative overflow-hidden group active:scale-[0.98] transition-all shadow-2xl"
-                >
-                   {/* Animated Hero Background */}
-                   <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-700" />
-                   <div className="absolute top-8 left-8 bg-white/10 backdrop-blur-2xl px-5 py-2 rounded-full border border-white/20 text-[11px] font-black flex items-center gap-2 shadow-xl">
-                      <Sparkles size={14} className="text-yellow-400 animate-spin-slow" /> SUGGESTÃO PREMIUM
-                   </div>
-                   
-                   <div className="absolute bottom-10 left-10 right-10">
-                      <div className="flex items-center gap-3 mb-3">
-                        <TrendingUp size={18} className="text-cyan-400" />
-                        <span className="text-[12px] font-black text-cyan-400 uppercase tracking-[0.3em]">Crescendo agora</span>
-                      </div>
-                      <h2 className="text-4xl md:text-6xl font-black font-syne mb-2 tracking-tight italic uppercase">{featuredChannel.name}</h2>
-                      <p className="text-sm md:text-lg text-white/60 line-clamp-2 max-w-2xl">{featuredChannel.description}</p>
-                   </div>
-
-                   <div className="absolute bottom-10 right-10 w-20 h-20 bg-white text-black rounded-full flex items-center justify-center shadow-[0_0_50px_rgba(255,255,255,0.3)] hover:scale-110 transition-transform">
-                      <Play fill="currentColor" size={32} className="ml-1" />
-                   </div>
-                </button>
-             </div>
+             <HeroCarousel 
+               channels={featuredChannels} 
+               onChannelSelect={setActiveChannel} 
+             />
           )}
 
           <div className="max-w-7xl mx-auto">

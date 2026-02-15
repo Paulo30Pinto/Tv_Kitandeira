@@ -8,8 +8,8 @@
     <title>TEIP - Smart PWA</title>
     <meta name="description" content="A próxima geração de TV pública digital." />
     <link rel="manifest" href="manifest.json" />
-    <link rel="icon" type="image/png" href="/icons/TEIP.png" />
-    <link rel="apple-touch-icon" href="/icons/TEIP.png" />
+    <link rel="icon" type="image/svg+xml" href="/TEIP.JPG" />
+    <link rel="apple-touch-icon" href="/TEIP.JPG" />
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -99,10 +99,10 @@
       ::-webkit-scrollbar { width: 4px; }
       ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
     </style>
-    
   </head>
   <body>
     <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
@@ -110,6 +110,5 @@
         });
       }
     </script>
-    <script type="module" src="/index.tsx"></script>
   </body>
 </html>
