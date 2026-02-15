@@ -55,7 +55,6 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ channel }) => {
         lowLatencyMode: true,
         maxBufferLength: 30,
         backBufferLength: 60,
-        // Suporte para fMP4 HLS (moderno)
         enableSoftwareAES: true
       });
       hlsRef.current = hls;
@@ -65,7 +64,6 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ channel }) => {
       hls.on(window.Hls.Events.MANIFEST_PARSED, () => {
         setLoading(false);
         video.play().catch(() => {
-          // Mute auto-play fallback
           video.muted = true;
           video.play();
         });
@@ -78,7 +76,6 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ channel }) => {
         }
       });
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-      // Native Safari support
       video.src = channel.streamUrl;
       video.addEventListener('loadedmetadata', () => {
         setLoading(false);
@@ -97,12 +94,13 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ channel }) => {
     const baseUrl = channel.streamUrl;
     const origin = window.location.origin;
     
-    // Passo C: Parâmetros e regras oficiais do player embutido
-    // Adicionamos mute=1 para garantir autoplay imediato em browsers modernos
+    // Custom TV-style parameters: No controls, clean interface
     const params = new URLSearchParams({
       autoplay: '1',
       mute: '1', 
-      controls: '1',
+      controls: '0', // Disabled native controls
+      disablekb: '1',
+      fs: '0',
       modestbranding: '1',
       rel: '0',
       enablejsapi: '1',
@@ -152,7 +150,6 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ channel }) => {
         </div>
       )}
 
-      {/* Fallback YouTube Helper */}
       {channel.type === StreamType.YOUTUBE && showFallback && !error && (
         <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-30 animate-bounce">
           <a 
@@ -171,10 +168,10 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ channel }) => {
         <video 
           ref={videoRef} 
           className="w-full h-full object-contain" 
-          controls 
           autoPlay 
           playsInline 
           crossOrigin="anonymous"
+          controls={false}
         />
       )}
 
@@ -182,7 +179,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ channel }) => {
         <iframe
           src={getYouTubeSrc()}
           title={channel.name}
-          className="w-full h-full border-0"
+          className="w-full h-full border-0 pointer-events-none" 
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
         />

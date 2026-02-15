@@ -6,7 +6,7 @@ import { VideoPlayer } from './components/VideoPlayer';
 import { Sidebar } from './components/Sidebar';
 import { BottomNav } from './components/BottomNav';
 import { HeroCarousel } from './components/HeroCarousel';
-import { ArrowLeft, Search, X, Tv, WifiOff, Download, Sparkles, TrendingUp, Play, Bell } from 'lucide-react';
+import { ArrowLeft, Search, X, Tv, WifiOff, Download, Sparkles, TrendingUp, Play, Bell, ChevronUp, ChevronDown } from 'lucide-react';
 
 const App: React.FC = () => {
   const [activeChannel, setActiveChannel] = useState<Channel | null>(null);
@@ -16,6 +16,10 @@ const App: React.FC = () => {
   const [favorites, setFavorites] = useState<string[]>([]);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  
+  // Controls visibility state
+  const [controlsVisible, setControlsVisible] = useState(true);
+  const controlsTimeoutRef = useRef<any>(null);
   
   const featuredChannels = CHANNELS.slice(0, 5);
 
@@ -27,10 +31,19 @@ const App: React.FC = () => {
     window.addEventListener('online', () => setIsOnline(true));
     window.addEventListener('offline', () => setIsOnline(false));
 
-    // Load favorites from local storage
     const saved = localStorage.getItem('teip_favorites');
     if (saved) setFavorites(JSON.parse(saved));
   }, []);
+
+  // Reset controls when channel changes
+  useEffect(() => {
+    if (activeChannel) {
+      handleUserActivity();
+    }
+    return () => {
+      if (controlsTimeoutRef.current) clearTimeout(controlsTimeoutRef.current);
+    };
+  }, [activeChannel]);
 
   const toggleFavorite = (id: string) => {
     const newFavs = favorites.includes(id) 
@@ -47,6 +60,14 @@ const App: React.FC = () => {
     if (outcome === 'accepted') setDeferredPrompt(null);
   };
 
+  const handleUserActivity = () => {
+    setControlsVisible(true);
+    if (controlsTimeoutRef.current) clearTimeout(controlsTimeoutRef.current);
+    controlsTimeoutRef.current = setTimeout(() => {
+      setControlsVisible(false);
+    }, 4000);
+  };
+
   const filteredChannels = CHANNELS.filter(channel => {
     const matchesCategory = activeCategory === 'All' || channel.category === activeCategory;
     const matchesSearch = channel.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -54,6 +75,17 @@ const App: React.FC = () => {
     const matchesTab = activeTab === 'fav' ? favorites.includes(channel.id) : true;
     return matchesCategory && matchesSearch && matchesTab;
   });
+
+  // Helper for TV Overlay
+  const getChannelInfo = (channel: Channel) => {
+    const index = CHANNELS.findIndex(c => c.id === channel.id);
+    const number = (index + 1).toString().padStart(3, '0');
+    const prev = CHANNELS[index - 1] || CHANNELS[CHANNELS.length - 1];
+    const next = CHANNELS[index + 1] || CHANNELS[0];
+    const prevNum = (CHANNELS.findIndex(c => c.id === prev.id) + 1).toString().padStart(3, '0');
+    const nextNum = (CHANNELS.findIndex(c => c.id === next.id) + 1).toString().padStart(3, '0');
+    return { number, prev, next, prevNum, nextNum };
+  };
 
   return (
     <div className="flex h-screen w-screen bg-[#050505] text-white overflow-hidden font-jakarta select-none">
@@ -71,29 +103,112 @@ const App: React.FC = () => {
         </div>
       )}
 
-      {/* Fullscreen Video Overlay */}
-      {activeChannel && (
-        <div className="fixed inset-0 z-[2000] bg-black flex flex-col animate-in fade-in zoom-in-95 duration-500">
-          <div className="absolute top-0 left-0 right-0 p-8 pt-safe flex justify-between items-center z-50">
-            <button 
-              onClick={() => setActiveChannel(null)}
-              className="w-14 h-14 flex items-center justify-center glass rounded-full active:scale-90 transition-all"
+      {/* Fullscreen Video Overlay - TV Style */}
+      {activeChannel && (() => {
+        const { number, prev, next, prevNum, nextNum } = getChannelInfo(activeChannel);
+        
+        return (
+          <div 
+            className={`fixed inset-0 z-[2000] bg-black animate-in fade-in zoom-in-95 duration-500 ${!controlsVisible ? 'cursor-none' : ''}`}
+            onMouseMove={handleUserActivity}
+            onClick={handleUserActivity}
+            onTouchStart={handleUserActivity}
+          >
+            {/* Video Layer */}
+            <div className="absolute inset-0 z-0">
+              <VideoPlayer channel={activeChannel} />
+            </div>
+
+            {/* Top UI: Back Button */}
+            <div 
+              className={`absolute top-0 left-0 right-0 p-6 pt-safe z-50 flex justify-between transition-opacity duration-500 ${controlsVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
             >
-              <ArrowLeft size={28} />
-            </button>
-            <div className="flex flex-col items-end">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-                <span className="text-[10px] font-black text-white/60 uppercase tracking-widest">Transmitindo</span>
+              <button 
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveChannel(null);
+                }}
+                className="w-12 h-12 flex items-center justify-center bg-black/40 backdrop-blur-md rounded-full border border-white/10 active:scale-90 transition-all hover:bg-white/20 text-white group shadow-xl"
+              >
+                <ArrowLeft size={24} className="group-hover:-translate-x-1 transition-transform" />
+              </button>
+            </div>
+
+            {/* TV Info Control Panel */}
+            <div 
+              className={`absolute bottom-0 left-0 right-0 z-50 transition-all duration-700 ease-in-out ${controlsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}`}
+            >
+              {/* Gradient Backdrop */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/90 to-transparent h-80 -z-10 bottom-0" />
+
+              <div className="px-8 pb-10 md:px-12 md:pb-12 max-w-7xl mx-auto flex flex-col gap-6">
+                
+                {/* Main Program Bar */}
+                <div className="flex flex-col md:flex-row items-end md:items-center gap-6">
+                  
+                  {/* Channel ID */}
+                  <div className="flex items-center gap-5 min-w-max">
+                     <span className="text-6xl md:text-7xl font-black font-syne text-white/90 tabular-nums tracking-tighter drop-shadow-2xl">
+                       {number}
+                     </span>
+                     <div className="h-16 w-px bg-white/20" />
+                     <div className="flex flex-col gap-1">
+                        <span className="text-xs font-bold text-cyan-400 uppercase tracking-[0.2em]">{activeChannel.category}</span>
+                        <h2 className="text-2xl md:text-4xl font-black italic uppercase leading-none drop-shadow-lg">{activeChannel.name}</h2>
+                     </div>
+                  </div>
+
+                  {/* Program Info & Progress */}
+                  <div className="flex-1 w-full bg-white/5 backdrop-blur-xl border-t border-white/10 p-5 rounded-2xl flex flex-col gap-3 shadow-2xl">
+                     <div className="flex justify-between items-center text-[10px] font-black tracking-widest text-cyan-400/80 mb-0.5">
+                        <span>PROGRAMAÇÃO AO VIVO</span>
+                        <div className="flex items-center gap-2 text-red-500 bg-red-500/10 px-2 py-0.5 rounded">
+                          <span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />
+                          DIRETO
+                        </div>
+                     </div>
+                     
+                     <div className="flex justify-between items-end gap-4">
+                       <h3 className="text-xl font-bold text-white line-clamp-1 leading-tight">{activeChannel.description}</h3>
+                       <span className="text-xs text-white/30 font-mono whitespace-nowrap hidden sm:block border border-white/10 px-2 py-0.5 rounded">HD 1080p</span>
+                     </div>
+
+                     <div className="flex items-center gap-4 mt-1">
+                        <span className="text-xs font-bold text-white/40">15:30</span>
+                        <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden relative">
+                           <div className="absolute inset-y-0 left-0 w-[65%] bg-gradient-to-r from-cyan-600 to-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.6)]" />
+                        </div>
+                        <span className="text-xs font-bold text-white/40">18:00</span>
+                     </div>
+                  </div>
+                </div>
+
+                {/* Channel List / Navigation Hint */}
+                <div className="hidden md:flex items-center gap-4 text-sm font-medium text-white/40 pl-2 animate-in slide-in-from-bottom-4 duration-1000 delay-100">
+                   <div className="flex items-center gap-3 group/nav cursor-pointer hover:text-white transition-colors">
+                      <ChevronUp size={16} />
+                      <span className="tabular-nums opacity-50 font-mono">{prevNum}</span>
+                      <span className="uppercase text-xs font-bold tracking-wider">{prev.name}</span>
+                   </div>
+                   <div className="w-1 h-1 bg-white/20 rounded-full" />
+                   <div className="flex items-center gap-3 text-cyan-400 font-bold scale-105">
+                      <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full shadow-[0_0_10px_cyan]" />
+                      <span className="tabular-nums font-mono">{number}</span>
+                      <span className="uppercase text-xs tracking-wider">{activeChannel.name}</span>
+                   </div>
+                   <div className="w-1 h-1 bg-white/20 rounded-full" />
+                   <div className="flex items-center gap-3 group/nav cursor-pointer hover:text-white transition-colors">
+                      <span className="tabular-nums opacity-50 font-mono">{nextNum}</span>
+                      <span className="uppercase text-xs font-bold tracking-wider">{next.name}</span>
+                      <ChevronDown size={16} />
+                   </div>
+                </div>
+
               </div>
-              <h2 className="text-2xl font-black font-syne italic">{activeChannel.name}</h2>
             </div>
           </div>
-          <div className="flex-grow">
-            <VideoPlayer channel={activeChannel} />
-          </div>
-        </div>
-      )}
+        );
+      })()}
 
       <Sidebar 
         activeCategory={activeCategory} 
