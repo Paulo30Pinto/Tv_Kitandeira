@@ -1,9 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Channel, StreamType } from '../types';
 import { AlertTriangle, ExternalLink, Loader2, Youtube } from 'lucide-react';
+import { VideoControls } from './VideoControls';
 
 interface VideoPlayerProps {
   channel: Channel;
+  allChannels?: Channel[];
+  onChannelChange?: (channel: Channel) => void;
 }
 
 declare global {
@@ -12,17 +15,31 @@ declare global {
   }
 }
 
-export const VideoPlayer: React.FC<VideoPlayerProps> = ({ channel }) => {
+export const VideoPlayer: React.FC<VideoPlayerProps> = ({ channel, allChannels = [], onChannelChange }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const hlsRef = useRef<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [showFallback, setShowFallback] = useState(false);
+  const [showControls, setShowControls] = useState(false);
+  const controlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Gerenciar visibilidade dos controles
+  const showControlsTemporarily = () => {
+    setShowControls(true);
+    if (controlsTimeoutRef.current) {
+      clearTimeout(controlsTimeoutRef.current);
+    }
+    controlsTimeoutRef.current = setTimeout(() => {
+      setShowControls(false);
+    }, 5000);
+  };
 
   useEffect(() => {
     setError(null);
     setLoading(true);
     setShowFallback(false);
+    setShowControls(false);
 
     if (hlsRef.current) {
       hlsRef.current.destroy();
@@ -42,6 +59,9 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ channel }) => {
 
     return () => {
       if (hlsRef.current) hlsRef.current.destroy();
+      if (controlsTimeoutRef.current) {
+        clearTimeout(controlsTimeoutRef.current);
+      }
     };
   }, [channel]);
 
@@ -130,7 +150,11 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ channel }) => {
   }
 
   return (
-    <div className="relative w-full h-full bg-black flex items-center justify-center group">
+    <div 
+      className="relative w-full h-full bg-black flex items-center justify-center group"
+      onMouseMove={showControlsTemporarily}
+      onClick={showControlsTemporarily}
+    >
       {loading && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-black z-10">
           <Loader2 className="animate-spin text-blue-500 mb-4" size={56} />
@@ -175,6 +199,8 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ channel }) => {
           autoPlay 
           playsInline 
           crossOrigin="anonymous"
+          onMouseMove={showControlsTemporarily}
+          onClick={showControlsTemporarily}
         />
       )}
 
@@ -195,6 +221,17 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ channel }) => {
           className="w-full h-full border-0" 
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen 
+        />
+      )}
+
+      {/* Painel de Controles Melhorado */}
+      {allChannels.length > 0 && onChannelChange && (
+        <VideoControls
+          currentChannel={channel}
+          allChannels={allChannels}
+          onChannelChange={onChannelChange}
+          isVisible={showControls && !loading && !error}
+          onHide={() => setShowControls(false)}
         />
       )}
     </div>

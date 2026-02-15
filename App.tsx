@@ -90,7 +90,11 @@ const App: React.FC = () => {
             </div>
           </div>
           <div className="flex-grow">
-            <VideoPlayer channel={activeChannel} />
+            <VideoPlayer 
+              channel={activeChannel} 
+              allChannels={CHANNELS}
+              onChannelChange={setActiveChannel}
+            />
           </div>
         </div>
       )}
