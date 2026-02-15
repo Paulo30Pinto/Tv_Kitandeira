@@ -1,5 +1,8 @@
 {
-  "name": "Copy of LusoTV Smart",
-  "description": "A Smart-TV style PWA aggregating public TV channels from Angola, Brazil, and Portugal.",
-  "requestFramePermissions": []
+  "name": "TEIP Smart PWA",
+  "description": "A Smart-TV style PWA aggregating public TV channels with Capacitor CLI integration.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
 }

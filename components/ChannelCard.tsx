@@ -1,77 +1,92 @@
 import React from 'react';
-import { Channel, StreamType } from '../types';
-import { Play, Globe, Radio } from 'lucide-react';
+import { Channel } from '../types';
+import { Play, Info, Heart } from 'lucide-react';
 
 interface ChannelCardProps {
   channel: Channel;
   onClick: (channel: Channel) => void;
+  isFavorite?: boolean;
+  onFavorite?: (id: string) => void;
 }
 
-export const ChannelCard: React.FC<ChannelCardProps> = ({ channel, onClick }) => {
+export const ChannelCard: React.FC<ChannelCardProps> = ({ channel, onClick, isFavorite, onFavorite }) => {
+  const handleCardKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      onClick(channel);
+    }
+  };
+
   return (
-    <button
-      onClick={() => onClick(channel)}
-      className="group relative flex flex-col bg-gray-900 rounded-2xl overflow-hidden hover:scale-105 hover:shadow-[0_0_30px_rgba(37,99,235,0.3)] hover:ring-4 hover:ring-blue-600 transition-all duration-300 text-left focus:outline-none focus:ring-4 focus:ring-blue-500 border border-gray-800"
-    >
-      {/* Thumbnail / Logo Holder */}
-      <div className={`h-40 w-full ${channel.logoColor} flex items-center justify-center relative overflow-hidden`}>
-        {/* Animated Gradient Background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-transparent to-black/60 opacity-60" />
-        
-        {/* Glowing effect on hover */}
-        <div className="absolute -inset-1 bg-white/10 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+    <div className="perspective-card group">
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={() => onClick(channel)}
+        onKeyDown={handleCardKeyDown}
+        className="inner-card w-full relative flex flex-col glass-card rounded-[2.5rem] overflow-hidden transition-all duration-500 group-active:scale-95 group-hover:-translate-y-2 border border-white/10"
+      >
+        {/* Layered Visual Background */}
+        <div className={`aspect-[4/5] w-full ${channel.logoColor} relative overflow-hidden`}>
+          {/* Subtle Parallax Background Abbreviation */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20 transform -translate-z-10 group-hover:scale-110 transition-transform duration-700">
+            <span className="text-7xl font-black font-syne tracking-tighter text-white select-none">
+              {channel.name.substring(0, 2).toUpperCase()}
+            </span>
+          </div>
 
-        <div className="relative z-10 flex flex-col items-center">
-          <span className="text-4xl font-black text-white drop-shadow-[0_4px_4px_rgba(0,0,0,0.5)] tracking-tighter">
-            {channel.name.split(' ')[0]}
-          </span>
-          {channel.name.split(' ').length > 1 && (
-             <span className="text-sm font-bold text-white/80 -mt-1 uppercase">
-               {channel.name.split(' ').slice(1).join(' ')}
-             </span>
-          )}
-        </div>
-        
-        {/* Play Icon Overlay */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all bg-blue-900/40 backdrop-blur-[2px]">
-          <div className="bg-white text-blue-600 p-4 rounded-full shadow-2xl transform scale-75 group-hover:scale-100 transition-transform">
-            <Play fill="currentColor" size={28} />
+          {/* Gradients & Textures */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-black/30 z-10" />
+          <div className="absolute inset-0 bg-cyan-400/5 mix-blend-overlay" />
+
+          {/* Top Meta Info */}
+          <div className="absolute top-5 left-5 z-20 flex flex-col gap-3">
+            <div className="flex items-center gap-2 bg-red-600/90 backdrop-blur-xl text-white text-[9px] font-black px-3 py-1.5 rounded-full live-indicator shadow-[0_0_15px_rgba(220,38,38,0.5)]">
+              <span className="w-1.5 h-1.5 bg-white rounded-full" />
+              AO VIVO
+            </div>
+          </div>
+
+          {/* Favorite Toggle (Quick Action) */}
+          <button 
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              onFavorite?.(channel.id);
+            }}
+            aria-label={isFavorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos'}
+            className="absolute top-5 right-5 z-30 p-2.5 rounded-full glass hover:bg-white/10 transition-colors"
+          >
+            <Heart size={16} className={isFavorite ? "fill-cyan-400 text-cyan-400" : "text-white/40"} />
+          </button>
+
+          {/* Play Center Glow - Only on Hover/Touch */}
+          <div className="absolute inset-0 flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <div className="w-16 h-16 bg-white/10 backdrop-blur-md rounded-full border border-white/20 flex items-center justify-center shadow-2xl scale-75 group-hover:scale-100 transition-transform duration-500">
+              <Play fill="white" size={28} className="ml-1 text-white" />
+            </div>
+          </div>
+
+          {/* Information Section */}
+          <div className="absolute bottom-0 left-0 right-0 p-6 z-20 text-left">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-cyan-400 drop-shadow-lg">
+                {channel.category}
+              </span>
+              <span className="w-1 h-1 bg-white/20 rounded-full" />
+              <span className="text-[10px] font-bold text-white/40 uppercase">
+                {channel.country}
+              </span>
+            </div>
+            <h3 className="text-xl font-extrabold text-white leading-tight font-syne group-hover:text-cyan-200 transition-colors">
+              {channel.name}
+            </h3>
           </div>
         </div>
 
-        {/* Live Badge */}
-        <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-red-600 text-white px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-tighter animate-pulse shadow-lg">
-          <div className="w-1.5 h-1.5 bg-white rounded-full" />
-          AO VIVO
-        </div>
+        {/* Card Interactive Border (Bottom Glow) */}
+        <div className="h-1.5 w-full bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
       </div>
-
-      {/* Details Section */}
-      <div className="p-5 flex flex-col flex-grow w-full bg-gradient-to-b from-gray-900 to-black">
-        <div className="flex justify-between items-start mb-2">
-          <h3 className="font-black text-xl text-white group-hover:text-blue-400 transition-colors truncate">
-            {channel.name}
-          </h3>
-          <span className="text-[10px] font-black bg-gray-800 text-gray-400 px-2 py-1 rounded-md uppercase tracking-widest border border-gray-700">
-            {channel.country}
-          </span>
-        </div>
-        
-        <p className="text-gray-500 text-xs leading-relaxed line-clamp-2 mb-4 group-hover:text-gray-300 transition-colors">
-          {channel.description}
-        </p>
-
-        <div className="mt-auto flex items-center gap-4 text-[10px] font-bold text-gray-400 uppercase tracking-widest border-t border-gray-800 pt-3">
-          <div className="flex items-center gap-1.5">
-            <Globe size={14} className="text-blue-500" />
-            <span>{channel.category}</span>
-          </div>
-          <div className="flex items-center gap-1.5 ml-auto">
-            <Radio size={14} className={channel.type === StreamType.HLS ? 'text-green-500' : 'text-red-500'} />
-            <span>{channel.type === StreamType.HLS ? 'DIGITAL' : 'STREAM'}</span>
-          </div>
-        </div>
-      </div>
-    </button>
+    </div>
   );
 };

@@ -1,119 +1,225 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { CHANNELS } from './constants';
 import { Channel, Category } from './types';
 import { ChannelCard } from './components/ChannelCard';
 import { VideoPlayer } from './components/VideoPlayer';
 import { Sidebar } from './components/Sidebar';
-import { ArrowLeft, Menu } from 'lucide-react';
+import { BottomNav } from './components/BottomNav';
+import { ArrowLeft, Search, X, Tv, WifiOff, Download, Sparkles, TrendingUp, Play, Bell } from 'lucide-react';
 
 const App: React.FC = () => {
   const [activeChannel, setActiveChannel] = useState<Channel | null>(null);
   const [activeCategory, setActiveCategory] = useState<Category | 'All'>('All');
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [activeTab, setActiveTab] = useState('home');
+  const [favorites, setFavorites] = useState<string[]>([]);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  
+  const featuredChannel = CHANNELS[0];
 
-  // Filter channels
-  const filteredChannels = activeCategory === 'All' 
-    ? CHANNELS 
-    : CHANNELS.filter(c => c.category === activeCategory);
-
-  // Handle ESC key to close player
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setActiveChannel(null);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    });
+    window.addEventListener('online', () => setIsOnline(true));
+    window.addEventListener('offline', () => setIsOnline(false));
+
+    // Load favorites from local storage
+    const saved = localStorage.getItem('teip_favorites');
+    if (saved) setFavorites(JSON.parse(saved));
   }, []);
 
-  const handleMobileSelect = (cat: Category | 'All') => {
-    setActiveCategory(cat);
-    setIsMobileMenuOpen(false);
+  const toggleFavorite = (id: string) => {
+    const newFavs = favorites.includes(id) 
+      ? favorites.filter(fav => fav !== id)
+      : [...favorites, id];
+    setFavorites(newFavs);
+    localStorage.setItem('teip_favorites', JSON.stringify(newFavs));
   };
 
-  const getMobileMenuClass = (cat: Category | 'All') => 
-    `block w-full text-left p-3 rounded ${activeCategory === cat ? 'bg-blue-900 text-blue-200' : 'text-gray-300'}`;
+  const handleInstallClick = async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') setDeferredPrompt(null);
+  };
+
+  const filteredChannels = CHANNELS.filter(channel => {
+    const matchesCategory = activeCategory === 'All' || channel.category === activeCategory;
+    const matchesSearch = channel.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                          channel.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesTab = activeTab === 'fav' ? favorites.includes(channel.id) : true;
+    return matchesCategory && matchesSearch && matchesTab;
+  });
 
   return (
-    <div className="flex h-screen w-screen bg-[#0f0f0f] text-white overflow-hidden">
+    <div className="flex h-screen w-screen bg-[#050505] text-white overflow-hidden font-jakarta select-none">
       
-      {/* Player Overlay - Shows when channel is active */}
+      {/* Background Ambience */}
+      <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-0">
+        <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-cyan-500/10 rounded-full blur-[120px] animate-pulse" />
+        <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-purple-600/10 rounded-full blur-[120px]" />
+      </div>
+
+      {/* Connection Status */}
+      {!isOnline && (
+        <div className="fixed top-0 left-0 right-0 z-[1000] glass border-none bg-red-600/80 text-[10px] font-black py-2 px-4 flex items-center justify-center gap-2 animate-in slide-in-from-top duration-500">
+          <WifiOff size={14} /> MODO OFFLINE ATIVADO
+        </div>
+      )}
+
+      {/* Fullscreen Video Overlay */}
       {activeChannel && (
-        <div className="absolute inset-0 z-50 bg-black flex flex-col animate-in fade-in duration-300">
-          {/* Top Bar inside Player */}
-          <div className="absolute top-0 left-0 right-0 p-4 bg-gradient-to-b from-black/80 to-transparent z-10 flex justify-between items-center pointer-events-none">
+        <div className="fixed inset-0 z-[2000] bg-black flex flex-col animate-in fade-in zoom-in-95 duration-500">
+          <div className="absolute top-0 left-0 right-0 p-8 pt-safe flex justify-between items-center z-50">
             <button 
               onClick={() => setActiveChannel(null)}
-              className="pointer-events-auto flex items-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white px-4 py-2 rounded-full transition-all text-sm font-medium border border-white/10"
+              className="w-14 h-14 flex items-center justify-center glass rounded-full active:scale-90 transition-all"
             >
-              <ArrowLeft size={16} />
-              Voltar
+              <ArrowLeft size={28} />
             </button>
-            <div className="text-right">
-              <h2 className="text-lg font-bold drop-shadow-md">{activeChannel.name}</h2>
-              <span className="text-xs text-gray-300 font-medium bg-red-600/80 px-2 py-0.5 rounded ml-2">AO VIVO</span>
+            <div className="flex flex-col items-end">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                <span className="text-[10px] font-black text-white/60 uppercase tracking-widest">Transmitindo</span>
+              </div>
+              <h2 className="text-2xl font-black font-syne italic">{activeChannel.name}</h2>
             </div>
           </div>
-          
-          <div className="flex-grow w-full h-full">
+          <div className="flex-grow">
             <VideoPlayer channel={activeChannel} />
           </div>
         </div>
       )}
 
-      {/* Main UI */}
-      <Sidebar activeCategory={activeCategory} onSelectCategory={setActiveCategory} />
+      <Sidebar 
+        activeCategory={activeCategory} 
+        onSelectCategory={setActiveCategory} 
+        onInstall={deferredPrompt ? handleInstallClick : undefined}
+      />
 
-      <main className="flex-1 flex flex-col h-full overflow-hidden relative">
+      <main className="flex-1 flex flex-col h-full overflow-hidden relative z-10">
         
-        {/* Mobile Header */}
-        <div className="md:hidden flex items-center justify-between p-4 bg-gray-900 border-b border-gray-800">
-          <span className="text-xl font-bold bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text text-transparent">LusoTV</span>
-          <button 
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="p-2 rounded-lg bg-gray-800 text-gray-200"
-          >
-            <Menu size={24} />
-          </button>
+        {/* Mobile Header: Futuristic Glass Pill */}
+        <div className="md:hidden pt-safe pb-4 px-6 z-40">
+          <div className="flex items-center justify-between py-5 mb-2">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 glass rounded-2xl flex items-center justify-center shadow-xl glow-border overflow-hidden">
+                <img src="/icons/TEIP.png" alt="TEIP Logo" className="w-8 h-8 object-contain" />
+              </div>
+              <h1 className="text-3xl font-black font-syne tracking-tighter italic">TEIP</h1>
+            </div>
+            <div className="flex items-center gap-3">
+              <button className="w-12 h-12 glass rounded-full flex items-center justify-center text-white/60">
+                <Bell size={20} />
+              </button>
+              {deferredPrompt && (
+                <button onClick={handleInstallClick} className="w-12 h-12 bg-cyan-500 text-black rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-all">
+                  <Download size={22} strokeWidth={3} />
+                </button>
+              )}
+            </div>
+          </div>
+
+          <div className="relative group">
+            <div className="absolute inset-y-0 left-5 flex items-center pointer-events-none">
+              <Search size={20} className="text-white/20 group-focus-within:text-cyan-400 transition-colors" />
+            </div>
+            <input
+              type="text"
+              placeholder="Pesquisar canais ou programas..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full glass rounded-3xl pl-16 pr-6 py-5 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/40 placeholder-white/20 transition-all shadow-inner"
+            />
+          </div>
         </div>
 
-        {/* Mobile Menu Dropdown */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden absolute top-16 left-0 right-0 bg-gray-900 z-40 border-b border-gray-800 shadow-xl p-4 space-y-2 overflow-y-auto max-h-[80vh]">
-            <button onClick={() => handleMobileSelect('All')} className={getMobileMenuClass('All')}>Todos</button>
-            <button onClick={() => handleMobileSelect(Category.NEWS)} className={getMobileMenuClass(Category.NEWS)}>Notícias</button>
-            <button onClick={() => handleMobileSelect(Category.KIDS)} className={getMobileMenuClass(Category.KIDS)}>Infantil</button>
-            <button onClick={() => handleMobileSelect(Category.SPORTS)} className={getMobileMenuClass(Category.SPORTS)}>Desporto</button>
-            <button onClick={() => handleMobileSelect(Category.EDUCATION)} className={getMobileMenuClass(Category.EDUCATION)}>Educação & Gov</button>
-            <button onClick={() => handleMobileSelect(Category.INTERNATIONAL)} className={getMobileMenuClass(Category.INTERNATIONAL)}>Internacional</button>
-            <button onClick={() => handleMobileSelect(Category.MUSIC)} className={getMobileMenuClass(Category.MUSIC)}>Música</button>
-            <button onClick={() => handleMobileSelect(Category.GENERAL)} className={getMobileMenuClass(Category.GENERAL)}>Variedades</button>
-            <button onClick={() => handleMobileSelect(Category.PUBLIC)} className={getMobileMenuClass(Category.PUBLIC)}>Públicos</button>
-          </div>
-        )}
+        {/* Content Area */}
+        <div className="flex-1 overflow-y-auto custom-scrollbar px-6 md:px-12 pb-36">
+          
+          {/* Hero Section (Desktop/Mobile) */}
+          {!searchTerm && activeCategory === 'All' && activeTab === 'home' && (
+             <div className="mb-12 mt-4">
+                <button 
+                  onClick={() => setActiveChannel(featuredChannel)}
+                  className="w-full aspect-[16/9] md:aspect-[21/9] rounded-[3rem] bg-gradient-to-br from-cyan-600/30 to-purple-900/40 border border-white/10 relative overflow-hidden group active:scale-[0.98] transition-all shadow-2xl"
+                >
+                   {/* Animated Hero Background */}
+                   <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-700" />
+                   <div className="absolute top-8 left-8 bg-white/10 backdrop-blur-2xl px-5 py-2 rounded-full border border-white/20 text-[11px] font-black flex items-center gap-2 shadow-xl">
+                      <Sparkles size={14} className="text-yellow-400 animate-spin-slow" /> SUGGESTÃO PREMIUM
+                   </div>
+                   
+                   <div className="absolute bottom-10 left-10 right-10">
+                      <div className="flex items-center gap-3 mb-3">
+                        <TrendingUp size={18} className="text-cyan-400" />
+                        <span className="text-[12px] font-black text-cyan-400 uppercase tracking-[0.3em]">Crescendo agora</span>
+                      </div>
+                      <h2 className="text-4xl md:text-6xl font-black font-syne mb-2 tracking-tight italic uppercase">{featuredChannel.name}</h2>
+                      <p className="text-sm md:text-lg text-white/60 line-clamp-2 max-w-2xl">{featuredChannel.description}</p>
+                   </div>
 
-        {/* Content Grid */}
-        <div className="flex-1 overflow-y-auto p-4 md:p-8">
+                   <div className="absolute bottom-10 right-10 w-20 h-20 bg-white text-black rounded-full flex items-center justify-center shadow-[0_0_50px_rgba(255,255,255,0.3)] hover:scale-110 transition-transform">
+                      <Play fill="currentColor" size={32} className="ml-1" />
+                   </div>
+                </button>
+             </div>
+          )}
+
           <div className="max-w-7xl mx-auto">
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold text-white mb-2">
-                {activeCategory === 'All' ? 'Canais em Destaque' : activeCategory}
-              </h2>
-              <p className="text-gray-400 text-sm">Selecione um canal para iniciar a transmissão</p>
+            <div className="hidden md:block py-16">
+               <h1 className="text-7xl font-black font-syne tracking-tighter mb-4 italic uppercase">TEIP Stream</h1>
+               <div className="flex items-center gap-4">
+                 <p className="text-white/40 font-medium text-xl">Sintonize o futuro da televisão pública digital.</p>
+                 <div className="h-px flex-1 bg-gradient-to-r from-white/10 to-transparent" />
+               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-20">
-              {filteredChannels.map(channel => (
-                <ChannelCard 
-                  key={channel.id} 
-                  channel={channel} 
-                  onClick={setActiveChannel} 
-                />
-              ))}
+            <div className="flex items-center justify-between mb-8">
+               <div className="flex items-center gap-4">
+                  <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse glow-accent" />
+                  <h2 className="text-[13px] font-black uppercase tracking-[0.4em] text-white/40">
+                    {filteredChannels.length} Estações Ativas
+                  </h2>
+               </div>
+               {activeTab === 'fav' && (
+                 <span className="text-xs font-bold text-cyan-500 bg-cyan-500/10 px-4 py-1.5 rounded-full border border-cyan-500/20">MEUS FAVORITOS</span>
+               )}
             </div>
+
+            {filteredChannels.length > 0 ? (
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 md:gap-10">
+                {filteredChannels.map(channel => (
+                  <ChannelCard 
+                    key={channel.id} 
+                    channel={channel} 
+                    onClick={setActiveChannel}
+                    isFavorite={favorites.includes(channel.id)}
+                    onFavorite={toggleFavorite}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center py-48 text-center animate-in fade-in zoom-in duration-700">
+                <div className="w-32 h-32 glass rounded-[3rem] flex items-center justify-center mb-8 border-dashed rotate-12">
+                  <X size={56} className="text-white/5" />
+                </div>
+                <h3 className="text-2xl font-bold text-white/40 font-syne">NADA NA ÓRBITA</h3>
+                <p className="text-sm text-white/20 mt-2 max-w-xs">Tente redefinir seus filtros ou pesquise por outro termo.</p>
+              </div>
+            )}
           </div>
         </div>
+
+        {/* Orbit Bottom Navigation */}
+        <BottomNav 
+          activeTab={activeTab} 
+          onTabChange={setActiveTab} 
+          onSearchFocus={() => {}} 
+        />
       </main>
     </div>
   );

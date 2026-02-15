@@ -1,0 +1,27 @@
+
+{
+  "short_name": "TEIP",
+  "name": "TEIP - Smart PWA",
+  "description": "Agregador de canais de TV públicos com interface de Smart TV.",
+  "icons": [
+    {
+      "src": "/icons/TEIP.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/TEIP.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "minimal-ui"],
+  "theme_color": "#050505",
+  "background_color": "#050505",
+  "orientation": "portrait-primary",
+  "categories": ["entertainment", "multimedia"]
+}
