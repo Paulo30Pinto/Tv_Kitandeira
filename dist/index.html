@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover" />
+    <meta name="theme-color" content="#050505" />
+    
+    <title>TEIP - Smart PWA</title>
+    <meta name="description" content="A próxima geração de TV pública digital." />
+    <link rel="manifest" href="/assets/manifest-D-Othudf.json" />
+    <link rel="icon" type="image/png" href="/icons/TEIP.png" />
+    <link rel="apple-touch-icon" href="/icons/TEIP.png" />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Syne:wght@400..800&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    
+    <style>
+      :root {
+        --safe-top: env(safe-area-inset-top);
+        --safe-bottom: env(safe-area-inset-bottom);
+        --nebula-accent: #22d3ee;
+        --nebula-glass: rgba(255, 255, 255, 0.03);
+      }
+
+      * {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      h1, h2, .font-syne { font-family: 'Syne', sans-serif; }
+
+      body {
+        background-color: #050505;
+        background-image: 
+          radial-gradient(circle at 0% 0%, rgba(34, 211, 238, 0.08) 0%, transparent 40%),
+          radial-gradient(circle at 100% 100%, rgba(139, 92, 246, 0.08) 0%, transparent 40%);
+        color: white;
+        overflow-x: hidden;
+        user-select: none;
+      }
+
+      /* Noise Texture Overlay */
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background-image: url("https://www.transparenttextures.com/patterns/asfalt-dark.png");
+        opacity: 0.03;
+        pointer-events: none;
+        z-index: 100;
+      }
+
+      .glass {
+        background: var(--nebula-glass);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+
+      .glass-card {
+        background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      }
+
+      .glow-border {
+        box-shadow: inset 0 0 15px rgba(34, 211, 238, 0.1), 0 0 30px rgba(34, 211, 238, 0.05);
+      }
+
+      .perspective-card {
+        perspective: 1200px;
+      }
+
+      .inner-card {
+        transform-style: preserve-3d;
+        transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+      }
+
+      @keyframes pulse-ring {
+        0% { transform: scale(0.33); opacity: 1; }
+        80%, 100% { opacity: 0; }
+      }
+
+      .live-indicator::before {
+        content: '';
+        position: absolute;
+        width: 150%; height: 150%;
+        background: inherit;
+        border-radius: inherit;
+        animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+      }
+
+      ::-webkit-scrollbar { width: 4px; }
+      ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+    </style>
+    
+    <script type="module" crossorigin src="/assets/index-BImlOoXC.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(err => console.error(err));
+        });
+      }
+    </script>
+  </body>
+</html>
