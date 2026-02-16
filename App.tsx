@@ -223,7 +223,7 @@ const App: React.FC = () => {
           <div className="flex items-center justify-between py-5 mb-2">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 glass rounded-2xl flex items-center justify-center shadow-xl glow-border overflow-hidden">
-                <img src="logo_no_bg.png" alt="TEIP Logo" className="w-8 h-8 object-contain" />
+                <img src="https://teiptv.netlify.app/TEIP.png" alt="TEIP Logo" className="w-8 h-8 object-contain" />
               </div>
               <h1 className="text-3xl font-black font-syne tracking-tighter italic">TEIP</h1>
             </div>

@@ -8,6 +8,7 @@ export const CHANNELS: Channel[] = [
     name: 'TV Zimbo',
     description: 'A primeira emissora privada de Angola. Programação diversificada com foco em jornalismo e debates em alta definição.',
     logoColor: 'bg-orange-700',
+    logoImage: 'https://targeting.ao/shatsuph/2024/09/tvzimbohd.jpg',
     streamUrl: 'https://sgn-cdn-video.vods2africa.com/Tv-Zimbo/index.fmp4.m3u8',
     type: StreamType.HLS,
     country: Country.ANGOLA,

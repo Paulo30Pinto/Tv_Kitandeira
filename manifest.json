@@ -5,13 +5,13 @@
   "description": "Agregador de canais de TV públicos com interface de Smart TV.",
   "icons": [
     {
-      "src": "logo_white_bg.png",
+      "src": "https://teiptv.netlify.app/assets/TEIP-X89hzE6_.JPG",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "logo_no_bg.png",
+      "src": "https://teiptv.netlify.app/TEIP.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
