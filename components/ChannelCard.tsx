@@ -17,17 +17,31 @@ export const ChannelCard: React.FC<ChannelCardProps> = ({ channel, onClick, isFa
         className="inner-card w-full relative flex flex-col glass-card rounded-[2.5rem] overflow-hidden transition-all duration-500 group-active:scale-95 group-hover:-translate-y-2 border border-white/10"
       >
         {/* Layered Visual Background */}
-        <div className={`aspect-[4/5] w-full ${channel.logoColor} relative overflow-hidden`}>
-          {/* Subtle Parallax Background Abbreviation */}
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20 transform -translate-z-10 group-hover:scale-110 transition-transform duration-700">
-            <span className="text-7xl font-black font-syne tracking-tighter text-white select-none">
-              {channel.name.substring(0, 2).toUpperCase()}
-            </span>
-          </div>
+        <div className={`aspect-[4/5] w-full ${!channel.logoImage ? channel.logoColor : 'bg-[#0a0a0a]'} relative overflow-hidden flex items-center justify-center`}>
+          
+          {/* Logo Image Background */}
+          {channel.logoImage ? (
+             <div className="absolute inset-0 p-8 flex items-center justify-center">
+                {/* Background colored glow for logo */}
+                <div className={`absolute inset-0 opacity-20 ${channel.logoColor} blur-3xl`} />
+                <img 
+                  src={channel.logoImage} 
+                  alt={channel.name} 
+                  className="w-full h-full object-contain relative z-10 drop-shadow-2xl opacity-90 group-hover:scale-110 group-hover:opacity-100 transition-all duration-700"
+                />
+             </div>
+          ) : (
+             /* Subtle Parallax Background Abbreviation for channels without logo */
+             <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-20 transform -translate-z-10 group-hover:scale-110 transition-transform duration-700">
+               <span className="text-7xl font-black font-syne tracking-tighter text-white select-none">
+                 {channel.name.substring(0, 2).toUpperCase()}
+               </span>
+             </div>
+          )}
 
           {/* Gradients & Textures */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-black/30 z-10" />
-          <div className="absolute inset-0 bg-cyan-400/5 mix-blend-overlay" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-black/10 z-10" />
+          <div className="absolute inset-0 bg-cyan-400/5 mix-blend-overlay z-10" />
 
           {/* Top Meta Info */}
           <div className="absolute top-5 left-5 z-20 flex flex-col gap-3">
@@ -66,7 +80,7 @@ export const ChannelCard: React.FC<ChannelCardProps> = ({ channel, onClick, isFa
                 {channel.country}
               </span>
             </div>
-            <h3 className="text-xl font-extrabold text-white leading-tight font-syne group-hover:text-cyan-200 transition-colors">
+            <h3 className="text-xl font-extrabold text-white leading-tight font-syne group-hover:text-cyan-200 transition-colors drop-shadow-lg">
               {channel.name}
             </h3>
           </div>

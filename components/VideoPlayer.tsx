@@ -32,8 +32,8 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ channel }) => {
     if (channel.type === StreamType.HLS) {
       handleHLS();
     } else if (channel.type === StreamType.YOUTUBE) {
-      // YouTube: Loading timeout
-      const timer = setTimeout(() => setShowFallback(true), 7000);
+      // YouTube: Loading timeout reduzido para 4 segundos para resposta mais rápida
+      const timer = setTimeout(() => setShowFallback(true), 4000);
       setLoading(false);
       return () => clearTimeout(timer);
     } else {
@@ -92,20 +92,15 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ channel }) => {
 
   const getYouTubeSrc = () => {
     const baseUrl = channel.streamUrl;
-    const origin = window.location.origin;
     
-    // Custom TV-style parameters: No controls, clean interface
+    // Simplificando parâmetros para evitar problemas de CSP/Origem
     const params = new URLSearchParams({
       autoplay: '1',
       mute: '1', 
-      controls: '0', // Disabled native controls
-      disablekb: '1',
-      fs: '0',
-      modestbranding: '1',
+      controls: '1',
       rel: '0',
-      enablejsapi: '1',
-      origin: origin,
-      widget_referrer: origin
+      modestbranding: '1',
+      showinfo: '0'
     });
 
     return `${baseUrl}${baseUrl.includes('?') ? '&' : '?'}${params.toString()}`;
@@ -151,15 +146,15 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ channel }) => {
       )}
 
       {channel.type === StreamType.YOUTUBE && showFallback && !error && (
-        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-30 animate-bounce">
+        <div className="absolute bottom-24 left-1/2 -translate-x-1/2 z-[3000] animate-in slide-in-from-bottom-4 duration-500">
           <a 
-            href={channel.streamUrl.replace('embed/', 'watch?v=').replace('live_stream?channel=', 'channel/')} 
+            href={channel.streamUrl.includes('live_stream') ? `https://www.youtube.com/channel/${new URLSearchParams(channel.streamUrl.split('?')[1]).get('channel')}/live` : channel.streamUrl.replace('embed/', 'watch?v=')} 
             target="_blank" 
             rel="noopener noreferrer"
-            className="flex items-center gap-3 bg-red-600 text-white px-6 py-3 rounded-full text-sm font-black shadow-2xl hover:bg-red-700 transition-all border-2 border-white/20"
+            className="flex items-center gap-3 bg-red-600 text-white px-8 py-4 rounded-full text-sm font-black shadow-2xl hover:bg-red-700 transition-all border-2 border-white/20 active:scale-95"
           >
             <Youtube size={20} />
-            ABRIR NO YOUTUBE (MODO DIRETO)
+            PROBLEMAS NO SINAL? ASSISTIR DIRETO NO YOUTUBE
           </a>
         </div>
       )}
@@ -179,9 +174,10 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ channel }) => {
         <iframe
           src={getYouTubeSrc()}
           title={channel.name}
-          className="w-full h-full border-0 pointer-events-none" 
+          className="w-full h-full border-0" 
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
+          referrerPolicy="no-referrer-when-downgrade"
         />
       )}
 
