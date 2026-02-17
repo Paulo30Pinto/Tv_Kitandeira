@@ -32,8 +32,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ channel }) => {
     if (channel.type === StreamType.HLS) {
       handleHLS();
     } else if (channel.type === StreamType.YOUTUBE) {
-      // YouTube: Loading timeout reduzido para 4 segundos para resposta mais rápida
-      const timer = setTimeout(() => setShowFallback(true), 4000);
+      const timer = setTimeout(() => setShowFallback(true), 5000);
       setLoading(false);
       return () => clearTimeout(timer);
     } else {
@@ -92,17 +91,15 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ channel }) => {
 
   const getYouTubeSrc = () => {
     const baseUrl = channel.streamUrl;
-    
-    // Simplificando parâmetros para evitar problemas de CSP/Origem
     const params = new URLSearchParams({
       autoplay: '1',
       mute: '1', 
       controls: '1',
       rel: '0',
       modestbranding: '1',
-      showinfo: '0'
+      showinfo: '0',
+      enablejsapi: '1'
     });
-
     return `${baseUrl}${baseUrl.includes('?') ? '&' : '?'}${params.toString()}`;
   };
 
@@ -123,11 +120,11 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ channel }) => {
   }
 
   return (
-    <div className="relative w-full h-full bg-black flex items-center justify-center group">
+    <div className="relative w-full h-full bg-black flex items-center justify-center">
       {loading && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-black z-10">
-          <Loader2 className="animate-spin text-blue-500 mb-4" size={56} />
-          <span className="text-gray-400 text-sm font-bold uppercase tracking-widest">A sintonizar sinal...</span>
+          <Loader2 className="animate-spin text-cyan-400 mb-4" size={56} />
+          <span className="text-gray-400 text-xs font-black uppercase tracking-widest">A sintonizar sinal...</span>
         </div>
       )}
 
@@ -146,15 +143,15 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ channel }) => {
       )}
 
       {channel.type === StreamType.YOUTUBE && showFallback && !error && (
-        <div className="absolute bottom-24 left-1/2 -translate-x-1/2 z-[3000] animate-in slide-in-from-bottom-4 duration-500">
+        <div className="absolute bottom-28 left-1/2 -translate-x-1/2 z-[3000] animate-in slide-in-from-bottom-4 duration-500">
           <a 
-            href={channel.streamUrl.includes('live_stream') ? `https://www.youtube.com/channel/${new URLSearchParams(channel.streamUrl.split('?')[1]).get('channel')}/live` : channel.streamUrl.replace('embed/', 'watch?v=')} 
+            href={channel.streamUrl.replace('embed/', 'watch?v=')} 
             target="_blank" 
             rel="noopener noreferrer"
-            className="flex items-center gap-3 bg-red-600 text-white px-8 py-4 rounded-full text-sm font-black shadow-2xl hover:bg-red-700 transition-all border-2 border-white/20 active:scale-95"
+            className="flex items-center gap-3 bg-red-600 text-white px-8 py-4 rounded-full text-xs font-black shadow-2xl hover:bg-red-700 transition-all border-2 border-white/20"
           >
-            <Youtube size={20} />
-            PROBLEMAS NO SINAL? ASSISTIR DIRETO NO YOUTUBE
+            <Youtube size={18} />
+            ASSISTIR DIRETO NO YOUTUBE
           </a>
         </div>
       )}
@@ -166,7 +163,6 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ channel }) => {
           autoPlay 
           playsInline 
           crossOrigin="anonymous"
-          controls={false}
         />
       )}
 
@@ -177,7 +173,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ channel }) => {
           className="w-full h-full border-0" 
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
-          referrerPolicy="no-referrer-when-downgrade"
+          referrerPolicy="strict-origin-when-cross-origin"
         />
       )}
 

@@ -1,17 +1,12 @@
-
-const CACHE_NAME = 'teip-stream-v1';
+const CACHE_NAME = 'teip-stream-v2';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
-  '/index.tsx',
   '/manifest.json',
-  '/https://teiptv.netlify.app/TEIP.png',
-  '/https://teiptv.netlify.app/assets/TEIP-X89hzE6_.JPG',
+  'https://teiptv.netlify.app/TEIP.png',
+  'https://teiptv.netlify.app/assets/TEIP-X89hzE6_.JPG',
   'https://cdn.tailwindcss.com',
-  'https://cdn.jsdelivr.net/npm/hls.js@latest',
-  'https://esm.sh/react@^19.2.3',
-  'https://esm.sh/react-dom@^19.2.3/',
-  'https://esm.sh/lucide-react@^0.562.0'
+  'https://cdn.jsdelivr.net/npm/hls.js@latest'
 ];
 
 self.addEventListener('install', (event) => {
@@ -35,7 +30,6 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // Ignora streams e requisições dinâmicas de vídeo
   if (
     event.request.url.includes('.m3u8') || 
     event.request.url.includes('.ts') || 
@@ -45,7 +39,6 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Estratégia Stale-While-Revalidate para o restante
   event.respondWith(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.match(event.request).then((cachedResponse) => {
@@ -55,7 +48,6 @@ self.addEventListener('fetch', (event) => {
           }
           return networkResponse;
         }).catch(() => {
-          // Fallback para quando o fetch falha (offline total)
           if (event.request.mode === 'navigate') {
             return cache.match('/index.html');
           }
