@@ -1,4 +1,3 @@
-
 {
   "short_name": "TEIP",
   "name": "TEIP - Smart PWA",
@@ -17,11 +16,11 @@
       "purpose": "maskable"
     }
   ],
-  "start_url": "./index.html",
+  "start_url": "/",
   "display": "standalone",
   "display_override": ["window-controls-overlay", "minimal-ui"],
   "theme_color": "#050505",
   "background_color": "#050505",
-  "orientation": "portrait-primary",
+  "orientation": "any",
   "categories": ["entertainment", "multimedia"]
 }

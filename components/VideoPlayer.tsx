@@ -174,6 +174,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ channel }) => {
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowFullScreen
           referrerPolicy="strict-origin-when-cross-origin"
+          frameBorder="0"
         />
       )}
 
