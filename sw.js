@@ -1,40 +1,33 @@
-const CACHE_NAME = 'teip-stream-v3';
-const STATIC_ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  'https://cdn.tailwindcss.com',
-  'https://cdn.jsdelivr.net/npm/hls.js@latest'
-];
+const CACHE_NAME = 'teip-v4-stable';
 
-// External assets that might have CORS issues
-const EXTERNAL_IMAGES = [
+const ASSETS_TO_CACHE = [
+  '/',
+  'index.html',
+  'manifest.json',
+  'https://cdn.tailwindcss.com',
+  'https://cdn.jsdelivr.net/npm/hls.js@latest',
   'https://teiptv.netlify.app/TEIP.png',
   'https://teiptv.netlify.app/assets/TEIP-X89hzE6_.JPG'
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(async (cache) => {
-      // 1. Add essential local assets
-      try {
-        await cache.addAll(STATIC_ASSETS);
-      } catch (err) {
-        console.warn('SW: Some static assets failed to cache during install', err);
-      }
-      
-      // 2. Add external images one by one to avoid failing the whole installation
-      for (const url of EXTERNAL_IMAGES) {
+    caches.open(CACHE_NAME).then((cache) => {
+      // Tenta cachear cada item individualmente. 
+      // Se um falhar, os outros continuam e o SW instala com sucesso.
+      const cachePromises = ASSETS_TO_CACHE.map(async (url) => {
         try {
-          const request = new Request(url, { mode: 'no-cors' });
-          const response = await fetch(request);
+          const response = await fetch(url, { 
+            mode: url.includes('netlify.app') || url.includes('cdn') ? 'no-cors' : 'cors' 
+          });
           if (response.ok || response.type === 'opaque') {
-            await cache.put(request, response);
+            return await cache.put(url, response);
           }
         } catch (err) {
-          console.warn(`SW: Failed to cache external asset: ${url}`, err);
+          console.warn(`[SW] Falha ao cachear durante install: ${url}`, err);
         }
-      }
+      });
+      return Promise.all(cachePromises);
     })
   );
   self.skipWaiting();
@@ -52,39 +45,43 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  const url = event.request.url;
+  const { request } = event;
+  const url = new URL(request.url);
 
-  // Skip caching for streams and YouTube
+  // Não cacheia fluxos de vídeo ou YouTube
   if (
-    url.includes('.m3u8') || 
-    url.includes('.ts') || 
-    url.includes('youtube.com') ||
-    url.includes('googlevideo.com') ||
-    url.includes('ytimg.com')
+    url.pathname.endsWith('.m3u8') || 
+    url.pathname.endsWith('.ts') || 
+    url.hostname.includes('youtube.com') ||
+    url.hostname.includes('googlevideo.com') ||
+    url.hostname.includes('ytimg.com') ||
+    request.method !== 'GET'
   ) {
     return;
   }
 
-  // Handle caching for other requests
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
+    caches.match(request).then((cachedResponse) => {
       if (cachedResponse) {
         return cachedResponse;
       }
 
-      return fetch(event.request).then((networkResponse) => {
-        // Cache valid responses
-        if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
+      return fetch(request).then((networkResponse) => {
+        // Apenas cacheia respostas válidas de mesma origem ou assets estáticos conhecidos
+        if (
+          networkResponse && 
+          (networkResponse.status === 200 || networkResponse.type === 'opaque')
+        ) {
           const responseToCache = networkResponse.clone();
           caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
+            cache.put(request, responseToCache);
           });
         }
         return networkResponse;
       }).catch(() => {
-        // Fallback for navigation requests
-        if (event.request.mode === 'navigate') {
-          return caches.match('/index.html');
+        // Fallback para navegação (offline)
+        if (request.mode === 'navigate') {
+          return caches.match('index.html') || caches.match('/');
         }
       });
     })

@@ -116,7 +116,14 @@
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js').catch(err => console.error(err));
+          // Registro resiliente apontando para o caminho relativo correto
+          navigator.serviceWorker.register('./sw.js')
+            .then(reg => {
+              console.log('SW: Registro concluído com sucesso');
+            })
+            .catch(err => {
+              console.warn('SW: Falha crítica no registro', err);
+            });
         });
       }
     </script>
