@@ -110,22 +110,25 @@
       }
     }
     </script>
-  </head>
+  <link rel="stylesheet" href="/index.css">
+</head>
   <body>
     <div id="root"></div>
     <script>
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-          // Registro resiliente apontando para o caminho relativo correto
-          navigator.serviceWorker.register('./sw.js')
+          // Registro direto no escopo raiz
+          navigator.serviceWorker.register('sw.js', { scope: '/' })
             .then(reg => {
-              console.log('SW: Registro concluído com sucesso');
+              console.log('SW: Ativo');
             })
             .catch(err => {
-              console.warn('SW: Falha crítica no registro', err);
+              // Silencioso para o usuário, apenas log de debug
+              console.debug('SW: Offline mode limited', err);
             });
         });
       }
     </script>
-  </body>
+  <script type="module" src="/index.tsx"></script>
+</body>
 </html>

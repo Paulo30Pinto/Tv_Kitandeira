@@ -12,9 +12,16 @@ interface ChannelCardProps {
 export const ChannelCard: React.FC<ChannelCardProps> = ({ channel, onClick, isFavorite, onFavorite }) => {
   return (
     <div className="perspective-card group">
-      <button
+      <div
         onClick={() => onClick(channel)}
-        className="inner-card w-full relative flex flex-col glass-card rounded-[2.5rem] overflow-hidden transition-all duration-500 group-active:scale-95 group-hover:-translate-y-2 border border-white/10"
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            onClick(channel);
+          }
+        }}
+        className="inner-card w-full relative flex flex-col glass-card rounded-[2.5rem] overflow-hidden transition-all duration-500 group-active:scale-95 group-hover:-translate-y-2 border border-white/10 cursor-pointer"
       >
         {/* Layered Visual Background */}
         <div className={`aspect-[4/5] w-full ${!channel.logoImage ? channel.logoColor : 'bg-[#0a0a0a]'} relative overflow-hidden flex items-center justify-center`}>
@@ -52,15 +59,23 @@ export const ChannelCard: React.FC<ChannelCardProps> = ({ channel, onClick, isFa
           </div>
 
           {/* Favorite Toggle (Quick Action) */}
-          <button 
+          <div 
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.stopPropagation();
+                onFavorite?.(channel.id);
+              }
+            }}
             onClick={(e) => {
               e.stopPropagation();
               onFavorite?.(channel.id);
             }}
-            className="absolute top-5 right-5 z-30 p-2.5 rounded-full glass hover:bg-white/10 transition-colors"
+            className="absolute top-5 right-5 z-30 p-2.5 rounded-full glass hover:bg-white/10 transition-colors cursor-pointer"
           >
             <Heart size={16} className={isFavorite ? "fill-cyan-400 text-cyan-400" : "text-white/40"} />
-          </button>
+          </div>
 
           {/* Play Center Glow - Only on Hover/Touch */}
           <div className="absolute inset-0 flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -88,7 +103,7 @@ export const ChannelCard: React.FC<ChannelCardProps> = ({ channel, onClick, isFa
 
         {/* Card Interactive Border (Bottom Glow) */}
         <div className="h-1.5 w-full bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-      </button>
+      </div>
     </div>
   );
 };

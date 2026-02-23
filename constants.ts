@@ -293,6 +293,17 @@ export const CHANNELS: Channel[] = [
 
   // --- PORTUGAL ---
   {
+    id: 'cnn-portugal',
+    name: 'CNN Portugal',
+    description: 'Informação de rigor e credibilidade. Acompanhe as notícias de Portugal e do mundo em direto.',
+    logoColor: 'bg-red-700',
+    logoImage: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/CNN_Portugal.svg/1200px-CNN_Portugal.svg.png',
+    streamUrl: 'https://video-auth1.iol.pt/live_cnn/live_cnn/playlist.m3u8',
+    type: StreamType.HLS,
+    country: Country.PORTUGAL,
+    category: Category.NEWS
+  },
+  {
     id: 'rtp-i',
     name: 'RTP Internacional',
     description: 'O canal que une a comunidade lusófona global com o melhor da cultura e informação de Portugal.',
@@ -329,6 +340,17 @@ export const CHANNELS: Channel[] = [
   },
 
   // --- ESPECIALIZADOS & GLOBAL ---
+  {
+    id: 'euronews-pt',
+    name: 'Euronews',
+    description: 'Acompanhe as últimas notícias da Europa e do mundo. Informação independente e cobertura em tempo real.',
+    logoColor: 'bg-blue-600',
+    logoImage: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Euronews_logo.svg/800px-Euronews_logo.svg.png',
+    streamUrl: 'https://www.youtube.com/embed/XuZAl-ZPEcA',
+    type: StreamType.YOUTUBE,
+    country: Country.GLOBAL,
+    category: Category.NEWS
+  },
   {
     id: 'premier-uk',
     name: 'Premier UK',
