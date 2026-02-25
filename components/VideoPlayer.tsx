@@ -23,16 +23,66 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ channel, allChannels =
   const [showFallback, setShowFallback] = useState(false);
   const [showControls, setShowControls] = useState(false);
   const controlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const lastActivityRef = useRef<number>(Date.now());
+  const isMouseOverVideoRef = useRef<boolean>(false);
 
   // Gerenciar visibilidade dos controles
   const showControlsTemporarily = () => {
+    lastActivityRef.current = Date.now();
     setShowControls(true);
     if (controlsTimeoutRef.current) {
       clearTimeout(controlsTimeoutRef.current);
     }
     controlsTimeoutRef.current = setTimeout(() => {
       setShowControls(false);
-    }, 5000);
+    }, 4000); // 4 seconds instead of 5
+  };
+
+  const hideControls = () => {
+    setShowControls(false);
+    if (controlsTimeoutRef.current) {
+      clearTimeout(controlsTimeoutRef.current);
+    }
+  };
+
+  // Handle mouse movement - only show if mouse is over video area
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isMouseOverVideoRef.current) return;
+    
+    const timeSinceLastActivity = Date.now() - lastActivityRef.current;
+    if (timeSinceLastActivity > 1000) { // Only show if 1+ seconds since last activity
+      showControlsTemporarily();
+    }
+  };
+
+  // Handle mouse enter/leave for video area
+  const handleMouseEnter = () => {
+    isMouseOverVideoRef.current = true;
+    showControlsTemporarily();
+  };
+
+  const handleMouseLeave = () => {
+    isMouseOverVideoRef.current = false;
+    hideControls();
+  };
+
+  // Handle touch events for mobile
+  const handleTouchStart = (e: React.TouchEvent) => {
+    e.preventDefault();
+    showControlsTemporarily();
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    e.preventDefault();
+    const timeSinceLastActivity = Date.now() - lastActivityRef.current;
+    if (timeSinceLastActivity > 1000) {
+      showControlsTemporarily();
+    }
+  };
+
+  // Handle click/tap on video area
+  const handleClick = () => {
+    showControlsTemporarily();
   };
 
   useEffect(() => {
@@ -152,8 +202,12 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ channel, allChannels =
   return (
     <div 
       className="relative w-full h-full bg-black flex items-center justify-center group"
-      onMouseMove={showControlsTemporarily}
-      onClick={showControlsTemporarily}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onClick={handleClick}
     >
       {loading && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-black z-10">
@@ -199,8 +253,6 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ channel, allChannels =
           autoPlay 
           playsInline 
           crossOrigin="anonymous"
-          onMouseMove={showControlsTemporarily}
-          onClick={showControlsTemporarily}
         />
       )}
 
