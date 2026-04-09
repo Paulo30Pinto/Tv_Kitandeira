@@ -85,17 +85,17 @@ export const ChannelCard: React.FC<ChannelCardProps> = ({ channel, onClick, isFa
           </div>
 
           {/* Information Section */}
-          <div className="absolute bottom-0 left-0 right-0 p-6 z-20 text-left">
-            <div className="flex items-center gap-2 mb-2">
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-cyan-400 drop-shadow-lg">
+          <div className="absolute bottom-0 left-0 right-0 p-5 z-20 text-left">
+            <div className="flex items-center gap-2 mb-1.5">
+              <span className="text-[8px] font-black uppercase tracking-[0.2em] text-cyan-400 drop-shadow-lg">
                 {channel.category}
               </span>
               <span className="w-1 h-1 bg-white/20 rounded-full" />
-              <span className="text-[10px] font-bold text-white/40 uppercase">
+              <span className="text-[8px] font-bold text-white/40 uppercase">
                 {channel.country}
               </span>
             </div>
-            <h3 className="text-xl font-extrabold text-white leading-tight font-syne group-hover:text-cyan-200 transition-colors drop-shadow-lg">
+            <h3 className="text-lg font-extrabold text-white leading-tight font-syne group-hover:text-cyan-200 transition-colors drop-shadow-lg">
               {channel.name}
             </h3>
           </div>

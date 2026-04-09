@@ -144,41 +144,41 @@ const App: React.FC = () => {
               <div className="px-8 pb-10 md:px-12 md:pb-12 max-w-7xl mx-auto flex flex-col gap-6">
                 
                 {/* Main Program Bar */}
-                <div className="flex flex-col md:flex-row items-end md:items-center gap-6">
+                <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6">
                   
                   {/* Channel ID */}
-                  <div className="flex items-center gap-5 min-w-max">
-                     <span className="text-6xl md:text-7xl font-black font-syne text-white/90 tabular-nums tracking-tighter drop-shadow-2xl">
+                  <div className="flex items-center gap-4 md:gap-5 min-w-max">
+                     <span className="text-5xl sm:text-6xl md:text-7xl font-black font-syne text-white/90 tabular-nums tracking-tighter drop-shadow-2xl">
                        {number}
                      </span>
-                     <div className="h-16 w-px bg-white/20" />
-                     <div className="flex flex-col gap-1">
-                        <span className="text-xs font-bold text-cyan-400 uppercase tracking-[0.2em]">{activeChannel.category}</span>
-                        <h2 className="text-2xl md:text-4xl font-black italic uppercase leading-none drop-shadow-lg">{activeChannel.name}</h2>
+                     <div className="h-12 md:h-16 w-px bg-white/20" />
+                     <div className="flex flex-col gap-0.5 md:gap-1">
+                        <span className="text-[10px] md:text-xs font-bold text-cyan-400 uppercase tracking-[0.2em]">{activeChannel.category}</span>
+                        <h2 className="text-xl sm:text-2xl md:text-4xl font-black italic uppercase leading-none drop-shadow-lg">{activeChannel.name}</h2>
                      </div>
                   </div>
 
                   {/* Program Info & Progress */}
-                  <div className="flex-1 w-full bg-white/5 backdrop-blur-xl border-t border-white/10 p-5 rounded-2xl flex flex-col gap-3 shadow-2xl">
-                     <div className="flex justify-between items-center text-[10px] font-black tracking-widest text-cyan-400/80 mb-0.5">
+                  <div className="flex-1 w-full bg-white/5 backdrop-blur-xl border-t border-white/10 p-4 md:p-5 rounded-2xl flex flex-col gap-2 md:gap-3 shadow-2xl">
+                     <div className="flex justify-between items-center text-[9px] md:text-[10px] font-black tracking-widest text-cyan-400/80 mb-0.5">
                         <span>PROGRAMAÇÃO AO VIVO</span>
-                        <div className="flex items-center gap-2 text-red-500 bg-red-500/10 px-2 py-0.5 rounded">
+                        <div className="flex items-center gap-1.5 md:gap-2 text-red-500 bg-red-500/10 px-2 py-0.5 rounded">
                           <span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />
                           DIRETO
                         </div>
                      </div>
                      
                      <div className="flex justify-between items-end gap-4">
-                       <h3 className="text-xl font-bold text-white line-clamp-1 leading-tight">{activeChannel.description}</h3>
-                       <span className="text-xs text-white/30 font-mono whitespace-nowrap hidden sm:block border border-white/10 px-2 py-0.5 rounded">HD 1080p</span>
+                       <h3 className="text-lg md:text-xl font-bold text-white line-clamp-1 leading-tight">{activeChannel.description}</h3>
+                       <span className="text-[10px] md:text-xs text-white/30 font-mono whitespace-nowrap hidden sm:block border border-white/10 px-2 py-0.5 rounded">HD 1080p</span>
                      </div>
 
-                     <div className="flex items-center gap-4 mt-1">
-                        <span className="text-xs font-bold text-white/40">15:30</span>
-                        <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden relative">
+                     <div className="flex items-center gap-3 md:gap-4 mt-1">
+                        <span className="text-[10px] md:text-xs font-bold text-white/40">15:30</span>
+                        <div className="flex-1 h-1 md:h-1.5 bg-white/10 rounded-full overflow-hidden relative">
                            <div className="absolute inset-y-0 left-0 w-[65%] bg-gradient-to-r from-cyan-600 to-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.6)]" />
                         </div>
-                        <span className="text-xs font-bold text-white/40">18:00</span>
+                        <span className="text-[10px] md:text-xs font-bold text-white/40">18:00</span>
                      </div>
                   </div>
                 </div>
@@ -254,39 +254,41 @@ const App: React.FC = () => {
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar px-6 md:px-12 pb-36">
+        <div className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar px-4 sm:px-6 md:px-12 pb-32 md:pb-12">
           
           {/* Hero Section (Carousel) */}
           {!searchTerm && activeCategory === 'All' && activeTab === 'home' && (
-             <HeroCarousel 
-               channels={featuredChannels} 
-               onChannelSelect={setActiveChannel} 
-             />
+             <div className="max-w-7xl mx-auto w-full overflow-hidden">
+               <HeroCarousel 
+                 channels={featuredChannels} 
+                 onChannelSelect={setActiveChannel} 
+               />
+             </div>
           )}
 
           <div className="max-w-7xl mx-auto">
-            <div className="hidden md:block py-16">
-               <h1 className="text-7xl font-black font-syne tracking-tighter mb-4 italic uppercase">TEIP Stream</h1>
+            <div className="hidden md:block py-6 lg:py-10">
+               <h1 className="text-2xl md:text-3xl lg:text-4xl font-black font-syne tracking-tighter mb-2 italic uppercase">TEIP Stream</h1>
                <div className="flex items-center gap-4">
-                 <p className="text-white/40 font-medium text-xl">Sintonize o futuro da televisão pública digital.</p>
+                 <p className="text-white/40 font-medium text-sm lg:text-base">Sintonize o futuro da televisão pública digital.</p>
                  <div className="h-px flex-1 bg-gradient-to-r from-white/10 to-transparent" />
                </div>
             </div>
 
-            <div className="flex items-center justify-between mb-8">
-               <div className="flex items-center gap-4">
-                  <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse glow-accent" />
-                  <h2 className="text-[13px] font-black uppercase tracking-[0.4em] text-white/40">
+            <div className="flex items-center justify-between mb-4 md:mb-6 mt-2 md:mt-0">
+               <div className="flex items-center gap-2 md:gap-3">
+                  <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse glow-accent" />
+                  <h2 className="text-[9px] md:text-[11px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] text-white/40">
                     {filteredChannels.length} Estações Ativas
                   </h2>
                </div>
                {activeTab === 'fav' && (
-                 <span className="text-xs font-bold text-cyan-500 bg-cyan-500/10 px-4 py-1.5 rounded-full border border-cyan-500/20">MEUS FAVORITOS</span>
+                 <span className="text-[9px] md:text-[10px] font-bold text-cyan-500 bg-cyan-500/10 px-2 md:px-3 py-0.5 md:py-1 rounded-full border border-cyan-500/20">MEUS FAVORITOS</span>
                )}
             </div>
 
             {filteredChannels.length > 0 ? (
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5 md:gap-10">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 md:gap-8 lg:gap-10">
                 {filteredChannels.map(channel => (
                   <ChannelCard 
                     key={channel.id} 
@@ -298,12 +300,12 @@ const App: React.FC = () => {
                 ))}
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center py-48 text-center animate-in fade-in zoom-in duration-700">
-                <div className="w-32 h-32 glass rounded-[3rem] flex items-center justify-center mb-8 border-dashed rotate-12">
-                  <X size={56} className="text-white/5" />
+              <div className="flex flex-col items-center justify-center py-32 text-center animate-in fade-in zoom-in duration-700">
+                <div className="w-24 h-24 glass rounded-[2.5rem] flex items-center justify-center mb-6 border-dashed rotate-12">
+                  <X size={40} className="text-white/5" />
                 </div>
-                <h3 className="text-2xl font-bold text-white/40 font-syne">NADA NA ÓRBITA</h3>
-                <p className="text-sm text-white/20 mt-2 max-w-xs">Tente redefinir seus filtros ou pesquise por outro termo.</p>
+                <h3 className="text-xl font-bold text-white/40 font-syne">NADA NA ÓRBITA</h3>
+                <p className="text-xs text-white/20 mt-2 max-w-xs">Tente redefinir seus filtros ou pesquise por outro termo.</p>
               </div>
             )}
           </div>

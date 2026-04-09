@@ -46,33 +46,33 @@ export const HeroCarousel: React.FC<HeroCarouselProps> = ({ channels, onChannelS
             <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-black/20 to-transparent z-0" />
             
             {/* Content Overlay */}
-            <div className="relative z-10 w-full flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div className="relative z-10 w-full flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-6">
               <div className="max-w-2xl animate-in slide-in-from-bottom-8 duration-700 delay-150">
-                <div className="bg-white/10 backdrop-blur-2xl px-5 py-2 rounded-full border border-white/20 text-[11px] font-black flex items-center gap-2 shadow-xl w-fit mb-6">
-                  <Sparkles size={14} className="text-yellow-400 animate-pulse" /> 
+                <div className="bg-white/10 backdrop-blur-2xl px-3 md:px-5 py-1.5 md:py-2 rounded-full border border-white/20 text-[8px] md:text-[10px] font-black flex items-center gap-2 shadow-xl w-fit mb-3 md:mb-6">
+                  <Sparkles size={12} className="text-yellow-400 animate-pulse md:w-[14px] md:h-[14px]" /> 
                   DESTAQUE DA SEMANA
                 </div>
                 
-                <div className="flex items-center gap-3 mb-3">
-                  <TrendingUp size={18} className="text-cyan-400" />
-                  <span className="text-[12px] font-black text-cyan-400 uppercase tracking-[0.3em]">
+                <div className="flex items-center gap-2 md:gap-3 mb-2 md:mb-3">
+                  <TrendingUp size={14} className="text-cyan-400 md:w-[18px] md:h-[18px]" />
+                  <span className="text-[9px] md:text-[11px] font-black text-cyan-400 uppercase tracking-[0.2em] md:tracking-[0.3em]">
                     Sintonizado por milhares
                   </span>
                 </div>
                 
-                <h2 className="text-4xl md:text-7xl font-black font-syne mb-4 tracking-tight italic uppercase drop-shadow-2xl">
+                <h2 className="text-lg sm:text-2xl md:text-4xl lg:text-5xl font-black font-syne mb-1.5 md:mb-3 tracking-tight italic uppercase drop-shadow-2xl leading-none">
                   {channel.name}
                 </h2>
-                <p className="text-sm md:text-xl text-white/60 line-clamp-2 drop-shadow-lg font-medium leading-relaxed">
+                <p className="text-[9px] md:text-sm lg:text-base text-white/60 line-clamp-2 drop-shadow-lg font-medium leading-relaxed max-w-lg">
                   {channel.description}
                 </p>
               </div>
 
               <button 
                 onClick={() => onChannelSelect(channel)}
-                className="group/play flex-shrink-0 w-24 h-24 md:w-32 md:h-32 bg-white text-black rounded-full flex items-center justify-center shadow-[0_0_50px_rgba(255,255,255,0.3)] hover:scale-110 active:scale-95 transition-all duration-500"
+                className="group/play flex-shrink-0 w-16 h-16 sm:w-20 sm:h-20 md:w-32 md:h-32 bg-white text-black rounded-full flex items-center justify-center shadow-[0_0_50px_rgba(255,255,255,0.3)] hover:scale-110 active:scale-95 transition-all duration-500 mt-2 md:mt-0"
               >
-                <Play fill="currentColor" size={40} className="ml-1 group-hover/play:scale-110 transition-transform" />
+                <Play fill="currentColor" size={24} className="ml-1 group-hover/play:scale-110 transition-transform sm:w-[32px] sm:h-[32px] md:w-[40px] md:h-[40px]" />
               </button>
             </div>
           </div>
