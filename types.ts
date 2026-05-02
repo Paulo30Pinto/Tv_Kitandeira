@@ -25,7 +25,17 @@ export enum Country {
   SINGAPORE = 'Singapura',
   CANADA = 'Canadá',
   POLAND = 'Polônia',
-  UN = 'ONU'
+  UN = 'ONU',
+  ARGENTINA = 'Argentina',
+  HONG_KONG = 'Hong Kong',
+  BELGIUM = 'Bélgica',
+  NETHERLANDS = 'Países Baixos',
+  MEXICO = 'México',
+  BOLIVIA = 'Bolívia',
+  EGYPT = 'Egito',
+  CHILE = 'Chile',
+  VENEZUELA = 'Venezuela',
+  ITALY = 'Itália'
 }
 
 export enum Category {
@@ -33,10 +43,16 @@ export enum Category {
   GENERAL = 'Variedades',
   PUBLIC = 'Público',
   SPORTS = 'Desporto',
+  FOOTBALL = 'Futebol',
   MUSIC = 'Música',
   EDUCATION = 'Educação & Gov',
   INTERNATIONAL = 'Internacional',
-  KIDS = 'Infantil'
+  KIDS = 'Infantil',
+  CARTOON = 'Desenhos',
+  ANIME = 'Anime',
+  NOVELAS = 'Novelas',
+  SERIES = 'Séries',
+  MOVIES = 'Filmes'
 }
 
 export interface Channel {

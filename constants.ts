@@ -424,15 +424,334 @@ export const CHANNELS: Channel[] = [
     country: Country.SPAIN,
     category: Category.SPORTS
   },
+
+  // --- DESPORTO (INTERNACIONAL) ---
   {
-    id: 'redbull-tv',
-    name: 'Red Bull TV',
-    description: 'Esportes de ação, festivais de música e documentários exclusivos sobre alta performance.',
-    logoColor: 'bg-zinc-900',
-    logoImage: 'https://upload.wikimedia.org/wikipedia/en/thumb/f/f5/RedBullTVLogo.svg/800px-RedBullTVLogo.svg.png',
-    streamUrl: 'https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master.m3u8',
+    id: "all-sports-tv",
+    name: "All Sports Television Network",
+    description: "Rede americana com conteúdo multidesportivo variado.",
+    logoColor: "bg-[#1c7ed6]",
+    streamUrl: "https://2-fss-2.streamhoster.com/pl_118/204972-2205186-1/playlist.m3u8",
+    type: StreamType.HLS,
+    country: Country.USA,
+    category: Category.SPORTS
+  },
+  {
+    id: "esport3",
+    name: "Esport3",
+    description: "Canal catalão de desporto; transmissões de alta qualidade com foco regional.",
+    logoColor: "bg-[#2b8a3e]",
+    streamUrl: "https://directes-tv-int.3catdirectes.cat/live-content/esport3-hls/master.m3u8",
+    type: StreamType.HLS,
+    country: Country.SPAIN,
+    category: Category.SPORTS
+  },
+  {
+    id: "ftf-sports",
+    name: "FTF Sports",
+    description: "Canal de eventos e programas desportivos variados.",
+    logoColor: "bg-[#0d7bdc]",
+    streamUrl: "https://1657061170.rsc.cdn77.org/HLS/FTF-LINEAR.m3u8",
+    type: StreamType.HLS,
+    country: Country.USA,
+    category: Category.SPORTS
+  },
+  {
+    id: "fubo-sports-network",
+    name: "Fubo Sports Network",
+    description: "Notícias, debates e programas desportivos 24/7.",
+    logoColor: "bg-[#33a852]",
+    streamUrl: "https://livetv-fa.tubi.video/fubo/master.m3u8",
+    type: StreamType.HLS,
+    country: Country.USA,
+    category: Category.SPORTS
+  },
+  {
+    id: "more-than-sports-tv",
+    name: "More Than Sports TV",
+    description: "Canal internacional de desporto e lifestyle desportivo.",
+    logoColor: "bg-[#1769aa]",
+    streamUrl: "https://mts-linear-1979071187.us-east-1.elb.amazonaws.com/out/v1/4f4000f876114f3ab80df2f24645e7d8/index.m3u8",
+    type: StreamType.HLS,
+    country: Country.GERMANY,
+    category: Category.SPORTS
+  },
+  {
+    id: "motortrend-fast-tv",
+    name: "MotorTrend FAST TV",
+    description: "Automobilismo, carros, velocidade e programas de garagem.",
+    logoColor: "bg-[#e4572e]",
+    streamUrl: "https://live-manifest.production-public.tubi.io/live/e7be5ad5-9044-4151-95d4-a9aae10ab0a5/playlist.m3u8",
+    type: StreamType.HLS,
+    country: Country.USA,
+    category: Category.SPORTS
+  },
+  {
+    id: "nba-fast-channel",
+    name: "NBA FAST Channel",
+    description: "Conteúdo de basquetebol da NBA em formato contínuo.",
+    logoColor: "bg-[#1d428a]",
+    streamUrl: "https://live-manifest.production-public.tubi.io/live/553b8d5e-fd2a-4a61-bdfa-73b34c299d75/playlist.m3u8",
+    type: StreamType.HLS,
+    country: Country.USA,
+    category: Category.SPORTS
+  },
+  {
+    id: "nhl-fast",
+    name: "NHL FAST",
+    description: "Conteúdo focado em hóquei no gelo, clássicos e programas da liga americana.",
+    logoColor: "bg-[#111111]",
+    streamUrl: "https://aegis-cloudfront-1.tubi.video/1f4cbb33-cb23-40ab-b54b-2965cc551b32/playlist.m3u8",
+    type: StreamType.HLS,
+    country: Country.USA,
+    category: Category.SPORTS
+  },
+  {
+    id: "ufc-fast",
+    name: "UFC Channel",
+    description: "O melhor das artes marciais mistas, lutas históricas e bastidores.",
+    logoColor: "bg-[#d90429]",
+    streamUrl: "https://aegis-cloudfront-1.tubi.video/a78ea283-8666-44a1-a0f6-fde5d229ac21/playlist.m3u8",
+    type: StreamType.HLS,
+    country: Country.USA,
+    category: Category.SPORTS
+  },
+  {
+    id: "vsin",
+    name: "VSiN",
+    description: "Notícias, análises e debates sobre desporto 24 horas por dia.",
+    logoColor: "bg-[#495057]",
+    streamUrl: "https://vsin-sgrewind.streamguys1.com/scte/live-2k/playlist.m3u8",
+    type: StreamType.HLS,
+    country: Country.USA,
+    category: Category.SPORTS
+  },
+
+  // --- FUTEBOL ---
+  {
+    id: "bein-sports-xtra",
+    name: "beIN SPORTS XTRA",
+    description: "Notícias e eventos desportivos focados em futebol internacional.",
+    logoColor: "bg-[#6b35d8]",
+    streamUrl: "https://aegis-cloudfront-1.tubi.video/651ee7d3-e75b-4748-be86-422d43ff24b6/playlist.m3u8",
+    type: StreamType.HLS,
+    country: Country.USA,
+    category: Category.FOOTBALL
+  },
+  {
+    id: "caze-tv",
+    name: "CazeTV",
+    description: "O fenômeno do YouTube brasileiro com transmissões de futebol e desporto ao vivo.",
+    logoColor: "bg-[#772ce8]",
+    streamUrl: "https://dfr80qz435crc.cloudfront.net/MNOP/Amagi/Caze/Caze_TV_BR/Caze_TV.m3u8",
+    type: StreamType.HLS,
+    country: Country.BRASIL,
+    category: Category.FOOTBALL
+  },
+  {
+    id: "sevilla-fc-tv",
+    name: "Sevilla FC TV",
+    description: "Canal oficial do clube espanhol com bastidores e jogos.",
+    logoColor: "bg-[#d00000]",
+    streamUrl: "https://open.http.mp.streamamg.com/p/3001314/sp/300131400/playManifest/entryId/0_ye0b8tc0/format/applehttp/protocol/https/uiConfId/30026292/a.m3u8",
+    type: StreamType.HLS,
+    country: Country.SPAIN,
+    category: Category.FOOTBALL
+  },
+
+  // --- DESENHOS & ANIMES ---
+  {
+    id: "kartoon-channel",
+    name: "Kartoon Channel",
+    description: "Desenhos, séries animadas e conteúdo infantil 24h.",
+    logoColor: "bg-[#8338ec]",
+    streamUrl: "https://cdn-apse1-prod.tsv2.amagi.tv/linear/amg01076-lightningintern-kartoonchannel-samsungnz/playlist.m3u8",
+    type: StreamType.HLS,
+    country: Country.USA,
+    category: Category.CARTOON
+  },
+  {
+    id: "toon-goggles",
+    name: "Toon Goggles",
+    description: "Desenhos animados e conteúdo infantil em transmissão contínua.",
+    logoColor: "bg-[#845ef7]",
+    streamUrl: "https://stream-us-east-1.getpublica.com/playlist.m3u8?network_id=37",
+    type: StreamType.HLS,
+    country: Country.USA,
+    category: Category.CARTOON
+  },
+  {
+    id: "xtrema-cartoons",
+    name: "Xtrema Cartoons",
+    description: "Canal brasileiro de desenhos animados e entretenimento infantil.",
+    logoColor: "bg-[#ffbe0b]",
+    streamUrl: "https://stmv6.voxtvhd.com.br/xtremacartoons/xtremacartoons/playlist.m3u8",
+    type: StreamType.HLS,
+    country: Country.BRASIL,
+    category: Category.CARTOON
+  },
+  {
+    id: "ani-one",
+    name: "Ani-One",
+    description: "Canal de anime com séries e conteúdo asiático diversificado.",
+    logoColor: "bg-[#00a8e8]",
+    streamUrl: "https://amg19223-amg19223c9-amgplt0019.playout.now3.amagi.tv/playlist/amg19223-amg19223c9-amgplt0019/playlist.m3u8",
+    type: StreamType.HLS,
+    country: Country.HONG_KONG,
+    category: Category.ANIME
+  },
+  {
+    id: "japanim-tv",
+    name: "Japanim TV",
+    description: "Anime e cultura pop japonesa em transmissão contínua.",
+    logoColor: "bg-[#fb5607]",
+    streamUrl: "https://foxkidstv.be:3369/stream/play.m3u8",
+    type: StreamType.HLS,
+    country: Country.BELGIUM,
+    category: Category.ANIME
+  },
+  {
+    id: "toonami-aftermath-east",
+    name: "Toonami Aftermath East",
+    description: "Animação, anime e conteúdo nostálgico inspirado em blocos clássicos.",
+    logoColor: "bg-[#5c7cfa]",
+    streamUrl: "http://api.toonamiaftermath.com:3000/est/playlist.m3u8",
+    type: StreamType.HLS,
+    country: Country.USA,
+    category: Category.ANIME
+  },
+
+  // --- NOVELAS & FILMES ---
+  {
+    id: "frequence-novelas",
+    name: "Frequence Novelas",
+    description: "Canal FAST dedicado a novelas em espanhol.",
+    logoColor: "bg-[#9d4edd]",
+    streamUrl: "https://d20oth1416y9a1.cloudfront.net/playlist/amg00711-zylofast-frequencenovelas-rakutenus/playlist.m3u8",
     type: StreamType.HLS,
     country: Country.GLOBAL,
-    category: Category.SPORTS
-  }
+    category: Category.NOVELAS
+  },
+  {
+    id: "pasiones",
+    name: "Pasiones",
+    description: "Canal de novelas, dramas românticos e teledramaturgia em espanhol.",
+    logoColor: "bg-[#c2255c]",
+    streamUrl: "https://dvrfl04.tulix.tv/teleup-pasiones/mpegts",
+    type: StreamType.HLS,
+    country: Country.USA,
+    category: Category.NOVELAS
+  },
+  {
+    id: "todo-novelas",
+    name: "Todo Novelas",
+    description: "Novelas clássicas e contemporâneas em espanhol.",
+    logoColor: "bg-[#ff477e]",
+    streamUrl: "https://aegis-cloudfront-1.tubi.video/6fa0e83b-0e19-46d7-95fd-7d9526c8dab5/playlist.m3u8",
+    type: StreamType.HLS,
+    country: Country.USA,
+    category: Category.NOVELAS
+  },
+  {
+    id: "24-hour-free-movies",
+    name: "24 Hour Free Movies",
+    description: "Filmes gratuitos em transmissão 24 horas por dia.",
+    logoColor: "bg-[#f3722c]",
+    streamUrl: "https://d1j2u714xk898n.cloudfront.net/scheduler/scheduleMaster/145.m3u8",
+    type: StreamType.HLS,
+    country: Country.USA,
+    category: Category.MOVIES
+  },
+  {
+    id: "cinevault-80s",
+    name: "Cinevault 80s",
+    description: "Filmes e clássicos icônicos dos anos 80.",
+    logoColor: "bg-[#ff7b00]",
+    streamUrl: "https://gsn-cinevault-80s-2-us.roku.wurl.tv/playlist.m3u8",
+    type: StreamType.HLS,
+    country: Country.USA,
+    category: Category.MOVIES
+  },
+  {
+    id: "discover-film",
+    name: "Discover Film",
+    description: "Curtas, filmes independentes e histórias selecionadas globalmente.",
+    logoColor: "bg-[#0081a7]",
+    streamUrl: "https://discoverfilm-discoverfilm-1-nl.samsung.wurl.tv/playlist.m3u8",
+    type: StreamType.HLS,
+    country: Country.NETHERLANDS,
+    category: Category.MOVIES
+  },
+  {
+    id: "horror-by-alter",
+    name: "Horror by ALTER",
+    description: "Filmes e curtas de terror e suspense 24h.",
+    logoColor: "bg-[#1b1b1b]",
+    streamUrl: "https://aegis-cloudfront-1.tubi.video/acac036c-181a-413a-a102-cd294c83320d/playlist.m3u8",
+    type: StreamType.HLS,
+    country: Country.USA,
+    category: Category.MOVIES
+  },
+
+  // --- MÚSICA ---
+  {
+    id: "clubbing-tv",
+    name: "Clubbing TV",
+    description: "Música eletrónica, DJs, festivais e cultura clubbing.",
+    logoColor: "bg-[#8338ec]",
+    streamUrl: "https://d1j2csarxnwazk.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-uze1m6xh4fiyr-ssai-prd/master.m3u8",
+    type: StreamType.HLS,
+    country: Country.FRANCE,
+    category: Category.MUSIC
+  },
+  {
+    id: "kpop-tv-play",
+    name: "KpopTV Play",
+    description: "Música K-pop, clipes e cultura pop coreana.",
+    logoColor: "bg-[#ff4ecb]",
+    streamUrl: "https://giatv.bozztv.com/giatv/giatv-kpoptvplay/kpoptvplay/playlist.m3u8",
+    type: StreamType.HLS,
+    country: Country.SOUTH_KOREA,
+    category: Category.MUSIC
+  },
+  {
+    id: "qello-concerts",
+    name: "Qello Concerts",
+    description: "Concertos fantásticos, shows ao vivo e documentários musicais.",
+    logoColor: "bg-[#00b4d8]",
+    streamUrl: "https://lotus.stingray.com/manifest/qello-qello001-montreal/samsungtvplus/master.m3u8",
+    type: StreamType.HLS,
+    country: Country.CANADA,
+    category: Category.MUSIC
+  },
+  {
+    id: "stingray-classic-rock",
+    name: "Stingray Classic Rock",
+    description: "Rock clássico e grandes sucessos de várias épocas.",
+    logoColor: "bg-[#d00000]",
+    streamUrl: "https://lotus.stingray.com/manifest/ose-101ads-montreal/samsungtvplus/master.m3u8",
+    type: StreamType.HLS,
+    country: Country.CANADA,
+    category: Category.MUSIC
+  },
+  {
+    id: "stingray-hit-list",
+    name: "Stingray Hit List",
+    description: "Hits atuais e videoclipes mais populares do momento.",
+    logoColor: "bg-[#fb5607]",
+    streamUrl: "https://lotus.stingray.com/manifest/ose-107ads-montreal/samsungtvplus/master.m3u8",
+    type: StreamType.HLS,
+    country: Country.CANADA,
+    category: Category.MUSIC
+  },
+  {
+    id: "xite-reggae-vibes",
+    name: "XITE Reggae Vibes",
+    description: "Reggae, dancehall e vibes caribenhas em alta definição.",
+    logoColor: "bg-[#38b000]",
+    streamUrl: "https://dw2m7yrngfg8c.cloudfront.net/XITE_Reggae_Vibes.m3u8",
+    type: StreamType.HLS,
+    country: Country.NETHERLANDS,
+    category: Category.MUSIC
+  },
 ];

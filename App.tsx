@@ -87,6 +87,11 @@ const App: React.FC = () => {
     return { number, prev, next, prevNum, nextNum };
   };
 
+  const handleCategorySelect = (category: Category | 'All') => {
+    setActiveCategory(category);
+    setActiveTab('home'); // Redireciona para home para ver os resultados
+  };
+
   return (
     <div className="flex h-screen w-screen bg-[#050505] text-white overflow-hidden font-jakarta select-none">
       
@@ -212,7 +217,7 @@ const App: React.FC = () => {
 
       <Sidebar 
         activeCategory={activeCategory} 
-        onSelectCategory={setActiveCategory} 
+        onSelectCategory={handleCategorySelect} 
         onInstall={deferredPrompt ? handleInstallClick : undefined}
       />
 
@@ -239,7 +244,7 @@ const App: React.FC = () => {
             </div>
           </div>
 
-          <div className="relative group">
+          <div className="relative group mb-6">
             <div className="absolute inset-y-0 left-5 flex items-center pointer-events-none">
               <Search size={20} className="text-white/20 group-focus-within:text-cyan-400 transition-colors" />
             </div>
@@ -250,6 +255,33 @@ const App: React.FC = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full glass rounded-3xl pl-16 pr-6 py-5 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/40 placeholder-white/20 transition-all shadow-inner"
             />
+          </div>
+
+          {/* Mobile Categories Scroll */}
+          <div className="flex items-center gap-3 overflow-x-auto pb-4 no-scrollbar -mx-2 px-2">
+            <button
+              onClick={() => handleCategorySelect('All')}
+              className={`px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all border ${
+                activeCategory === 'All' 
+                  ? 'bg-cyan-400 text-black border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.3)]' 
+                  : 'bg-white/5 text-white/40 border-white/5'
+              }`}
+            >
+              TUDO
+            </button>
+            {Object.entries(Category).map(([key, value]) => (
+              <button
+                key={key}
+                onClick={() => handleCategorySelect(value as Category)}
+                className={`px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all border ${
+                  activeCategory === value 
+                    ? 'bg-cyan-400 text-black border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.3)]' 
+                    : 'bg-white/5 text-white/40 border-white/5'
+                }`}
+              >
+                {value}
+              </button>
+            ))}
           </div>
         </div>
 

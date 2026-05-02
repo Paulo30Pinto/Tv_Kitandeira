@@ -1,5 +1,9 @@
 import React from 'react';
-import { Tv, Globe2, Film, Info, Trophy, Music, GraduationCap, Globe, Smile, Download } from 'lucide-react';
+import { 
+  Tv, Globe2, Film, Info, Trophy, Music, GraduationCap, 
+  Globe, Smile, Download, Activity, Heart, Clapperboard, 
+  Ghost, Sparkles, Layers 
+} from 'lucide-react';
 import { Category } from '../types';
 
 interface SidebarProps {
@@ -12,12 +16,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeCategory, onSelectCatego
   const menuItems = [
     { id: 'All', label: 'Início', icon: Tv },
     { id: Category.NEWS, label: 'Notícias', icon: Globe2 },
-    { id: Category.KIDS, label: 'Infantil', icon: Smile },
+    { id: Category.FOOTBALL, label: 'Futebol', icon: Activity },
     { id: Category.SPORTS, label: 'Desporto', icon: Trophy },
+    { id: Category.KIDS, label: 'Infantil', icon: Smile },
+    { id: Category.CARTOON, label: 'Desenhos', icon: Sparkles },
+    { id: Category.ANIME, label: 'Anime', icon: Ghost },
+    { id: Category.NOVELAS, label: 'Novelas', icon: Heart },
+    { id: Category.SERIES, label: 'Séries', icon: Layers },
+    { id: Category.MOVIES, label: 'Filmes', icon: Film },
+    { id: Category.MUSIC, label: 'Música', icon: Music },
     { id: Category.EDUCATION, label: 'Educação', icon: GraduationCap },
     { id: Category.INTERNATIONAL, label: 'Mundo', icon: Globe },
-    { id: Category.MUSIC, label: 'Música', icon: Music },
-    { id: Category.GENERAL, label: 'Variedades', icon: Film },
+    { id: Category.GENERAL, label: 'Variedades', icon: Clapperboard },
     { id: Category.PUBLIC, label: 'Públicos', icon: Info },
   ];
 
