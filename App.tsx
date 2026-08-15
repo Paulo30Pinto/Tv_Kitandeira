@@ -1,28 +1,57 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { CHANNELS } from './constants';
-import { Channel, Category } from './types';
+import { Channel, Category, ActiveNavView, ParentalControlSettings, PlaylistSource, WatchHistoryItem } from './types';
 import { ChannelCard } from './components/ChannelCard';
 import { VideoPlayer } from './components/VideoPlayer';
 import { Sidebar } from './components/Sidebar';
 import { BottomNav } from './components/BottomNav';
-import { HeroCarousel } from './components/HeroCarousel';
-import { ArrowLeft, Search, X, Tv, WifiOff, Download, Sparkles, TrendingUp, Play, Bell, ChevronUp, ChevronDown } from 'lucide-react';
+import { EPGGuide } from './components/EPGGuide';
+import { AdminPanel } from './components/AdminPanel';
+import { SettingsModal } from './components/SettingsModal';
+import { CategoriesModal } from './components/CategoriesModal';
+import { AccountModal } from './components/AccountModal';
+import { useTVNavigation } from './hooks/useTVNavigation';
+import { Search, X, WifiOff, Download, Radio, Sparkles, Check, Heart, Layers } from 'lucide-react';
+
+const CATEGORY_TABS = [
+  { id: 'All', label: 'Todos' },
+  { id: Category.NEWS, label: 'Notícias' },
+  { id: Category.KIDS, label: 'Infantil' },
+  { id: Category.SPORTS, label: 'Desporto' },
+  { id: Category.EDUCATION, label: 'Educação' },
+  { id: Category.INTERNATIONAL, label: 'Internacional' },
+  { id: Category.MUSIC, label: 'Música' },
+  { id: Category.GENERAL, label: 'Variedades' },
+  { id: Category.MOVIES, label: 'Filmes' },
+  { id: Category.NOVELAS, label: 'Novelas' },
+  { id: 'fav', label: 'Favoritos' },
+];
 
 const App: React.FC = () => {
+  // Main Data States
+  const [channels, setChannels] = useState<Channel[]>(CHANNELS);
   const [activeChannel, setActiveChannel] = useState<Channel | null>(null);
-  const [activeCategory, setActiveCategory] = useState<Category | 'All'>('All');
+  const [activeView, setActiveView] = useState<ActiveNavView | Category | 'All'>('All');
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeTab, setActiveTab] = useState('home');
   const [favorites, setFavorites] = useState<string[]>([]);
+  const [watchHistory, setWatchHistory] = useState<WatchHistoryItem[]>([]);
+  
+  // Modals & UI States
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isCategoriesOpen, setIsCategoriesOpen] = useState(false);
+  const [isAccountOpen, setIsAccountOpen] = useState(false);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-  
-  // Controls visibility state
-  const [controlsVisible, setControlsVisible] = useState(true);
-  const controlsTimeoutRef = useRef<any>(null);
-  
-  const featuredChannels = CHANNELS.slice(0, 5);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
+  // Parental Control State
+  const [parentalSettings, setParentalSettings] = useState<ParentalControlSettings>({
+    isPinEnabled: false,
+    pinCode: '0000',
+    blockAdultContent: false,
+  });
+
+  // Load Saved Favorites & Parental Settings
   useEffect(() => {
     window.addEventListener('beforeinstallprompt', (e) => {
       e.preventDefault();
@@ -31,27 +60,56 @@ const App: React.FC = () => {
     window.addEventListener('online', () => setIsOnline(true));
     window.addEventListener('offline', () => setIsOnline(false));
 
-    const saved = localStorage.getItem('teip_favorites');
-    if (saved) setFavorites(JSON.parse(saved));
+    const savedFavs = localStorage.getItem('teip_favorites');
+    if (savedFavs) setFavorites(JSON.parse(savedFavs));
+
+    const savedParental = localStorage.getItem('teip_parental');
+    if (savedParental) setParentalSettings(JSON.parse(savedParental));
   }, []);
 
-  // Reset controls when channel changes
-  useEffect(() => {
-    if (activeChannel) {
-      handleUserActivity();
-    }
-    return () => {
-      if (controlsTimeoutRef.current) clearTimeout(controlsTimeoutRef.current);
-    };
-  }, [activeChannel]);
+  // Show Toast Helper
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3000);
+  };
 
+  // Toggle Favorite
   const toggleFavorite = (id: string) => {
-    const newFavs = favorites.includes(id) 
+    const isFav = favorites.includes(id);
+    const newFavs = isFav 
       ? favorites.filter(fav => fav !== id)
       : [...favorites, id];
     setFavorites(newFavs);
     localStorage.setItem('teip_favorites', JSON.stringify(newFavs));
+    showToast(isFav ? 'Removido dos Favoritos' : 'Adicionado aos Favoritos');
   };
+
+  // Handle Select Channel & Add to Watch History
+  const handleSelectChannel = (channel: Channel) => {
+    setActiveChannel(channel);
+
+    // Add to history
+    const newHistory = [
+      {
+        channelId: channel.id,
+        channelName: channel.name,
+        category: channel.category,
+        lastWatchedAt: Date.now(),
+        watchedSeconds: 0,
+      },
+      ...watchHistory.filter((item) => item.channelId !== channel.id),
+    ].slice(0, 20);
+
+    setWatchHistory(newHistory);
+  };
+
+  // TV Remote Navigation Hook
+  const { channelNotice } = useTVNavigation({
+    channels,
+    onSelectChannel: handleSelectChannel,
+    onClosePlayer: () => setActiveChannel(null),
+    isPlayerOpen: !!activeChannel,
+  });
 
   const handleInstallClick = async () => {
     if (!deferredPrompt) return;
@@ -60,296 +118,305 @@ const App: React.FC = () => {
     if (outcome === 'accepted') setDeferredPrompt(null);
   };
 
-  const handleUserActivity = () => {
-    setControlsVisible(true);
-    if (controlsTimeoutRef.current) clearTimeout(controlsTimeoutRef.current);
-    controlsTimeoutRef.current = setTimeout(() => {
-      setControlsVisible(false);
-    }, 4000);
+  // Admin Callbacks
+  const handleAddChannel = (newChannel: Channel) => {
+    setChannels([newChannel, ...channels]);
+    showToast(`Canal ${newChannel.name} adicionado com sucesso!`);
   };
 
-  const filteredChannels = CHANNELS.filter(channel => {
-    const matchesCategory = activeCategory === 'All' || channel.category === activeCategory;
-    const matchesSearch = channel.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          channel.description.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesTab = activeTab === 'fav' ? favorites.includes(channel.id) : true;
-    return matchesCategory && matchesSearch && matchesTab;
+  const handleDeleteChannel = (id: string) => {
+    setChannels(channels.filter((c) => c.id !== id));
+    showToast('Canal removido do sistema.');
+  };
+
+  const handleAddPlaylist = (playlist: PlaylistSource) => {
+    showToast(`Lista ${playlist.name} sincronizada!`);
+  };
+
+  // Channel Category Counts
+  const categoryCounts: Record<string, number> = {
+    All: channels.length,
+    fav: favorites.length,
+  };
+  channels.forEach((c) => {
+    categoryCounts[c.category] = (categoryCounts[c.category] || 0) + 1;
   });
 
-  // Helper for TV Overlay
-  const getChannelInfo = (channel: Channel) => {
-    const index = CHANNELS.findIndex(c => c.id === channel.id);
-    const number = (index + 1).toString().padStart(3, '0');
-    const prev = CHANNELS[index - 1] || CHANNELS[CHANNELS.length - 1];
-    const next = CHANNELS[index + 1] || CHANNELS[0];
-    const prevNum = (CHANNELS.findIndex(c => c.id === prev.id) + 1).toString().padStart(3, '0');
-    const nextNum = (CHANNELS.findIndex(c => c.id === next.id) + 1).toString().padStart(3, '0');
-    return { number, prev, next, prevNum, nextNum };
-  };
+  // Filter Channels
+  const filteredChannels = channels.filter((channel) => {
+    const matchesSearch =
+      channel.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      channel.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (channel.watermark && channel.watermark.toLowerCase().includes(searchTerm.toLowerCase()));
 
-  const handleCategorySelect = (category: Category | 'All') => {
-    setActiveCategory(category);
-    setActiveTab('home'); // Redireciona para home para ver os resultados
+    if (!matchesSearch) return false;
+
+    if (activeView === 'fav') return favorites.includes(channel.id);
+    if (activeView === 'recent') return watchHistory.some((item) => item.channelId === channel.id);
+    if (activeView === 'All' || activeView === 'canais') return true;
+
+    return channel.category === activeView;
+  });
+
+  // Active Section Title Label
+  const getSectionTitle = () => {
+    if (activeView === 'fav') return 'CANAIS FAVORITOS';
+    if (activeView === 'recent') return 'VISTOS RECENTEMENTE';
+    if (activeView === 'All' || activeView === 'canais') return 'TODOS OS CANAIS';
+    return (activeView as string).toUpperCase();
   };
 
   return (
-    <div className="flex h-screen w-screen bg-[#050505] text-white overflow-hidden font-jakarta select-none">
-      
-      {/* Background Ambience */}
+    <div className="flex h-screen w-screen bg-[#090B16] text-white overflow-hidden font-jakarta select-none">
+      {/* Background Futuristic Ambience Glows */}
       <div className="fixed top-0 left-0 w-full h-full pointer-events-none z-0">
-        <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] bg-cyan-500/10 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] bg-purple-600/10 rounded-full blur-[120px]" />
+        <div className="absolute top-[-15%] left-[-15%] w-[60%] h-[60%] bg-[#00B5FF]/10 rounded-full blur-[160px]" />
+        <div className="absolute bottom-[-15%] right-[-15%] w-[60%] h-[60%] bg-[#00D2FF]/10 rounded-full blur-[160px]" />
       </div>
 
-      {/* Connection Status */}
+      {/* Offline Alert Bar */}
       {!isOnline && (
-        <div className="fixed top-0 left-0 right-0 z-[1000] glass border-none bg-red-600/80 text-[10px] font-black py-2 px-4 flex items-center justify-center gap-2 animate-in slide-in-from-top duration-500">
+        <div className="fixed top-0 left-0 right-0 z-[1000] bg-red-600 text-white text-[11px] font-bold py-1.5 px-4 flex items-center justify-center gap-2">
           <WifiOff size={14} /> MODO OFFLINE ATIVADO
         </div>
       )}
 
-      {/* Fullscreen Video Overlay - TV Style */}
-      {activeChannel && (() => {
-        const { number, prev, next, prevNum, nextNum } = getChannelInfo(activeChannel);
-        
-        return (
-          <div 
-            className={`fixed inset-0 z-[2000] bg-black animate-in fade-in zoom-in-95 duration-500 ${!controlsVisible ? 'cursor-none' : ''}`}
-            onMouseMove={handleUserActivity}
-            onClick={handleUserActivity}
-            onTouchStart={handleUserActivity}
-          >
-            {/* Video Layer */}
-            <div className="absolute inset-0 z-0">
-              <VideoPlayer channel={activeChannel} />
-            </div>
+      {/* TV Direct Number Typing Toast Notice */}
+      {channelNotice && (
+        <div className="fixed top-8 left-1/2 -translate-x-1/2 z-[3500] bg-[#00B5FF] text-slate-950 font-black text-lg px-6 py-2 rounded-2xl shadow-[0_0_30px_rgba(0,181,255,0.6)] animate-pulse">
+          {channelNotice}
+        </div>
+      )}
 
-            {/* Top UI: Back Button */}
-            <div 
-              className={`absolute top-0 left-0 right-0 p-6 pt-safe z-50 flex justify-between transition-opacity duration-500 ${controlsVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
-            >
-              <button 
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setActiveChannel(null);
-                }}
-                className="w-12 h-12 flex items-center justify-center bg-black/40 backdrop-blur-md rounded-full border border-white/10 active:scale-90 transition-all hover:bg-white/20 text-white group shadow-xl"
-              >
-                <ArrowLeft size={24} className="group-hover:-translate-x-1 transition-transform" />
-              </button>
-            </div>
+      {/* Quick Action Toast */}
+      {toastMessage && (
+        <div className="fixed bottom-20 left-1/2 -translate-x-1/2 z-[3500] bg-[#121828] border border-cyan-500/50 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-2xl flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2">
+          <Check size={16} className="text-[#00B5FF]" />
+          <span>{toastMessage}</span>
+        </div>
+      )}
 
-            {/* TV Info Control Panel */}
-            <div 
-              className={`absolute bottom-0 left-0 right-0 z-50 transition-all duration-700 ease-in-out ${controlsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10 pointer-events-none'}`}
-            >
-              {/* Gradient Backdrop */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/90 to-transparent h-80 -z-10 bottom-0" />
+      {/* Fullscreen Video Overlay - TV Digital Experience */}
+      {activeChannel && (
+        <VideoPlayer
+          channel={activeChannel}
+          channels={channels}
+          onSelectChannel={handleSelectChannel}
+          onClose={() => setActiveChannel(null)}
+          isFavorite={favorites.includes(activeChannel.id)}
+          onToggleFavorite={toggleFavorite}
+        />
+      )}
 
-              <div className="px-8 pb-10 md:px-12 md:pb-12 max-w-7xl mx-auto flex flex-col gap-6">
-                
-                {/* Main Program Bar */}
-                <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-6">
-                  
-                  {/* Channel ID */}
-                  <div className="flex items-center gap-4 md:gap-5 min-w-max">
-                     <span className="text-5xl sm:text-6xl md:text-7xl font-black font-syne text-white/90 tabular-nums tracking-tighter drop-shadow-2xl">
-                       {number}
-                     </span>
-                     <div className="h-12 md:h-16 w-px bg-white/20" />
-                     <div className="flex flex-col gap-0.5 md:gap-1">
-                        <span className="text-[10px] md:text-xs font-bold text-cyan-400 uppercase tracking-[0.2em]">{activeChannel.category}</span>
-                        <h2 className="text-xl sm:text-2xl md:text-4xl font-black italic uppercase leading-none drop-shadow-lg">{activeChannel.name}</h2>
-                     </div>
-                  </div>
-
-                  {/* Program Info & Progress */}
-                  <div className="flex-1 w-full bg-white/5 backdrop-blur-xl border-t border-white/10 p-4 md:p-5 rounded-2xl flex flex-col gap-2 md:gap-3 shadow-2xl">
-                     <div className="flex justify-between items-center text-[9px] md:text-[10px] font-black tracking-widest text-cyan-400/80 mb-0.5">
-                        <span>PROGRAMAÇÃO AO VIVO</span>
-                        <div className="flex items-center gap-1.5 md:gap-2 text-red-500 bg-red-500/10 px-2 py-0.5 rounded">
-                          <span className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />
-                          DIRETO
-                        </div>
-                     </div>
-                     
-                     <div className="flex justify-between items-end gap-4">
-                       <h3 className="text-lg md:text-xl font-bold text-white line-clamp-1 leading-tight">{activeChannel.description}</h3>
-                       <span className="text-[10px] md:text-xs text-white/30 font-mono whitespace-nowrap hidden sm:block border border-white/10 px-2 py-0.5 rounded">HD 1080p</span>
-                     </div>
-
-                     <div className="flex items-center gap-3 md:gap-4 mt-1">
-                        <span className="text-[10px] md:text-xs font-bold text-white/40">15:30</span>
-                        <div className="flex-1 h-1 md:h-1.5 bg-white/10 rounded-full overflow-hidden relative">
-                           <div className="absolute inset-y-0 left-0 w-[65%] bg-gradient-to-r from-cyan-600 to-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.6)]" />
-                        </div>
-                        <span className="text-[10px] md:text-xs font-bold text-white/40">18:00</span>
-                     </div>
-                  </div>
-                </div>
-
-                {/* Channel List / Navigation Hint */}
-                <div className="hidden md:flex items-center gap-4 text-sm font-medium text-white/40 pl-2 animate-in slide-in-from-bottom-4 duration-1000 delay-100">
-                   <div className="flex items-center gap-3 group/nav cursor-pointer hover:text-white transition-colors">
-                      <ChevronUp size={16} />
-                      <span className="tabular-nums opacity-50 font-mono">{prevNum}</span>
-                      <span className="uppercase text-xs font-bold tracking-wider">{prev.name}</span>
-                   </div>
-                   <div className="w-1 h-1 bg-white/20 rounded-full" />
-                   <div className="flex items-center gap-3 text-cyan-400 font-bold scale-105">
-                      <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full shadow-[0_0_10px_cyan]" />
-                      <span className="tabular-nums font-mono">{number}</span>
-                      <span className="uppercase text-xs tracking-wider">{activeChannel.name}</span>
-                   </div>
-                   <div className="w-1 h-1 bg-white/20 rounded-full" />
-                   <div className="flex items-center gap-3 group/nav cursor-pointer hover:text-white transition-colors">
-                      <span className="tabular-nums opacity-50 font-mono">{nextNum}</span>
-                      <span className="uppercase text-xs font-bold tracking-wider">{next.name}</span>
-                      <ChevronDown size={16} />
-                   </div>
-                </div>
-
-              </div>
-            </div>
-          </div>
-        );
-      })()}
-
-      <Sidebar 
-        activeCategory={activeCategory} 
-        onSelectCategory={handleCategorySelect} 
+      {/* Fixed Left Sidebar (Desktop View) */}
+      <Sidebar
+        activeView={activeView}
+        onSelectView={(view) => setActiveView(view as any)}
         onInstall={deferredPrompt ? handleInstallClick : undefined}
+        onLoginClick={() => setIsAccountOpen(true)}
+        onSettingsClick={() => setIsSettingsOpen(true)}
       />
 
-      <main className="flex-1 flex flex-col h-full overflow-hidden relative z-10">
-        
-        {/* Mobile Header: Futuristic Glass Pill */}
-        <div className="md:hidden pt-safe pb-4 px-6 z-40">
-          <div className="flex items-center justify-between py-5 mb-2">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 glass rounded-2xl flex items-center justify-center shadow-xl glow-border overflow-hidden">
-                <img src="https://teiptv.netlify.app/TEIP.png" alt="TEIP Logo" className="w-8 h-8 object-contain" />
+      {/* Main App Content Area */}
+      <main className="flex-1 flex flex-col h-full overflow-hidden relative z-10 bg-[#090B16]">
+        {/* Top Header matching exact screenshot */}
+        <header className="px-4 sm:px-6 pt-3 pb-2 flex flex-col gap-3 bg-[#090B16] shrink-0">
+          {/* Top Brand & Live Badge Row */}
+          <div className="flex items-center justify-between">
+            {/* Left: TeIP Pill Logo & Titles */}
+            <div 
+              className="flex items-center gap-2.5 cursor-pointer" 
+              onClick={() => {
+                setActiveView('All');
+                setSearchTerm('');
+              }}
+            >
+              <div className="bg-white rounded-2xl px-3 py-1.5 flex items-center justify-center shadow-lg">
+                <img 
+                  src="https://teiptv.netlify.app/TEIP.png" 
+                  alt="TeIP" 
+                  className="h-5 sm:h-6 w-auto object-contain" 
+                />
               </div>
-              <h1 className="text-3xl font-black font-syne tracking-tighter italic">TEIP</h1>
+              <div className="flex flex-col justify-center">
+                <h1 className="text-base sm:text-lg font-black text-white leading-tight tracking-tight">
+                  TeIP
+                </h1>
+                <span className="text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-wider leading-none">
+                  UNINDO TVS
+                </span>
+              </div>
             </div>
-            <div className="flex items-center gap-3">
-              <button className="w-12 h-12 glass rounded-full flex items-center justify-center text-white/60">
-                <Bell size={20} />
-              </button>
-              {deferredPrompt && (
-                <button onClick={handleInstallClick} className="w-12 h-12 bg-cyan-500 text-black rounded-full flex items-center justify-center shadow-lg active:scale-90 transition-all">
-                  <Download size={22} strokeWidth={3} />
-                </button>
-              )}
+
+            {/* Right: Live Count Pill Badge */}
+            <div className="bg-[#121828] border border-white/10 px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-md">
+              <Radio size={13} className="text-cyan-400 animate-pulse" />
+              <span className="text-xs font-bold text-slate-300">
+                {channels.length} ao vivo
+              </span>
             </div>
           </div>
 
-          <div className="relative group mb-6">
-            <div className="absolute inset-y-0 left-5 flex items-center pointer-events-none">
-              <Search size={20} className="text-white/20 group-focus-within:text-cyan-400 transition-colors" />
-            </div>
+          {/* Search Box (Full Width matching screenshot) */}
+          <div className="relative w-full">
+            <Search size={17} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
-              placeholder="Pesquisar canais ou programas..."
+              placeholder="Pesquisar canais"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full glass rounded-3xl pl-16 pr-6 py-5 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/40 placeholder-white/20 transition-all shadow-inner"
+              className="w-full bg-[#121828] border border-white/10 focus:border-[#00B5FF]/70 rounded-xl pl-10 pr-9 py-2.5 text-xs sm:text-sm text-white placeholder-slate-400 focus:outline-none transition-colors shadow-inner"
             />
-          </div>
-
-          {/* Mobile Categories Scroll */}
-          <div className="flex items-center gap-3 overflow-x-auto pb-4 no-scrollbar -mx-2 px-2">
-            <button
-              onClick={() => handleCategorySelect('All')}
-              className={`px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all border ${
-                activeCategory === 'All' 
-                  ? 'bg-cyan-400 text-black border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.3)]' 
-                  : 'bg-white/5 text-white/40 border-white/5'
-              }`}
-            >
-              TUDO
-            </button>
-            {Object.entries(Category).map(([key, value]) => (
+            {searchTerm && (
               <button
-                key={key}
-                onClick={() => handleCategorySelect(value as Category)}
-                className={`px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all border ${
-                  activeCategory === value 
-                    ? 'bg-cyan-400 text-black border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.3)]' 
-                    : 'bg-white/5 text-white/40 border-white/5'
-                }`}
+                onClick={() => setSearchTerm('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
               >
-                {value}
+                <X size={15} />
               </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Content Area */}
-        <div className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar px-4 sm:px-6 md:px-12 pb-32 md:pb-12">
-          
-          {/* Hero Section (Carousel) */}
-          {!searchTerm && activeCategory === 'All' && activeTab === 'home' && (
-             <div className="max-w-7xl mx-auto w-full overflow-hidden">
-               <HeroCarousel 
-                 channels={featuredChannels} 
-                 onChannelSelect={setActiveChannel} 
-               />
-             </div>
-          )}
-
-          <div className="max-w-7xl mx-auto">
-            <div className="hidden md:block py-6 lg:py-10">
-               <h1 className="text-2xl md:text-3xl lg:text-4xl font-black font-syne tracking-tighter mb-2 italic uppercase">TEIP Stream</h1>
-               <div className="flex items-center gap-4">
-                 <p className="text-white/40 font-medium text-sm lg:text-base">Sintonize o futuro da televisão pública digital.</p>
-                 <div className="h-px flex-1 bg-gradient-to-r from-white/10 to-transparent" />
-               </div>
-            </div>
-
-            <div className="flex items-center justify-between mb-4 md:mb-6 mt-2 md:mt-0">
-               <div className="flex items-center gap-2 md:gap-3">
-                  <div className="w-1.5 h-1.5 bg-cyan-400 rounded-full animate-pulse glow-accent" />
-                  <h2 className="text-[9px] md:text-[11px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] text-white/40">
-                    {filteredChannels.length} Estações Ativas
-                  </h2>
-               </div>
-               {activeTab === 'fav' && (
-                 <span className="text-[9px] md:text-[10px] font-bold text-cyan-500 bg-cyan-500/10 px-2 md:px-3 py-0.5 md:py-1 rounded-full border border-cyan-500/20">MEUS FAVORITOS</span>
-               )}
-            </div>
-
-            {filteredChannels.length > 0 ? (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 md:gap-8 lg:gap-10">
-                {filteredChannels.map(channel => (
-                  <ChannelCard 
-                    key={channel.id} 
-                    channel={channel} 
-                    onClick={setActiveChannel}
-                    isFavorite={favorites.includes(channel.id)}
-                    onFavorite={toggleFavorite}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center py-32 text-center animate-in fade-in zoom-in duration-700">
-                <div className="w-24 h-24 glass rounded-[2.5rem] flex items-center justify-center mb-6 border-dashed rotate-12">
-                  <X size={40} className="text-white/5" />
-                </div>
-                <h3 className="text-xl font-bold text-white/40 font-syne">NADA NA ÓRBITA</h3>
-                <p className="text-xs text-white/20 mt-2 max-w-xs">Tente redefinir seus filtros ou pesquise por outro termo.</p>
-              </div>
             )}
           </div>
+
+          {/* Subheader: Section Title & Results Count */}
+          {activeView !== 'prog' && activeView !== 'admin' && (
+            <div className="flex items-center justify-between pt-1">
+              <div className="flex items-center gap-1.5 text-slate-400 text-xs font-black tracking-wider">
+                <Sparkles size={13} className="text-slate-400" />
+                <span>{getSectionTitle()}</span>
+              </div>
+              <span className="text-xs font-semibold text-slate-400">
+                {filteredChannels.length} resultados
+              </span>
+            </div>
+          )}
+
+          {/* Horizontal Category Scroll Tabs (matching screenshot) */}
+          {activeView !== 'prog' && activeView !== 'admin' && (
+            <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar select-none">
+              {CATEGORY_TABS.map((tab) => {
+                const isActive = (activeView === tab.id) || (activeView === 'canais' && tab.id === 'All');
+                
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => {
+                      setActiveView(tab.id as any);
+                    }}
+                    className={`px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all duration-200 active:scale-95 ${
+                      isActive
+                        ? 'bg-white text-slate-950 shadow-md font-black'
+                        : 'bg-[#131929] text-slate-300 border border-white/10 hover:bg-white/10 hover:text-white'
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </header>
+
+        {/* Content Router Views */}
+        <div className="flex-1 overflow-y-auto custom-scrollbar px-3 sm:px-6 pb-24">
+          {activeView === 'prog' ? (
+            <EPGGuide channels={channels} onSelectChannel={handleSelectChannel} />
+          ) : activeView === 'admin' ? (
+            <AdminPanel
+              channels={channels}
+              onAddChannel={handleAddChannel}
+              onDeleteChannel={handleDeleteChannel}
+              onAddPlaylist={handleAddPlaylist}
+            />
+          ) : (
+            <div className="py-2">
+              {/* Channel Grid (Mobile 2-columns, desktop responsive) */}
+              {filteredChannels.length > 0 ? (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4">
+                  {filteredChannels.map((channel) => (
+                    <ChannelCard
+                      key={channel.id}
+                      channel={channel}
+                      onClick={handleSelectChannel}
+                      isFavorite={favorites.includes(channel.id)}
+                      onFavorite={toggleFavorite}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-20 text-center">
+                  <div className="w-14 h-14 rounded-full bg-white/5 flex items-center justify-center mb-3 text-slate-400">
+                    <X size={24} />
+                  </div>
+                  <h3 className="text-sm font-bold text-white">Nenhum canal encontrado</h3>
+                  <p className="text-xs text-slate-400 mt-1 max-w-xs">
+                    Tente selecionar outra categoria ou limpar o termo de pesquisa.
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
-        {/* Orbit Bottom Navigation */}
-        <BottomNav 
-          activeTab={activeTab} 
-          onTabChange={setActiveTab} 
-          onSearchFocus={() => {}} 
+        {/* Mobile Bottom Navigation Bar matching screenshot */}
+        <BottomNav
+          activeTab={
+            activeView === 'fav'
+              ? 'favoritos'
+              : activeView === 'prog'
+              ? 'guia'
+              : 'canais'
+          }
+          onTabChange={(tabId) => {
+            if (tabId === 'canais') {
+              setActiveView('All');
+            } else if (tabId === 'categorias') {
+              setIsCategoriesOpen(true);
+            } else if (tabId === 'guia') {
+              setActiveView('prog');
+            } else if (tabId === 'favoritos') {
+              setActiveView('fav');
+            } else if (tabId === 'entrar') {
+              setIsAccountOpen(true);
+            }
+          }}
         />
       </main>
+
+      {/* Categories Drawer / Modal */}
+      <CategoriesModal
+        isOpen={isCategoriesOpen}
+        onClose={() => setIsCategoriesOpen(false)}
+        selectedCategory={activeView as string}
+        onSelectCategory={(cat) => {
+          setActiveView(cat as any);
+        }}
+        channelCounts={categoryCounts}
+      />
+
+      {/* Account / Login & Parental Control Modal */}
+      <AccountModal
+        isOpen={isAccountOpen}
+        onClose={() => setIsAccountOpen(false)}
+        parentalSettings={parentalSettings}
+        onUpdateParental={(newSettings) => {
+          setParentalSettings(newSettings);
+          localStorage.setItem('teip_parental', JSON.stringify(newSettings));
+          showToast('Definições guardadas com sucesso.');
+        }}
+        onOpenAdmin={() => setActiveView('admin')}
+      />
+
+      {/* Settings Modal */}
+      <SettingsModal
+        isOpen={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        parentalSettings={parentalSettings}
+        onUpdateParental={(newSettings) => {
+          setParentalSettings(newSettings);
+          localStorage.setItem('teip_parental', JSON.stringify(newSettings));
+          showToast('Definições guardadas com sucesso.');
+        }}
+      />
     </div>
   );
 };

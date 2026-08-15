@@ -1,97 +1,105 @@
 import React from 'react';
 import { 
-  Tv, Globe2, Film, Info, Trophy, Music, GraduationCap, 
-  Globe, Smile, Download, Activity, Heart, Clapperboard, 
-  Ghost, Sparkles, Layers 
+  Tv, Globe2, Film, Trophy, Music, GraduationCap, 
+  Globe, Smile, Heart, LayoutGrid, Calendar, LogIn,
+  ShieldCheck, Settings, History
 } from 'lucide-react';
-import { Category } from '../types';
+import { Category, ActiveNavView } from '../types';
 
 interface SidebarProps {
-  activeCategory: Category | 'All';
-  onSelectCategory: (cat: Category | 'All') => void;
+  activeView: ActiveNavView | Category | 'All';
+  onSelectView: (view: ActiveNavView | Category | 'All') => void;
   onInstall?: () => void;
+  onLoginClick?: () => void;
+  onSettingsClick?: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ activeCategory, onSelectCategory, onInstall }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ 
+  activeView, 
+  onSelectView, 
+  onLoginClick,
+  onSettingsClick 
+}) => {
   const menuItems = [
-    { id: 'All', label: 'Início', icon: Tv },
+    { id: 'All', label: 'Todos os Canais', icon: Tv },
     { id: Category.NEWS, label: 'Notícias', icon: Globe2 },
-    { id: Category.FOOTBALL, label: 'Futebol', icon: Activity },
-    { id: Category.SPORTS, label: 'Desporto', icon: Trophy },
     { id: Category.KIDS, label: 'Infantil', icon: Smile },
-    { id: Category.CARTOON, label: 'Desenhos', icon: Sparkles },
-    { id: Category.ANIME, label: 'Anime', icon: Ghost },
-    { id: Category.NOVELAS, label: 'Novelas', icon: Heart },
-    { id: Category.SERIES, label: 'Séries', icon: Layers },
-    { id: Category.MOVIES, label: 'Filmes', icon: Film },
+    { id: Category.SPORTS, label: 'Desporto', icon: Trophy },
+    { id: Category.EDUCATION, label: 'Educação & Gov', icon: GraduationCap },
+    { id: Category.INTERNATIONAL, label: 'Internacional', icon: Globe },
     { id: Category.MUSIC, label: 'Música', icon: Music },
-    { id: Category.EDUCATION, label: 'Educação', icon: GraduationCap },
-    { id: Category.INTERNATIONAL, label: 'Mundo', icon: Globe },
-    { id: Category.GENERAL, label: 'Variedades', icon: Clapperboard },
-    { id: Category.PUBLIC, label: 'Públicos', icon: Info },
+    { id: Category.GENERAL, label: 'Variedades', icon: LayoutGrid },
+    { id: Category.MOVIES, label: 'Filme', icon: Film },
+    { id: Category.NOVELAS, label: 'Novelas', icon: Tv },
+    { id: 'fav', label: 'Favoritos', icon: Heart },
+    { id: 'recent', label: 'Recentes', icon: History },
+    { id: 'prog', label: 'Programação (EPG)', icon: Calendar },
+    { id: 'admin', label: 'Painel Admin', icon: ShieldCheck },
   ];
 
   return (
-    <div className="hidden md:flex flex-col w-72 bg-[#0a0a0a] border-r border-white/5 h-full p-8">
-      <div className="mb-12 flex items-center gap-4 px-2">
-        <div className="w-12 h-12 glass rounded-2xl flex items-center justify-center shadow-2xl overflow-hidden border border-white/10 rotate-3">
-          <img src="https://teiptv.netlify.app/TEIP.png" alt="TEIP Logo" className="w-9 h-9 object-contain" />
+    <aside className="hidden md:flex flex-col w-[260px] bg-[#090d16] border-r border-white/10 h-full px-4 py-6 select-none shrink-0">
+      {/* Brand Header */}
+      <div className="flex items-center gap-3.5 px-3 mb-8 cursor-pointer group" onClick={() => onSelectView('All')}>
+        <div className="w-12 h-8 bg-white rounded-full flex items-center justify-center shadow-lg p-1 group-hover:scale-105 transition-transform">
+          <img src="https://teiptv.netlify.app/TEIP.png" alt="TeIP" className="h-6 w-auto object-contain" />
         </div>
-        <div>
-          <h1 className="text-3xl font-black tracking-tighter text-white italic leading-none">
-            TEIP
+        <div className="flex flex-col">
+          <h1 className="text-xl font-bold tracking-tight text-white leading-tight">
+            TeIP
           </h1>
-          <span className="text-[9px] font-black text-cyan-500 tracking-[0.3em] uppercase">Digital Stream</span>
+          <span className="text-[9px] font-semibold text-cyan-400 tracking-[0.25em] uppercase">
+            UNINDO TVS
+          </span>
         </div>
       </div>
 
-      <nav className="space-y-1.5 overflow-y-auto max-h-[calc(100vh-320px)] pr-2 custom-scrollbar">
+      {/* Navigation List */}
+      <nav className="flex-1 space-y-1 overflow-y-auto pr-1 custom-scrollbar">
         {menuItems.map((item) => {
-          const isActive = activeCategory === item.id;
+          const isActive = activeView === item.id;
           const Icon = item.icon;
           return (
             <button
               key={item.id}
-              onClick={() => onSelectCategory(item.id as Category | 'All')}
-              className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl transition-all duration-300 group text-sm font-bold
+              onClick={() => onSelectView(item.id as any)}
+              className={`w-full flex items-center gap-3.5 px-4 py-2.5 rounded-xl transition-all duration-200 text-sm font-medium
                 ${isActive 
-                  ? 'bg-cyan-500 text-black shadow-lg shadow-cyan-500/10 scale-[1.02]' 
-                  : 'text-gray-500 hover:bg-white/5 hover:text-white'
+                  ? 'bg-[#00a8e8] text-slate-950 font-bold shadow-[0_0_20px_rgba(0,168,232,0.35)] scale-[1.01]' 
+                  : 'text-gray-400 hover:bg-white/5 hover:text-white'
                 }`}
             >
-              <Icon size={20} className={isActive ? 'text-black' : 'text-gray-600 group-hover:text-cyan-400'} />
-              {item.label}
+              <Icon size={18} className={isActive ? 'text-slate-950' : 'text-gray-400'} />
+              <span>{item.label}</span>
             </button>
           );
         })}
       </nav>
 
-      <div className="mt-auto pt-8">
-        {onInstall && (
-          <button 
-            onClick={onInstall}
-            className="w-full flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 text-white font-black py-4 rounded-2xl mb-6 transition-all border border-white/5 active:scale-95"
-          >
-            <Download size={18} className="text-cyan-400" />
-            INSTALAR APP
-          </button>
-        )}
-        
-        <div className="bg-[#111] rounded-3xl p-5 border border-white/5 text-center relative overflow-hidden group">
-          <div className="absolute top-0 right-0 p-2 opacity-10 group-hover:rotate-12 transition-transform">
-             <img src="https://teiptv.netlify.app/TEIP.png" alt="" className="w-12 h-12 grayscale" />
-          </div>
-          <p className="text-[10px] text-gray-500 leading-relaxed font-bold uppercase tracking-widest relative z-10">
-            Interface otimizada<br/>
-            <span className="text-cyan-400 font-black">v3.0 Nebula</span>
-          </p>
-          <div className="mt-2 flex justify-center gap-1">
-            <div className="w-1 h-1 bg-green-500 rounded-full" />
-            <div className="w-1 h-1 bg-green-500 rounded-full animate-pulse" />
-            <div className="w-1 h-1 bg-green-500 rounded-full" />
-          </div>
-        </div>
+      {/* Bottom Footer Item */}
+      <div className="pt-4 border-t border-white/5 mt-auto px-2 space-y-2">
+        <button 
+          onClick={onSettingsClick}
+          className="w-full flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 px-3 py-2 rounded-xl transition-colors text-sm font-semibold"
+        >
+          <Settings size={18} />
+          <span>Definições</span>
+        </button>
+
+        <button 
+          onClick={onLoginClick}
+          className="w-full flex items-center gap-3 text-gray-400 hover:text-white hover:bg-white/5 px-3 py-2 rounded-xl transition-colors text-sm font-semibold"
+        >
+          <LogIn size={18} className="rotate-180" />
+          <span>Entrar / Perfil</span>
+        </button>
+
+        <p className="text-[10px] text-gray-500 font-normal leading-tight pt-1">
+          Navegue com o comando da TV ou setas do teclado.
+        </p>
       </div>
-    </div>
+    </aside>
   );
 };
+
+

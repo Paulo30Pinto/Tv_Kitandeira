@@ -10,6 +10,9 @@
     "lint": "tsc --noEmit"
   },
   "dependencies": {
+    "@capacitor/core": "^8.5.0",
+    "embla-carousel-react": "^8.6.0",
+    "hls.js": "^1.6.17",
     "lucide-react": "^0.562.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3"
@@ -20,6 +23,6 @@
     "@vitejs/plugin-react": "^5.0.0",
     "terser": "^5.46.1",
     "typescript": "~5.8.2",
-    "vite": "^8.0.10"
+    "vite": "^6.2.0"
   }
 }

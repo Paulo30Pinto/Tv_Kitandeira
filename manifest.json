@@ -1,16 +1,16 @@
 {
-  "short_name": "TEIP",
-  "name": "TEIP - Smart PWA",
-  "description": "Agregador de canais de TV públicos com interface de Smart TV.",
+  "short_name": "Angoflix",
+  "name": "Angoflix",
+  "description": "Plataforma de streaming e TV ao vivo em Angola e países lusófonos - Filmes, Séries, Canais e Shorts.",
   "icons": [
     {
-      "src": "https://teiptv.netlify.app/assets/TEIP-X89hzE6_.JPG",
-      "sizes": "512x512",
+      "src": "https://picsum.photos/id/10/192/192",
+      "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://teiptv.netlify.app/TEIP.png",
+      "src": "https://picsum.photos/id/10/512/512",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
@@ -18,9 +18,8 @@
   ],
   "start_url": "/",
   "display": "standalone",
-  "display_override": ["window-controls-overlay", "minimal-ui"],
-  "theme_color": "#050505",
-  "background_color": "#050505",
+  "theme_color": "#0d0d0d",
+  "background_color": "#0d0d0d",
   "orientation": "any",
   "categories": ["entertainment", "multimedia"]
 }

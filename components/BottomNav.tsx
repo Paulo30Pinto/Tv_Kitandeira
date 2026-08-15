@@ -1,47 +1,41 @@
 import React from 'react';
-import { Home, LayoutGrid, Heart, Search, Tv, User } from 'lucide-react';
+import { Tv, LayoutGrid, Calendar, Heart, LogIn } from 'lucide-react';
 
 interface BottomNavProps {
   activeTab: string;
   onTabChange: (tab: string) => void;
-  onSearchFocus: () => void;
+  onSearchFocus?: () => void;
 }
 
-export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange, onSearchFocus }) => {
+export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange }) => {
   const tabs = [
-    { id: 'home', icon: Home, label: 'Início' },
-    { id: 'menu', icon: LayoutGrid, label: 'Menu' },
-    { id: 'fav', icon: Heart, label: 'Favoritos' },
-    { id: 'profile', icon: User, label: 'Conta' },
+    { id: 'canais', icon: Tv, label: 'CANAIS' },
+    { id: 'categorias', icon: LayoutGrid, label: 'CATEGORIAS' },
+    { id: 'guia', icon: Calendar, label: 'GUIA' },
+    { id: 'favoritos', icon: Heart, label: 'FAVORITOS' },
+    { id: 'entrar', icon: LogIn, label: 'ENTRAR' },
   ];
 
   return (
-    <div className="md:hidden fixed bottom-6 left-6 right-6 z-[100] pb-safe">
-      <div className="glass rounded-[2.5rem] h-20 px-8 flex items-center justify-between shadow-[0_30px_60px_rgba(0,0,0,0.8)] border-white/10 relative overflow-hidden">
-        
-        {/* Navigation Indicator Background Glow */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-32 h-20 bg-cyan-500/20 rounded-full blur-3xl opacity-50" />
-        </div>
+    <div className="fixed bottom-0 left-0 right-0 z-[100] bg-[#090d19]/95 backdrop-blur-xl select-none">
+      {/* Top Gradient Accent Line */}
+      <div className="h-[2px] w-full bg-gradient-to-r from-[#00B5FF] via-[#d946ef] to-[#00B5FF] opacity-80" />
 
+      <div className="flex items-center justify-around h-16 px-2 max-w-lg mx-auto">
         {tabs.map((tab) => {
-          const isActive = activeTab === tab.id;
+          const isActive = activeTab === tab.id || (activeTab === 'All' && tab.id === 'canais') || (activeTab === 'home' && tab.id === 'canais');
           const Icon = tab.icon;
           
           return (
             <button
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
-              className={`flex flex-col items-center justify-center gap-1 transition-all duration-500 relative ${isActive ? 'text-cyan-400 -translate-y-1' : 'text-white/30'}`}
+              className={`flex flex-col items-center justify-center gap-1 flex-1 py-1 transition-all active:scale-95 ${
+                isActive ? 'text-[#00B5FF]' : 'text-slate-400 hover:text-slate-200'
+              }`}
             >
-              {isActive && (
-                <>
-                  <div className="absolute -top-3 w-10 h-0.5 bg-cyan-400 rounded-full shadow-[0_0_20px_cyan]" />
-                  <div className="absolute -top-10 w-16 h-16 bg-cyan-500/10 rounded-full blur-xl animate-pulse" />
-                </>
-              )}
-              <Icon size={isActive ? 24 : 22} strokeWidth={isActive ? 2.5 : 2} className="transition-transform duration-500" />
-              <span className={`text-[9px] font-black uppercase tracking-widest transition-all duration-300 ${isActive ? 'opacity-100 scale-100' : 'opacity-0 scale-50 h-0 overflow-hidden'}`}>
+              <Icon size={20} strokeWidth={isActive ? 2.5 : 1.8} className={isActive ? 'drop-shadow-[0_0_8px_rgba(0,181,255,0.6)]' : ''} />
+              <span className={`text-[10px] tracking-wider uppercase ${isActive ? 'font-black' : 'font-bold'}`}>
                 {tab.label}
               </span>
             </button>
@@ -51,3 +45,4 @@ export const BottomNav: React.FC<BottomNavProps> = ({ activeTab, onTabChange, on
     </div>
   );
 };
+

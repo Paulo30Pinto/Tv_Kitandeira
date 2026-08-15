@@ -1,8 +1,11 @@
 {
-  "name": "TEIP Smart PWA",
-  "description": "A Smart-TV style PWA aggregating public TV channels with Capacitor CLI integration.",
+  "name": "Angoflix",
+  "description": "Plataforma de streaming e TV ao vivo em Angola e países lusófonos - Filmes, Séries, Canais ao Vivo e Shorts.",
   "requestFramePermissions": [
     "camera",
     "microphone"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
   ]
 }
