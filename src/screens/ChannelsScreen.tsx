@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { LIVE_CHANNELS } from '../data/mockData';
+import { LIVE_CHANNELS, PORTUGUESE_CHANNELS } from '../data/mockData';
 import { LiveChannel } from '../types';
 import { useApp } from '../context/AppContext';
 import Hls from 'hls.js';
@@ -7,15 +7,17 @@ import { Search, Heart, Maximize2, Radio, Play } from 'lucide-react';
 
 export const ChannelsScreen: React.FC = () => {
   const { currentPlayingChannel, setCurrentPlayingChannel, playChannel, isFavorite, toggleFavorite } = useApp();
-  const [activeCategory, setActiveCategory] = useState<string>('CANAIS DE ESPORTES');
+  const [activeCategory, setActiveCategory] = useState<string>('Portugal');
   const [channelSearch, setChannelSearch] = useState<string>('');
   const [subTab, setSubTab] = useState<'Canais' | 'Favoritos'>('Canais');
 
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  const activeChannel = currentPlayingChannel || LIVE_CHANNELS[1];
+  const channels = [...PORTUGUESE_CHANNELS, ...LIVE_CHANNELS];
+  const activeChannel = currentPlayingChannel || channels[0];
 
   const channelCategories = [
+    'Portugal',
     'Geral',
     'CANAIS DE ESPORTES',
     'GLOBO',
@@ -50,7 +52,7 @@ export const ChannelsScreen: React.FC = () => {
   }, [activeChannel]);
 
   // Filter channels based on tab, category, and search query
-  const filteredChannels = LIVE_CHANNELS.filter((ch) => {
+  const filteredChannels = channels.filter((ch) => {
     const matchesSearch = ch.name.toLowerCase().includes(channelSearch.toLowerCase());
     if (subTab === 'Favoritos') {
       return isFavorite(ch.id) && matchesSearch;

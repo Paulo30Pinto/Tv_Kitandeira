@@ -1,4 +1,4 @@
-import { MediaItem, LiveChannel, ShortItem, UserProfile } from '../types';
+import { Country, MediaItem, LiveChannel, ShortItem, UserProfile } from '../types';
 
 export const HERO_SLIDES: MediaItem[] = [
   {
@@ -477,6 +477,29 @@ export const LIVE_CHANNELS: LiveChannel[] = [
     status: 'Online',
     isLive: true,
     currentProgram: 'Notícias do Mundo Ao Vivo'
+  }
+];
+
+export const PORTUGUESE_CHANNELS: LiveChannel[] = [
+  {
+    id: 'rtp-1', name: 'RTP 1', category: 'Portugal', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/RTP1_logo.svg/320px-RTP1_logo.svg.png',
+    streamUrl: 'https://streaming-live.rtp.pt/liverepeater/rtp1HD.smil/playlist.m3u8', status: 'Online', isLive: true,
+    currentProgram: 'Programação RTP 1', country: Country.PORTUGAL, language: 'por', epgId: 'RTP1.pt', source: 'official'
+  },
+  {
+    id: 'rtp-noticias', name: 'RTP Notícias', category: 'Portugal', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/RTP3_logo.svg/320px-RTP3_logo.svg.png',
+    streamUrl: 'https://streaming-live.rtp.pt/livetvhlsDVR/rtpnHDdvr.smil/playlist.m3u8', status: 'Online', isLive: true,
+    currentProgram: 'Notícias em direto', country: Country.PORTUGAL, language: 'por', epgId: 'RTP3.pt', source: 'official'
+  },
+  {
+    id: 'artv', name: 'ARTV Parlamento', category: 'Portugal', logo: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Assembleia_da_Republica_logo.svg/320px-Assembleia_da_Republica_logo.svg.png',
+    streamUrl: 'https://playout172.livextend.cloud/liveiframe/_definst_/liveartvabr/playlist.m3u8', status: 'Online', isLive: true,
+    currentProgram: 'Canal Parlamento', country: Country.PORTUGAL, language: 'por', epgId: 'ARTV.pt', source: 'official'
+  },
+  {
+    id: 'cnn-portugal', name: 'CNN Portugal', category: 'Portugal', logo: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=200&q=80',
+    streamUrl: 'https://2-fss-2.streamhoster.com/pl_118/204972-2205186-1/playlist.m3u8', status: 'Online', isLive: true,
+    currentProgram: 'Notícias do mundo', country: Country.PORTUGAL, language: 'por', epgId: 'CNNPortugal.pt', source: 'iptv-org'
   }
 ];
 

@@ -141,6 +141,10 @@ export interface LiveChannel {
   isLive: boolean;
   currentProgram?: string;
   isFavorite?: boolean;
+  country?: Country;
+  language?: string;
+  epgId?: string;
+  source?: 'iptv-org' | 'official';
 }
 
 export interface ShortItem {
