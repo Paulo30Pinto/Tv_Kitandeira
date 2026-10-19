@@ -43,11 +43,26 @@ export const ChannelCard: React.FC<ChannelCardProps> = ({ channel, onClick, isFa
           </div>
         )}
 
-        {/* Live Badge (Top Right Orange Pill like screenshot) */}
-        <div className="absolute top-2 right-2 sm:top-2.5 sm:right-2.5 z-20 flex items-center gap-1 bg-[#ff5722] text-white text-[8px] sm:text-[9px] font-black px-2 py-0.5 rounded-full shadow-md">
-          <span className="w-1.5 h-1.5 bg-white rounded-full" />
-          <span>AO VIVO</span>
-        </div>
+        {/* Estado real do sinal (verificado no sync, não inventado no cliente). */}
+        {channel.status === 'OFFLINE' ? (
+          <div className="absolute top-2 right-2 sm:top-2.5 sm:right-2.5 z-20 flex items-center gap-1 bg-slate-700 text-slate-200 text-[8px] sm:text-[9px] font-black px-2 py-0.5 rounded-full shadow-md">
+            <span className="w-1.5 h-1.5 bg-slate-400 rounded-full" />
+            <span>OFFLINE</span>
+          </div>
+        ) : channel.status === 'UNVERIFIED' ? (
+          <div
+            className="absolute top-2 right-2 sm:top-2.5 sm:right-2.5 z-20 flex items-center gap-1 bg-amber-500/90 text-slate-950 text-[8px] sm:text-[9px] font-black px-2 py-0.5 rounded-full shadow-md"
+            title="Ainda não foi possível testar este sinal. Pode estar indisponível."
+          >
+            <span className="w-1.5 h-1.5 bg-slate-950 rounded-full" />
+            <span>POR TESTAR</span>
+          </div>
+        ) : (
+          <div className="absolute top-2 right-2 sm:top-2.5 sm:right-2.5 z-20 flex items-center gap-1 bg-[#ff5722] text-white text-[8px] sm:text-[9px] font-black px-2 py-0.5 rounded-full shadow-md">
+            <span className="w-1.5 h-1.5 bg-white rounded-full" />
+            <span>AO VIVO</span>
+          </div>
+        )}
 
         {/* Big Watermark on Bottom Left (like TeIP, TP, TN, TZ, TG in screenshot) */}
         <div className="absolute bottom-1.5 left-2 sm:bottom-2 sm:left-3 z-20 pointer-events-none">

@@ -1,0 +1,8 @@
+{
+  "snapshotUrl": "/epg/lusofonia.xml",
+  "sources": [],
+  "refreshHours": 6,
+  "maxStaleHours": 168,
+  "maxDays": 7,
+  "notes": "snapshotUrl é gerado por scripts/sync-epg.mjs e publicado em public/epg/lusofonia.xml. 'sources' aceita URLs XMLTV adicionais (CORS necessário)."
+}

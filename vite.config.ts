@@ -10,6 +10,8 @@ export default defineConfig(({ mode }) => {
         port: 3000,
         host: '0.0.0.0',
         hmr: false,
+        // Permite o preview do Arena/E2B e outros hosts de desenvolvimento.
+        allowedHosts: true,
       },
       plugins: [
         react(),

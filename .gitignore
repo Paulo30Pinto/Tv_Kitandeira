@@ -22,3 +22,14 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Clone local do iptv-org (use IPTV_STREAMS_DIR)
+vendor/
+
+# Variáveis de ambiente
+.env
+.env.*
+!.env.example
+
+# Netlify
+.netlify

@@ -12,6 +12,11 @@ export enum Country {
   ANGOLA = 'Angola',
   BRASIL = 'Brasil',
   PORTUGAL = 'Portugal',
+  MOCAMBIQUE = 'Moçambique',
+  CABO_VERDE = 'Cabo Verde',
+  SAO_TOME = 'São Tomé e Príncipe',
+  TIMOR_LESTE = 'Timor-Leste',
+  GUINE_BISSAU = 'Guiné-Bissau',
   GLOBAL = 'Global'
 }
 
@@ -32,7 +37,11 @@ export enum Category {
   ANIME = 'Anime'
 }
 
-export type LiveStatus = 'ONLINE' | 'OFFLINE' | 'BUFFERING' | 'ERROR';
+export type LiveStatus = 'ONLINE' | 'OFFLINE' | 'BUFFERING' | 'ERROR' | 'UNVERIFIED';
+
+export type ChannelSource = 'teip' | 'iptv-org' | 'manual';
+
+export type ContentRights = 'official' | 'public' | 'fast' | 'review';
 
 export interface Channel {
   id: string;
@@ -42,14 +51,24 @@ export interface Channel {
   logoImage?: string;
   watermark?: string; // e.g. "TP", "TZ", "TG", "GO", "ZV"
   streamUrl: string;
+  alternateStreams?: string[];
+  headers?: Record<string, string>;
   type: StreamType;
   country: Country;
   category: Category;
   language?: string;
-  resolution?: '4K' | '1080p' | '720p';
+  resolution?: '4K' | '1080p' | '720p' | '480p' | '360p';
   status?: LiveStatus;
   isAdult?: boolean;
   channelNumber?: string;
+  /** ID do canal no iptv-org (ex.: "RTP1.pt@HD"). */
+  tvgId?: string;
+  /** ID normalizado usado para casar com o XMLTV (ex.: "RTP1.pt"). */
+  epgId?: string;
+  source?: ChannelSource;
+  rights?: ContentRights;
+  labels?: string[];
+  group?: string;
 }
 
 export interface EPGProgram {
@@ -62,6 +81,10 @@ export interface EPGProgram {
   category: string;
   progressPercent?: number;
   isLive?: boolean;
+  /** Timestamps absolutos (ms). Presentes quando o programa vem de um guia XMLTV real. */
+  startMs?: number;
+  endMs?: number;
+  source?: 'xmltv' | 'estimated';
 }
 
 export interface WatchHistoryItem {
@@ -104,7 +127,7 @@ export interface UserProfile {
   role?: 'admin' | 'user';
 }
 
-export type ActiveNavView = 'all' | 'news' | 'sports' | 'kids' | 'movies' | 'series' | 'music' | 'education' | 'international' | 'general' | 'novelas' | 'fav' | 'recent' | 'prog' | 'admin' | 'settings';
+export type ActiveNavView = 'all' | 'news' | 'sports' | 'kids' | 'movies' | 'series' | 'music' | 'education' | 'international' | 'general' | 'novelas' | 'lusofonia' | 'fav' | 'recent' | 'prog' | 'admin' | 'settings';
 
 export type ScreenTab = 'inicio' | 'tendencias' | 'canais' | 'shorts' | 'favoritos' | 'perfil' | 'busca' | 'player';
 

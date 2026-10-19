@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { CHANNELS } from './constants';
+import { ALL_CHANNELS, LUSOFONIA_COUNT } from './src/data/channels';
+import { EpgProvider } from './src/epg/EpgContext';
 import { Channel, Category, ActiveNavView, ParentalControlSettings, PlaylistSource, WatchHistoryItem } from './types';
 import { ChannelCard } from './components/ChannelCard';
 import { VideoPlayer } from './components/VideoPlayer';
@@ -11,10 +12,11 @@ import { SettingsModal } from './components/SettingsModal';
 import { CategoriesModal } from './components/CategoriesModal';
 import { AccountModal } from './components/AccountModal';
 import { useTVNavigation } from './hooks/useTVNavigation';
-import { Search, X, WifiOff, Download, Radio, Sparkles, Check, Heart, Layers } from 'lucide-react';
+import { Search, X, WifiOff, Download, Radio, Sparkles, Check, Heart, Layers, Globe2 } from 'lucide-react';
 
 const CATEGORY_TABS = [
   { id: 'All', label: 'Todos' },
+  { id: 'lusofonia', label: 'Lusófonos' },
   { id: Category.NEWS, label: 'Notícias' },
   { id: Category.KIDS, label: 'Infantil' },
   { id: Category.SPORTS, label: 'Desporto' },
@@ -29,7 +31,7 @@ const CATEGORY_TABS = [
 
 const App: React.FC = () => {
   // Main Data States
-  const [channels, setChannels] = useState<Channel[]>(CHANNELS);
+  const [channels, setChannels] = useState<Channel[]>(ALL_CHANNELS);
   const [activeChannel, setActiveChannel] = useState<Channel | null>(null);
   const [activeView, setActiveView] = useState<ActiveNavView | Category | 'All'>('All');
   const [searchTerm, setSearchTerm] = useState('');
@@ -137,6 +139,7 @@ const App: React.FC = () => {
   const categoryCounts: Record<string, number> = {
     All: channels.length,
     fav: favorites.length,
+    lusofonia: LUSOFONIA_COUNT,
   };
   channels.forEach((c) => {
     categoryCounts[c.category] = (categoryCounts[c.category] || 0) + 1;
@@ -151,6 +154,7 @@ const App: React.FC = () => {
 
     if (!matchesSearch) return false;
 
+    if (activeView === 'lusofonia') return channel.source === 'iptv-org';
     if (activeView === 'fav') return favorites.includes(channel.id);
     if (activeView === 'recent') return watchHistory.some((item) => item.channelId === channel.id);
     if (activeView === 'All' || activeView === 'canais') return true;
@@ -161,6 +165,7 @@ const App: React.FC = () => {
   // Active Section Title Label
   const getSectionTitle = () => {
     if (activeView === 'fav') return 'CANAIS FAVORITOS';
+    if (activeView === 'lusofonia') return 'CANAIS DA LUSOFONIA';
     if (activeView === 'recent') return 'VISTOS RECENTEMENTE';
     if (activeView === 'All' || activeView === 'canais') return 'TODOS OS CANAIS';
     return (activeView as string).toUpperCase();
