@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-19T22:11:55.976Z",
+  "generatedAt": "2026-10-19T22:27:57.115Z",
   "generator": "scripts/sync-lusofonia.mjs",
   "upstream": {
     "project": "iptv-org/iptv",
     "lists": {
-      "pt": "file:///tmp/iptv-data/streams/pt.m3u",
-      "ao": "file:///tmp/iptv-data/streams/ao.m3u",
-      "mz": "file:///tmp/iptv-data/streams/mz.m3u",
-      "cv": "file:///tmp/iptv-data/streams/cv.m3u",
-      "br": "file:///tmp/iptv-data/streams/br.m3u"
+      "pt": "https://raw.githubusercontent.com/iptv-org/iptv/master/streams/pt.m3u",
+      "ao": "https://raw.githubusercontent.com/iptv-org/iptv/master/streams/ao.m3u",
+      "mz": "https://raw.githubusercontent.com/iptv-org/iptv/master/streams/mz.m3u",
+      "cv": "https://raw.githubusercontent.com/iptv-org/iptv/master/streams/cv.m3u",
+      "br": "https://raw.githubusercontent.com/iptv-org/iptv/master/streams/br.m3u"
     }
   },
   "policy": {
@@ -25,12 +25,12 @@
   "stats": {
     "curated": 57,
     "included": 56,
-    "verified": 0,
-    "unverified": 55,
-    "offline": 0,
+    "verified": 42,
+    "unverified": 0,
+    "offline": 13,
     "youtube": 1,
     "noSource": 1,
-    "invalid": 0,
+    "invalid": 13,
     "skipped": 0
   },
   "report": {
@@ -38,7 +38,73 @@
     "noSource": [
       "TVMInternacional.mz"
     ],
-    "invalid": [],
+    "invalid": [
+      {
+        "id": "SIC.pt",
+        "url": "https://sic.live.impresa.pt/sic.m3u8",
+        "reason": "HTTP 403"
+      },
+      {
+        "id": "SICNoticias.pt",
+        "url": "https://sicnot.live.impresa.pt/sicnot.m3u8",
+        "reason": "HTTP 403"
+      },
+      {
+        "id": "Famatv.pt",
+        "url": "https://tv2.fastcast4u.com:3310/live/famatvlive.m3u8",
+        "reason": "HTTP 500"
+      },
+      {
+        "id": "NPCRadioeTV.pt",
+        "url": "https://stmv5.samcast.com.br/nasciparacantartv/nasciparacantartv/playlist.m3u8",
+        "reason": "HTTP 403"
+      },
+      {
+        "id": "TVVitoria.mz",
+        "url": "https://stmv1.srvif.com/tvvitoriamz/tvvitoriamz/playlist.m3u8",
+        "reason": "HTTP 404"
+      },
+      {
+        "id": "TVCamara2.br",
+        "url": "https://stream3.camara.gov.br/tv2/manifest.m3u8",
+        "reason": "HTTP 404"
+      },
+      {
+        "id": "CanalSaude.br",
+        "url": "https://eitv7.cdn.broadpeak.io/account351-i1495/event/canalsaude/format720p.m3u8",
+        "reason": "HTTP 403"
+      },
+      {
+        "id": "JovemPanNews.br",
+        "url": "https://d6yfbj4xxtrod.cloudfront.net/out/v1/7836eb391ec24452b149f3dc6df15bbd/index.m3u8",
+        "reason": "fetch failed"
+      },
+      {
+        "id": "BandNews.br",
+        "url": "https://cdn-5.nxplay.com.br/BAND_NEWS/index.m3u8",
+        "reason": "HTTP 403"
+      },
+      {
+        "id": "Band.br",
+        "url": "https://media.cdntvms.com.br/band_sat/index.m3u8",
+        "reason": "HTTP 404"
+      },
+      {
+        "id": "BandSports.br",
+        "url": "https://cdn-5.nxplay.com.br/BAND_SPORTS/index.m3u8",
+        "reason": "HTTP 403"
+      },
+      {
+        "id": "SESCTV.br",
+        "url": "https://slbps-ml-sambatech.akamaized.net/samba-live/2472/7424/8a00fe7cc36ac263b2c3e9324497d5ff/video/93a9920d-1b24-4c5e-a7d2-63d5489f59b5_index.m3u8",
+        "reason": "HTTP 400"
+      },
+      {
+        "id": "TVGazeta.br",
+        "url": "https://tv.nuvemplay.live/hls/40gtv/stream.m3u8",
+        "reason": "fetch failed"
+      }
+    ],
     "duplicates": []
   },
   "channels": [
@@ -61,8 +127,8 @@
         "Not 24/7"
       ],
       "quality": "720p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:24.669Z",
       "notes": "Canal público RTP. Pode estar limitado a Portugal."
     },
     {
@@ -84,8 +150,8 @@
         "Not 24/7"
       ],
       "quality": "720p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:25.014Z",
       "notes": "Canal público RTP. Pode estar limitado a Portugal."
     },
     {
@@ -109,8 +175,8 @@
         "Not 24/7"
       ],
       "quality": "720p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:25.276Z",
       "notes": "Canal de informação RTP."
     },
     {
@@ -132,8 +198,8 @@
         "Not 24/7"
       ],
       "quality": "504p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:25.527Z",
       "notes": "Prioritário para Angola/PALOP. Sinal internacional oficial."
     },
     {
@@ -157,8 +223,8 @@
         "Not 24/7"
       ],
       "quality": "720p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:25.785Z",
       "notes": "Emissão regional dos Açores."
     },
     {
@@ -180,8 +246,8 @@
         "Not 24/7"
       ],
       "quality": "504p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:26.081Z",
       "notes": "Emissão regional da Madeira."
     },
     {
@@ -203,8 +269,8 @@
         "Not 24/7"
       ],
       "quality": "504p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:26.237Z",
       "notes": "Arquivo e programação histórica RTP."
     },
     {
@@ -226,8 +292,8 @@
         "Not 24/7"
       ],
       "quality": "504p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:26.532Z",
       "notes": "RTP para a diáspora."
     },
     {
@@ -246,8 +312,8 @@
         "Not 24/7"
       ],
       "quality": "720p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:27.310Z",
       "notes": "Canal do Parlamento português."
     },
     {
@@ -264,8 +330,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": "720p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:28.306Z",
       "notes": "Canal regional do Porto."
     },
     {
@@ -288,8 +354,8 @@
         "Geo-blocked"
       ],
       "quality": "1080p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "offline",
+      "checkedAt": "2026-10-19T22:27:28.780Z",
       "notes": "Sinal oficial Impresa; geobloqueado fora de Portugal."
     },
     {
@@ -312,8 +378,8 @@
         "Geo-blocked"
       ],
       "quality": "1080p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "offline",
+      "checkedAt": "2026-10-19T22:27:29.278Z",
       "notes": "Sinal oficial Impresa; geobloqueado fora de Portugal."
     },
     {
@@ -330,8 +396,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": "1080p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:29.832Z",
       "notes": "Canal religioso português."
     },
     {
@@ -348,8 +414,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": "720p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:30.303Z",
       "notes": "Rádio/TV musical."
     },
     {
@@ -366,8 +432,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": "1080p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:31.124Z",
       "notes": "Canal religioso."
     },
     {
@@ -384,8 +450,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": "1080p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:31.377Z",
       "notes": "Canal religioso."
     },
     {
@@ -404,8 +470,8 @@
         "Not 24/7"
       ],
       "quality": "1080p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "offline",
+      "checkedAt": "2026-10-19T22:27:31.560Z",
       "notes": "Canal musical."
     },
     {
@@ -422,8 +488,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": "360p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:32.146Z",
       "notes": "Canal musical."
     },
     {
@@ -440,8 +506,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": "720p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "offline",
+      "checkedAt": "2026-10-19T22:27:32.854Z",
       "notes": "Canal musical/comunitário."
     },
     {
@@ -460,8 +526,8 @@
         "Geo-blocked"
       ],
       "quality": "720p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:34.202Z",
       "notes": "Canal local; pode estar geobloqueado."
     },
     {
@@ -478,8 +544,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": "1080p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:35.222Z",
       "notes": "Canal privado angolano."
     },
     {
@@ -496,8 +562,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": "1080p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:35.642Z",
       "notes": "Canal musical angolano."
     },
     {
@@ -514,8 +580,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": "1080p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:36.360Z",
       "notes": "Canal religioso angolano."
     },
     {
@@ -550,8 +616,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": null,
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:37.680Z",
       "notes": "Televisão de Moçambique."
     },
     {
@@ -568,8 +634,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": null,
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:38.154Z",
       "notes": "Canal moçambicano."
     },
     {
@@ -586,8 +652,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": "1080p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:38.922Z",
       "notes": "Canal religioso."
     },
     {
@@ -604,8 +670,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": "720p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "offline",
+      "checkedAt": "2026-10-19T22:27:39.162Z",
       "notes": "Canal moçambicano."
     },
     {
@@ -622,8 +688,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": null,
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:39.409Z",
       "notes": "Canal infantil moçambicano."
     },
     {
@@ -640,8 +706,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": null,
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:39.574Z",
       "notes": "Canal cabo-verdiano."
     },
     {
@@ -658,8 +724,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": null,
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:40.652Z",
       "notes": "Fonte oficial EBC (URL manual)."
     },
     {
@@ -678,8 +744,8 @@
       ],
       "labels": [],
       "quality": null,
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:41.975Z",
       "notes": "Fonte oficial UOL (URL manual)."
     },
     {
@@ -696,8 +762,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": null,
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:43.675Z",
       "notes": "Fonte oficial da Câmara dos Deputados (URL manual)."
     },
     {
@@ -716,8 +782,8 @@
         "Not 24/7"
       ],
       "quality": "1080p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "offline",
+      "checkedAt": "2026-10-19T22:27:43.981Z",
       "notes": "Fonte oficial da Câmara dos Deputados."
     },
     {
@@ -734,8 +800,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": "720p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:44.981Z",
       "notes": "Fonte oficial EBC."
     },
     {
@@ -752,8 +818,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": "720p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:46.198Z",
       "notes": "Fonte oficial EBC."
     },
     {
@@ -772,8 +838,8 @@
       ],
       "labels": [],
       "quality": null,
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "offline",
+      "checkedAt": "2026-10-19T22:27:46.708Z",
       "notes": "Fonte oficial Fiocruz."
     },
     {
@@ -792,8 +858,8 @@
         "Not 24/7"
       ],
       "quality": "1080p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "offline",
+      "checkedAt": "2026-10-19T22:27:46.940Z",
       "notes": "Sinal oficial CloudFront."
     },
     {
@@ -812,8 +878,8 @@
       ],
       "labels": [],
       "quality": "720p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:47.233Z",
       "notes": "Sinal oficial; pode estar geobloqueado."
     },
     {
@@ -830,8 +896,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": "1080p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:47.500Z",
       "notes": "Sinal oficial CloudFront."
     },
     {
@@ -848,8 +914,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": "1080p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "offline",
+      "checkedAt": "2026-10-19T22:27:48.132Z",
       "notes": "Sinal oficial nxplay."
     },
     {
@@ -866,8 +932,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": "720p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:48.715Z",
       "notes": "Sinal oficial via Google DAI."
     },
     {
@@ -884,8 +950,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": "720p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:49.512Z",
       "notes": "Canal de notícias (Times Brasil/CNBC)."
     },
     {
@@ -902,8 +968,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": "1080p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:49.735Z",
       "notes": "Canal de notícias."
     },
     {
@@ -920,8 +986,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": "576p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "offline",
+      "checkedAt": "2026-10-19T22:27:50.607Z",
       "notes": "Sinal oficial do Grupo Bandeirantes."
     },
     {
@@ -938,8 +1004,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": "1080p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "offline",
+      "checkedAt": "2026-10-19T22:27:50.871Z",
       "notes": "Sinal oficial nxplay."
     },
     {
@@ -956,8 +1022,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": "1080p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "offline",
+      "checkedAt": "2026-10-19T22:27:51.100Z",
       "notes": "Canal cultural/educativo do SESC."
     },
     {
@@ -974,8 +1040,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": "1080p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:52.608Z",
       "notes": "TVE Rio Grande do Sul."
     },
     {
@@ -992,8 +1058,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": "1080p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:53.420Z",
       "notes": "TV universitária da UFOP."
     },
     {
@@ -1010,8 +1076,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": "720p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:54.054Z",
       "notes": "TV universitária Unisul."
     },
     {
@@ -1028,8 +1094,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": "1080p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:54.587Z",
       "notes": "Canal regional amazónico."
     },
     {
@@ -1046,8 +1112,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": "720p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:54.889Z",
       "notes": "Canal de documentários rurais (FAST)."
     },
     {
@@ -1064,8 +1130,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": "1080p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:55.517Z",
       "notes": "Canal oficial UOL."
     },
     {
@@ -1084,8 +1150,8 @@
       ],
       "labels": [],
       "quality": "1080p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:55.710Z",
       "notes": "Canal de filmes (FAST)."
     },
     {
@@ -1107,8 +1173,8 @@
         "Geo-blocked"
       ],
       "quality": "1080p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "verified",
+      "checkedAt": "2026-10-19T22:27:56.377Z",
       "notes": "Canal de séries clássicas."
     },
     {
@@ -1125,8 +1191,8 @@
       "alternateStreams": [],
       "labels": [],
       "quality": "720p",
-      "status": "unverified",
-      "checkedAt": null,
+      "status": "offline",
+      "checkedAt": "2026-10-19T22:27:56.965Z",
       "notes": "TV Gazeta."
     }
   ]
