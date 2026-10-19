@@ -12,7 +12,8 @@ export enum Country {
   ANGOLA = 'Angola',
   BRASIL = 'Brasil',
   PORTUGAL = 'Portugal',
-  GLOBAL = 'Global'
+  GLOBAL = 'Global',
+  PALOP = 'PALOP'
 }
 
 export enum Category {

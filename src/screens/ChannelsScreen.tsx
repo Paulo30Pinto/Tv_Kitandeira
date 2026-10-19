@@ -3,17 +3,37 @@ import { LIVE_CHANNELS, PORTUGUESE_CHANNELS } from '../data/mockData';
 import { LiveChannel } from '../types';
 import { useApp } from '../context/AppContext';
 import Hls from 'hls.js';
-import { Search, Heart, Maximize2, Radio, Play } from 'lucide-react';
+import { Search, Heart, Maximize2, Radio, Play, RefreshCw, Database, Wifi } from 'lucide-react';
+import { loadIptvOrgChannels } from '../services/iptvOrg';
 
 export const ChannelsScreen: React.FC = () => {
   const { currentPlayingChannel, setCurrentPlayingChannel, playChannel, isFavorite, toggleFavorite } = useApp();
   const [activeCategory, setActiveCategory] = useState<string>('Portugal');
   const [channelSearch, setChannelSearch] = useState<string>('');
   const [subTab, setSubTab] = useState<'Canais' | 'Favoritos'>('Canais');
+  const [iptvChannels, setIptvChannels] = useState<LiveChannel[]>([]);
+  const [playlistUpdatedAt, setPlaylistUpdatedAt] = useState<number>(0);
+  const [playlistFromCache, setPlaylistFromCache] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  const channels = [...PORTUGUESE_CHANNELS, ...LIVE_CHANNELS];
+  const refreshPlaylist = async () => {
+    setIsRefreshing(true);
+    const result = await loadIptvOrgChannels();
+    setIptvChannels(result.channels);
+    setPlaylistUpdatedAt(result.updatedAt);
+    setPlaylistFromCache(result.fromCache);
+    setIsRefreshing(false);
+  };
+
+  useEffect(() => {
+    refreshPlaylist();
+  }, []);
+
+  const channels = [...iptvChannels, ...PORTUGUESE_CHANNELS, ...LIVE_CHANNELS].filter(
+    (channel, index, all) => all.findIndex((item) => item.name.toLowerCase() === channel.name.toLowerCase()) === index
+  );
   const activeChannel = currentPlayingChannel || channels[0];
 
   const channelCategories = [
@@ -92,6 +112,26 @@ export const ChannelsScreen: React.FC = () => {
           <Maximize2 size={16} />
           <span className="hidden sm:inline">Expandir Player</span>
         </button>
+      </div>
+
+      {/* Curated playlist status */}
+      <div className="px-4 pt-4">
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-cyan-400/20 bg-cyan-950/20 px-4 py-3">
+          <div className="flex items-center gap-3">
+            <div className="rounded-xl bg-cyan-400/10 p-2 text-cyan-300"><Database size={17} /></div>
+            <div>
+              <p className="text-xs font-black text-white">Lusofonia · playlist curada</p>
+              <p className="mt-0.5 text-[10px] text-neutral-400">
+                {playlistUpdatedAt ? `iptv-org atualizado ${new Date(playlistUpdatedAt).toLocaleString('pt-PT')}` : 'A carregar canais públicos em português...'}
+                {playlistFromCache && ' · cache local'}
+              </p>
+            </div>
+          </div>
+          <button onClick={refreshPlaylist} disabled={isRefreshing} className="flex items-center gap-2 rounded-xl border border-cyan-300/20 px-3 py-2 text-[10px] font-bold text-cyan-200 transition hover:bg-cyan-300/10 disabled:opacity-50">
+            <RefreshCw size={13} className={isRefreshing ? 'animate-spin' : ''} />
+            Atualizar lista
+          </button>
+        </div>
       </div>
 
       {/* Sub-Tabs: Canais vs Favoritos */}
@@ -194,6 +234,7 @@ export const ChannelsScreen: React.FC = () => {
                         <span className="bg-[#E50914] text-white text-[9px] font-black px-1.5 py-0.2 rounded uppercase">
                           LIVE
                         </span>
+                        {channel.source === 'iptv-org' && <span className="flex items-center gap-1 rounded bg-cyan-400/10 px-1.5 py-0.5 text-[9px] font-bold uppercase text-cyan-300"><Wifi size={9} /> IPTV.org</span>}
                       </div>
                       <p className="text-[10px] text-neutral-400 line-clamp-1 mt-0.5">
                         {channel.currentProgram || 'Transmissão em Alta Definição'}
