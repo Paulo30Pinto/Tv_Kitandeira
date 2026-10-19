@@ -231,11 +231,22 @@ const App: React.FC = () => {
                 setSearchTerm('');
               }}
             >
-              <div className="bg-white rounded-2xl px-3 py-1.5 flex items-center justify-center shadow-lg">
+              <div className="bg-white rounded-2xl px-2.5 py-1 sm:px-3 sm:py-1.5 flex items-center justify-center shadow-lg min-w-[56px] h-8 sm:h-9">
                 <img 
                   src="https://teiptv.netlify.app/TEIP.png" 
                   alt="TeIP" 
                   className="h-5 sm:h-6 w-auto object-contain" 
+                  onError={(e) => {
+                    // Fallback to stylized SVG representation if external netlify asset fails
+                    (e.target as HTMLElement).style.display = 'none';
+                    const parent = (e.target as HTMLElement).parentElement;
+                    if (parent && !parent.querySelector('.teip-fallback')) {
+                      const span = document.createElement('span');
+                      span.className = 'teip-fallback font-black text-sm sm:text-base tracking-tighter bg-gradient-to-r from-sky-500 via-indigo-600 to-purple-600 bg-clip-text text-transparent';
+                      span.innerText = 'TeIP';
+                      parent.appendChild(span);
+                    }
+                  }}
                 />
               </div>
               <div className="flex flex-col justify-center">

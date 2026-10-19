@@ -19,14 +19,14 @@ export const CHANNELS: Channel[] = [
     status: 'ONLINE'
   },
   {
-    id: 'tpa1',
+    id: 'AXN.pt@SD',
     channelNumber: '002',
-    name: 'TPA1',
+    name: 'AXN',
     description: 'Televisão Pública de Angola - Canal 1. Informação, programas de estúdio e grandes produções nacionais.',
     logoColor: 'bg-gradient-to-br from-rose-200 via-red-200 to-pink-200',
     watermark: 'TP',
     logoImage: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/TPA_Angola_Logo.png/600px-TPA_Angola_Logo.png',
-    streamUrl: 'https://www.youtube.com/embed/9Xxhiz8UU6M',
+    streamUrl: 'http://znty.dyndns.org:5010/hls/axn.m3u8',
     type: StreamType.YOUTUBE,
     country: Country.ANGOLA,
     category: Category.GENERAL,

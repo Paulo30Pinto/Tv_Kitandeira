@@ -1,44 +1,23 @@
-const CACHE_NAME = 'teip-v5-robust';
+const CACHE_NAME = 'teip-v6-stable';
 
-// Arquivos críticos locais que devem ser cacheados
+// Core local assets
 const CORE_ASSETS = [
   '/',
-  'index.html',
-  'manifest.json'
-];
-
-// Assets externos que podem falhar ou ter problemas de CORS
-const EXTERNAL_ASSETS = [
-  'https://cdn.tailwindcss.com',
-  'https://cdn.jsdelivr.net/npm/hls.js@latest',
-  'https://teiptv.netlify.app/TEIP.png',
-  'https://teiptv.netlify.app/assets/TEIP-X89hzE6_.JPG'
+  '/index.html',
+  '/manifest.json',
+  '/index.css'
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(async (cache) => {
-      // 1. Tenta adicionar os arquivos core (locais)
-      try {
-        await cache.addAll(CORE_ASSETS);
-      } catch (e) {
-        console.warn('[SW] Falha em alguns arquivos core:', e);
-      }
-
-      // 2. Tenta adicionar os arquivos externos um por um
-      const externalPromises = EXTERNAL_ASSETS.map(async (url) => {
+      for (const asset of CORE_ASSETS) {
         try {
-          const response = await fetch(url, { 
-            mode: 'no-cors', // Garante que assets externos não causem erro de instalação
-            cache: 'no-cache'
-          });
-          return await cache.put(url, response);
-        } catch (err) {
-          console.warn(`[SW] Pulando asset externo com erro: ${url}`);
+          await cache.add(asset);
+        } catch (e) {
+          console.debug('[SW] Optional cache item skipped:', asset);
         }
-      });
-      
-      return Promise.all(externalPromises);
+      }
     })
   );
   self.skipWaiting();

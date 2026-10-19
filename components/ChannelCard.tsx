@@ -31,6 +31,9 @@ export const ChannelCard: React.FC<ChannelCardProps> = ({ channel, onClick, isFa
             src={channel.logoImage} 
             alt={channel.name} 
             className="max-h-[70%] max-w-[85%] object-contain relative z-10 transition-transform duration-500 group-hover:scale-105 drop-shadow-md"
+            onError={(e) => {
+              (e.target as HTMLElement).style.display = 'none';
+            }}
           />
         ) : (
           <div className="flex flex-col items-center justify-center z-10">
