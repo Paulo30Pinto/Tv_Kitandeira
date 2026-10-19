@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Channel, EPGProgram } from '../types';
 import { MOCK_EPG_SHOWS } from '../constants';
+import { loadIptvOrgEpg } from '../src/services/iptvEpg';
 import { Calendar, Play, Clock, Tv, Info, Sparkles } from 'lucide-react';
 
 interface EPGGuideProps {
@@ -10,6 +11,23 @@ interface EPGGuideProps {
 
 export const EPGGuide: React.FC<EPGGuideProps> = ({ channels, onSelectChannel }) => {
   const [selectedShow, setSelectedShow] = useState<{ channel: Channel; show: EPGProgram } | null>(null);
+  const [officialPrograms, setOfficialPrograms] = useState<EPGProgram[]>([]);
+  const [epgUpdatedAt, setEpgUpdatedAt] = useState(0);
+
+  useEffect(() => {
+    loadIptvOrgEpg().then(({ programs, updatedAt }) => {
+      setOfficialPrograms(programs);
+      setEpgUpdatedAt(updatedAt);
+    });
+  }, []);
+
+  const normalize = (value: string) => value.toLowerCase().replace(/[^a-z0-9]+/g, '');
+  const programsForChannel = (channel: Channel) => {
+    const name = normalize(channel.name);
+    return officialPrograms
+      .filter((program) => normalize(program.channelId).includes(name) || normalize(program.channelId).includes(normalize(channel.id)))
+      .slice(0, 6);
+  };
 
   const hours = ['12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'];
 
@@ -55,7 +73,8 @@ export const EPGGuide: React.FC<EPGGuideProps> = ({ channels, onSelectChannel })
         {/* Channels Rows */}
         <div className="divide-y divide-white/5 overflow-x-auto">
           {channels.slice(0, 15).map((channel) => {
-            const shows = MOCK_EPG_SHOWS[channel.id] || [
+            const officialShows = programsForChannel(channel);
+            const shows = officialShows.length > 0 ? officialShows : MOCK_EPG_SHOWS[channel.id] || [
               {
                 id: `p-def-${channel.id}`,
                 channelId: channel.id,
