@@ -2,19 +2,18 @@
 <html lang="pt">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover" />
-    <meta name="theme-color" content="#0d0d0d" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#090B16" />
     
     <title>TeIP - Unindo TVs | Canais de TV ao Vivo & Streaming</title>
     <meta name="description" content="TeIP - Plataforma de canais de TV ao vivo, entretenimento e emissão digital em Angola e no mundo." />
     <link rel="manifest" href="manifest.json" />
-    <link rel="icon" type="image/png" href="https://picsum.photos/id/10/192/192" />
-    <link rel="apple-touch-icon" href="https://picsum.photos/id/10/192/192" />
+    <link rel="icon" type="image/png" href="https://teiptv.netlify.app/TEIP.png" />
+    <link rel="apple-touch-icon" href="https://teiptv.netlify.app/TEIP.png" />
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Syne:wght@400..800&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
 
     <style>
       :root {
@@ -52,17 +51,13 @@
   <body>
     <div id="root"></div>
     <script>
-      if ('serviceWorker' in navigator) {
+      // Em desenvolvimento (localhost) não registar o SW para não interferir com o Vite.
+      const isLocalDev = ['localhost', '127.0.0.1'].includes(location.hostname);
+      if ('serviceWorker' in navigator && !isLocalDev) {
         window.addEventListener('load', () => {
-          // Registro direto no escopo raiz
           navigator.serviceWorker.register('sw.js', { scope: '/' })
-            .then(reg => {
-              console.log('SW: Ativo');
-            })
-            .catch(err => {
-              // Silencioso para o usuário, apenas log de debug
-              console.debug('SW: Offline mode limited', err);
-            });
+            .then(() => console.log('SW: Ativo'))
+            .catch((err) => console.debug('SW: modo offline limitado', err));
         });
       }
     </script>

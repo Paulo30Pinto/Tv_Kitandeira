@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Channel, StreamType } from '../types';
-import { getCurrentAndNextProgram, getChannelSchedule } from '../data/programs';
+import { useEpg } from '../src/epg/EpgContext';
 import { 
   ArrowLeft, 
   Play, 
@@ -80,9 +80,11 @@ export const StreamPlayer: React.FC<StreamPlayerProps> = ({
   // Clock
   const [currentTimeStr, setCurrentTimeStr] = useState<string>('');
 
-  // Calculate current program info & schedule
-  const programInfo = getCurrentAndNextProgram(channel);
-  const fullSchedule = getChannelSchedule(channel);
+  // EPG real (XMLTV) com fallback para a grelha estimada
+  const { getNowNext, getPrograms, hasRealEpg } = useEpg();
+  const programInfo = getNowNext(channel);
+  const fullSchedule = getPrograms(channel);
+  const usingRealEpg = hasRealEpg(channel);
 
   // Update live clock
   useEffect(() => {
@@ -156,7 +158,27 @@ export const StreamPlayer: React.FC<StreamPlayerProps> = ({
     const video = videoRef.current;
     if (!video) return;
 
+    // Listeners nativos precisam de cleanup; o <video> persiste entre canais.
+    let nativeLoaded: (() => void) | null = null;
+    let nativeError: (() => void) | null = null;
+
     if (channel.type === StreamType.HLS) {
+      const sources = [channel.streamUrl, ...(channel.alternateStreams || [])].filter(Boolean);
+      let sourceIndex = 0;
+      let networkAttempts = 0;
+      let mediaAttempts = 0;
+
+      const applyHeaders = (xhr: XMLHttpRequest) => {
+        const headers = (channel.headers || {}) as Record<string, string>;
+        Object.entries(headers).forEach(([name, value]) => {
+          try {
+            xhr.setRequestHeader(name, value);
+          } catch {
+            // O browser proíbe User-Agent/Referer; um proxy server-side é necessário.
+          }
+        });
+      };
+
       if (Hls.isSupported()) {
         const hls = new Hls({
           enableWorker: true,
@@ -164,12 +186,27 @@ export const StreamPlayer: React.FC<StreamPlayerProps> = ({
           backBufferLength: 60,
           maxBufferLength: 30,
           enableSoftwareAES: true,
+          xhrSetup: applyHeaders,
         });
         hlsRef.current = hls;
-        hls.loadSource(channel.streamUrl);
+        hls.loadSource(sources[sourceIndex]);
         hls.attachMedia(video);
 
+        const tryFailover = (reason: string): boolean => {
+          if (sourceIndex >= sources.length - 1) return false;
+          sourceIndex += 1;
+          networkAttempts = 0;
+          mediaAttempts = 0;
+          setError(null);
+          setLoading(true);
+          console.warn(`[player] ${reason}; a tentar fonte alternativa ${sourceIndex + 1}/${sources.length}`);
+          hls.loadSource(sources[sourceIndex]);
+          return true;
+        };
+
         hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          networkAttempts = 0;
+          mediaAttempts = 0;
           setLoading(false);
           video.volume = volume;
           video.muted = isMuted;
@@ -182,28 +219,61 @@ export const StreamPlayer: React.FC<StreamPlayerProps> = ({
         });
 
         hls.on(Hls.Events.ERROR, (_event, data) => {
-          if (data.fatal) {
-            switch (data.type) {
-              case Hls.ErrorTypes.NETWORK_ERROR:
+          if (!data.fatal) return;
+
+          switch (data.type) {
+            case Hls.ErrorTypes.NETWORK_ERROR:
+              if (networkAttempts < 2) {
+                networkAttempts += 1;
                 hls.startLoad();
-                break;
-              case Hls.ErrorTypes.MEDIA_ERROR:
-                hls.recoverMediaError();
-                break;
-              default:
+              } else if (!tryFailover('erro de rede')) {
                 hls.destroy();
-                setError('Sinal HLS temporariamente indisponível para este canal.');
+                setError(
+                  'Sinal indisponível (rede/CORS). Este canal pode estar geobloqueado ou exigir um proxy autorizado.'
+                );
                 setLoading(false);
-                break;
-            }
+              }
+              break;
+
+            case Hls.ErrorTypes.MEDIA_ERROR:
+              if (mediaAttempts < 2) {
+                mediaAttempts += 1;
+                hls.recoverMediaError();
+              } else if (!tryFailover('erro de media')) {
+                hls.destroy();
+                setError('Formato de vídeo não suportado por este dispositivo.');
+                setLoading(false);
+              }
+              break;
+
+            default:
+              if (!tryFailover('erro fatal')) {
+                hls.destroy();
+                setError(`Sinal HLS indisponível${data.details ? ` (${data.details})` : ''}.`);
+                setLoading(false);
+              }
+              break;
           }
         });
       } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        video.src = channel.streamUrl;
-        video.addEventListener('loadedmetadata', () => {
+        video.src = sources[sourceIndex];
+        nativeLoaded = () => {
           setLoading(false);
           video.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
-        });
+        };
+        nativeError = () => {
+          if (sourceIndex < sources.length - 1) {
+            sourceIndex += 1;
+            setError(null);
+            video.src = sources[sourceIndex];
+            video.play().catch(() => setIsPlaying(false));
+          } else {
+            setError('Sinal indisponível no player nativo (geobloqueio ou CORS).');
+            setLoading(false);
+          }
+        };
+        video.addEventListener('loadedmetadata', nativeLoaded);
+        video.addEventListener('error', nativeError);
       } else {
         setError('O seu navegador não suporta transmissões HLS.');
         setLoading(false);
@@ -221,6 +291,8 @@ export const StreamPlayer: React.FC<StreamPlayerProps> = ({
     }
 
     return () => {
+      if (nativeLoaded) video.removeEventListener('loadedmetadata', nativeLoaded);
+      if (nativeError) video.removeEventListener('error', nativeError);
       if (hlsRef.current) {
         hlsRef.current.destroy();
         hlsRef.current = null;
@@ -984,7 +1056,7 @@ export const StreamPlayer: React.FC<StreamPlayerProps> = ({
             {filteredDrawerChannels.map((c, idx) => {
               const isSelected = c.id === channel.id;
               const num = c.channelNumber || (channels.findIndex((ch) => ch.id === c.id) + 1).toString().padStart(3, '0');
-              const cProg = getCurrentAndNextProgram(c);
+              const cProg = getNowNext(c);
 
               return (
                 <div
@@ -1053,7 +1125,7 @@ export const StreamPlayer: React.FC<StreamPlayerProps> = ({
               </div>
               <div>
                 <h3 className="text-base font-black text-white">{channel.name} — Programação</h3>
-                <span className="text-[10px] text-cyan-400 font-semibold">Grelha Oficial de Hoje</span>
+                <span className="text-[10px] text-cyan-400 font-semibold">{usingRealEpg ? 'Guia XMLTV (iptv-org)' : 'Grelha estimada — configure o EPG'}</span>
               </div>
             </div>
             <button

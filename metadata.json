@@ -1,11 +1,4 @@
 {
-  "name": "Angoflix",
-  "description": "Plataforma de streaming e TV ao vivo em Angola e países lusófonos - Filmes, Séries, Canais ao Vivo e Shorts.",
-  "requestFramePermissions": [
-    "camera",
-    "microphone"
-  ],
-  "majorCapabilities": [
-    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
-  ]
+  "name": "TeIP",
+  "description": "Plataforma de TV ao vivo em língua portuguesa: Portugal, Angola, Brasil, Moçambique e Cabo Verde."
 }

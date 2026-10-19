@@ -1,25 +1,28 @@
 {
-  "short_name": "Angoflix",
-  "name": "Angoflix",
-  "description": "Plataforma de streaming e TV ao vivo em Angola e países lusófonos - Filmes, Séries, Canais e Shorts.",
+  "id": "/",
+  "short_name": "TeIP",
+  "name": "TeIP — TV Lusófona ao Vivo",
+  "description": "Canais de TV em língua portuguesa: Portugal, Angola, Brasil, Moçambique e Cabo Verde.",
+  "lang": "pt",
   "icons": [
     {
-      "src": "https://picsum.photos/id/10/192/192",
+      "src": "https://teiptv.netlify.app/TEIP.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "https://picsum.photos/id/10/512/512",
+      "src": "https://teiptv.netlify.app/TEIP.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     }
   ],
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "theme_color": "#0d0d0d",
-  "background_color": "#0d0d0d",
+  "theme_color": "#090B16",
+  "background_color": "#090B16",
   "orientation": "any",
   "categories": ["entertainment", "multimedia"]
 }

@@ -1,0 +1,72 @@
+name: Sync Lusofonia (canais + EPG)
+
+on:
+  schedule:
+    # Segunda-feira às 04:00 UTC (05:00 em Luanda)
+    - cron: '0 4 * * 1'
+  workflow_dispatch:
+  push:
+    paths:
+      - 'data/lusofonia.curation.json'
+      - 'scripts/sync-lusofonia.mjs'
+      - 'scripts/sync-epg.mjs'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-lusofonia
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Sync canais iptv-org (com teste de streams)
+        id: channels
+        continue-on-error: true
+        run: node scripts/sync-lusofonia.mjs --check
+
+      - name: Sync EPG XMLTV
+        id: epg
+        continue-on-error: true
+        run: node scripts/sync-epg.mjs --max-sources=40
+
+      - name: Mostrar resultado
+        run: |
+          node -e "const d=require('./data/lusofonia.generated.json'); console.log(d.stats)"
+          test -f public/epg/lusofonia.xml && du -h public/epg/lusofonia.xml || echo 'Sem snapshot EPG'
+
+      - name: Commit e push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/lusofonia.generated.json data/epg.sources.json public/epg
+          if git diff --cached --quiet; then
+            echo "Sem alterações."
+            exit 0
+          fi
+          git commit -m "chore: sync canais lusófonos e EPG"
+          git push
+
+      - name: Verificar falhas de sync
+        if: steps.channels.outcome == 'failure' || steps.epg.outcome == 'failure'
+        run: |
+          echo "::warning::Um dos passos de sync falhou. Ver logs; o último snapshot válido foi mantido."
